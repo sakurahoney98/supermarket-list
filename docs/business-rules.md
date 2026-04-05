@@ -34,12 +34,12 @@ A quantidade de compra deve ser calculada da seguinte forma:
 ## 2. Regras da Lista de Compras
 
 - A lista deve ser:
-- Agrupada por categoria
-- Ordenada alfabeticamente
+  - Agrupada por categoria
+  - Ordenada alfabeticamente
 
 - Cada item deve conter:
-- Nome
-- Quantidade sugerida
+  - Nome
+  - Quantidade sugerida
 
 - Itens com quantidade em estoque igual a 0 devem ser incluídos automaticamente na lista.
 
