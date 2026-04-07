@@ -49,6 +49,7 @@ Campos obrigatórios:
 
 - Campos obrigatórios não podem ser deixados em branco.
 - O sistema deve exibir feedback visual em caso de erro.
+- o sistema deve exibir um feedback visual de como a categoria aparece na lista do sistema.
 
 ---
 
