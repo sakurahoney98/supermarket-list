@@ -15,7 +15,7 @@ Campos opcionais:
 
 ---
 
-## 2. Regras Gerais
+### 1.1. Regras Gerais
 
 - Campos obrigatórios não podem ser deixados em branco.
 - O sistema deve exibir feedback visual em caso de erro.
@@ -23,14 +23,35 @@ Campos opcionais:
 
 ---
 
-## 3. Edição de Itens
+## 2. Edição de Itens
 
 - Todos os campos obrigatórios devem continuar preenchidos.
 - O ID do item não pode ser alterado.
 
 ---
 
-## 4. Exclusão
+## 3. Exclusão de Itens
+
+- Exclusão deve ser lógica (soft delete).
+
+
+## 4. Cadastro de Categoria
+
+Campos obrigatórios:
+- Nome
+
+
+---
+
+### 4.1. Regras Gerais
+
+- Campos obrigatórios não podem ser deixados em branco.
+- O sistema deve exibir feedback visual em caso de erro.
+
+---
+
+
+## 5. Exclusão de Categoria
 
 - Exclusão deve ser lógica (soft delete).
 - Exclusão de categoria deve ser bloqueada se houver itens vinculados.

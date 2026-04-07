@@ -76,7 +76,6 @@ O sistema não contemplará:
 
 ### 🏷️ Categorias
 - Criar categoria
-- Editar categoria
 - Excluir categoria
 
 ### 📊 Estoque
