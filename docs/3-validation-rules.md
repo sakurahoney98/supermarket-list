@@ -39,6 +39,8 @@ Campos opcionais:
 
 Campos obrigatórios:
 - Nome
+- Cor da letra
+- Fundo da forma
 
 
 ---
