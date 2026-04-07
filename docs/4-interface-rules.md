@@ -1,67 +1,48 @@
 # Regras de Interface
 
-## 1. Listagem
+## 1. Listagem de Itens Cadastrados
+- Exibir: **ID**, **Nome** e **Categoria** de cada item.
+- Ordenação: **alfabética** pelo nome do item.
+- Funcionalidades obrigatórias na tela:
+  - **Busca por nome** (filtro textual, case insensitive).
+  - **Filtro por categoria** (dropdown com todas as categorias ativas).
+  - Possibilidade de combinar busca + filtro.
+  - Botões para **editar**, **excluir** (ou selecionar para exclusão em massa) e **visualizar** detalhes.
 
-- Itens devem ser exibidos:
-  - Ordenados por categoria
-  - Em ordem alfabética
+## 2. Visualização de Detalhes de um Item (somente leitura)
+Ao clicar em "Visualizar", o sistema exibe (sem edição):
+- ID, Nome, Peso/unidade, Quantidade em estoque, Quantidade máxima de compra, Data da última compra, Categoria, Duração.
+- Botão "Fechar" para retornar à lista.
 
-- Exibição básica:
-  - ID
-  - Nome
+## 3. Pré-visualização da Lista de Compras
+- Exibe todos os itens que **entrariam na lista** (conforme regras de negócio), agrupados por categoria e em ordem alfabética.
+- Para cada item: nome, quantidade sugerida, botões **+** / **-** para ajustar quantidade, e um botão **Resetar** (retorna à quantidade sugerida original).
+- Se a quantidade for ajustada para 0, o item some da lista (exclusão visual imediata).
+- Dois botões principais:
+  - **Salvar rascunho** → exporta o estado atual da lista em CSV ou JSON.
+  - **Finalizar** → gera o PDF final da lista (conforme regras de negócio).
 
----
+## 4. Tela de Edição de Estoque (pré-compra)
+- Lista todos os itens ativos, com: nome, categoria, quantidade atual (editável via botões +/- e reset).
+- Ordenação: por categoria + alfabética.
+- Botão **Salvar** → persiste as alterações feitas no banco (apenas itens modificados).
 
-## 2. Pré-visualização da Lista
+## 5. Tela de Atualização Pós-Compra (após ir ao mercado)
+- Permite registrar o que foi efetivamente comprado.
+- Exibe: nome, categoria, quantidade (com botões +/- e reset).
+- Campos opcionais por item: **marca** (texto) e **preço** (número decimal).
+- Botões:
+  - **Salvar** → exporta dados em CSV/JSON (rascunho).
+  - **Finalizar** → persiste no banco (atualiza estoque e registra compra na tabela de histórico).
+- Lista ordenada por categoria + alfabética.
 
-- Deve permitir:
-  - Aumentar quantidade
-  - Diminuir quantidade
+## 6. Listagem de Categorias
+- Exibe: ID e Nome de cada categoria ativa.
+- Ordenação alfabética.
+- Permite: editar, excluir (individual ou em massa) e visualizar.
 
-- Se a quantidade for ajustada para 0:
-  - O item deve ser removido da lista
-
-- Deve conter:
-  - Botão para salvar temporariamente (CSV ou JSON)
-  - Botão para finalizar e gerar a lista
-
----
-
-## 3. Atualização de Estoque
-
-- Exibir:
-  - Nome
-  - Categoria
-  - Quantidade
-
-- Permitir:
-  - Incrementar/decrementar valores
-
-- Alterações devem ser salvas mediante ação do usuário
-
----
-
-## 4. Registro de Compras
-
-- Exibir lista de itens com:
-  - Nome
-  - Categoria
-  - Quantidade
-
-- Permitir informar:
-  - Marca (opcional)
-  - Preço (opcional)
-  - Quantidade
-
-- Deve conter:
-  - Botão "Salvar" (temporário)
-  - Botão "Finalizar" (persistência)
-
----
-
-## 5. Experiência do Usuário
-
-- Interface simples e intuitiva
-- Feedback visual para erros
-- Design visual agradável (estilo “cute”)
-- Sistema responsivo
+## 7. Feedback Visual e Experiência do Usuário
+- O sistema deve ser **responsivo** (funciona em desktop e mobile).
+- Estilo visual: **simples, limpo e agradável** (sugestão: "cute", com cores suaves e bordas arredondadas).
+- Erros de validação (campos obrigatórios, exclusão bloqueada, etc.) devem ser exibidos com mensagens claras e destaque visual.
+- Todas as ações destrutivas (exclusão, reset em massa) devem pedir confirmação.
