@@ -1,54 +1,67 @@
 # Regras de Validação
 
-## 1. Cadastro e Edição de Itens
+## 1. Cadastro de Itens
 
-### 1.1. Campos obrigatórios
-Os seguintes campos **não podem ficar em branco**:
+### 1.1. Campos obrigatórios (RN17)
 - Nome
 - Quantidade em estoque
+- Quantidade máxima de compra (agora obrigatório – mudou!)
 - Categoria
-- Duração (em dias)
+- Duração da unidade do item (em dias)
 
 ### 1.2. Campos opcionais
 - Peso ou unidade
-- Quantidade máxima de compra
 - Data da última compra
 
-### 1.3. Regras específicas
-- Ao cadastrar um item, o sistema deve verificar se existe **pelo menos uma categoria cadastrada**. Caso contrário, o cadastro é bloqueado com mensagem explicativa.
-- Na edição, os campos obrigatórios devem permanecer preenchidos. O ID do item não pode ser alterado.
-- Qualquer tentativa de deixar um campo obrigatório em branco deve exibir um **feedback visual claro** (ex: borda vermelha, mensagem de erro).
+### 1.3. Validações específicas
+- **RN18/RN19:** Antes de permitir cadastro de item, deve existir pelo menos uma categoria cadastrada. Caso contrário, bloquear e exibir mensagem.
+- **RN20:** Não é permitido cadastrar dois itens com o mesmo nome dentro da mesma categoria.
+- **RN21:** Campos obrigatórios não podem ficar em branco.
+- **RN22:** Se campo obrigatório estiver vazio, exibir indicativo visual de erro.
+- **RN23:** Duração deve ser **maior que 0** (positivo).
 
 ---
 
-## 2. Cadastro de Categorias
+## 2. Edição de Itens (RN24, RN25)
 
-### 2.1. Campos obrigatórios
-- Nome da categoria
-- Cor da letra (formato hexadecimal ou nome de cor suportado)
-- Cor do fundo (formato hexadecimal ou nome de cor suportado)
-
-### 2.2. Pré-visualização
-Durante o cadastro, o sistema deve mostrar uma **pré-visualização em tempo real** de como o nome da categoria aparecerá com as cores escolhidas (texto colorido sobre fundo colorido).
+- O usuário pode editar todos os campos do item.
+- Campos obrigatórios continuam obrigatórios (não podem ficar em branco).
+- ID do item não é editável.
 
 ---
 
-## 3. Exclusão em Massa
+## 3. Exclusão de Itens
 
-### 3.1. Itens
-- O sistema deve permitir a exclusão de múltiplos itens de uma só vez (seleção por checkboxes).
-- A exclusão deve ser **lógica** (soft delete) e uma mensagem de confirmação deve ser exibida antes da ação.
-
-### 3.2. Categorias
-- A exclusão em massa de categorias é permitida, mas **totalmente bloqueada** se pelo menos uma das categorias selecionadas estiver vinculada a algum item.
-- Nesse caso, o sistema exibe a lista das categorias problemáticas e impede a exclusão.
+- **RN26:** Permitir exclusão em massa de itens (seleção múltipla).
+- **RN27:** Exclusão lógica (soft delete).
+- A exclusão em massa deve seguir as mesmas regras de soft delete e confirmação.
 
 ---
 
-## 4. Atualização Pós-Compra
+## 4. Cadastro de Categorias
 
-- Os campos **marca** e **preço** são opcionais.
-- Ao finalizar a compra (botão "Finalizar"), o sistema deve:
-  - Atualizar o estoque dos itens (reduzir pela quantidade comprada) – *se essa for a regra definida pelo produto; caso contrário, apenas registrar a compra sem mexer no estoque*.
-  - Inserir um registro na tabela de compras (ver `05-data-rules.md`).
-  - Apenas itens com alteração de quantidade ou com marca/preço informados devem ser processados.
+### 4.1. Campos obrigatórios (RN33)
+- Nome
+- Cor da letra
+- Cor de fundo
+
+### 4.2. Validações
+- **RN34:** Exibir pré-visualização em tempo real das cores durante o cadastro.
+- **RN35:** Não permitir cadastrar categorias com nomes duplicados.
+- Campos obrigatórios não podem ficar em branco (aplicar RN21/RN22).
+
+---
+
+## 5. Exclusão de Categorias
+
+- **RN37:** Permitir exclusão em massa de categorias.
+- **RN38:** Exclusão lógica.
+- **RN39/RN40:** Antes de excluir (individual ou em massa), verificar se a categoria está vinculada a algum item. Se estiver, **bloquear a exclusão** e informar o usuário.
+
+---
+
+## 6. Regras Gerais de Validação (reutilizáveis)
+
+- Todos os campos obrigatórios (itens e categorias) seguem RN21/RN22.
+- Nomes duplicados: item dentro da mesma categoria (RN20); categoria globalmente (RN35).
+- Feedback visual claro para erros.

@@ -1,48 +1,46 @@
-# Regras de Interface
+# Regras de Persistência e Modelo de Dados - Supermarket List
 
-## 1. Listagem de Itens Cadastrados
-- Exibir: **ID**, **Nome** e **Categoria** de cada item.
-- Ordenação: **alfabética** pelo nome do item.
-- Funcionalidades obrigatórias na tela:
-  - **Busca por nome** (filtro textual, case insensitive).
-  - **Filtro por categoria** (dropdown com todas as categorias ativas).
-  - Possibilidade de combinar busca + filtro.
-  - Botões para **editar**, **excluir** (ou selecionar para exclusão em massa) e **visualizar** detalhes.
+## 1. Tabela de Itens Comprados (Histórico)
 
-## 2. Visualização de Detalhes de um Item (somente leitura)
-Ao clicar em "Visualizar", o sistema exibe (sem edição):
-- ID, Nome, Peso/unidade, Quantidade em estoque, Quantidade máxima de compra, Data da última compra, Categoria, Duração.
-- Botão "Fechar" para retornar à lista.
+**Conforme RN53:**  
+Deve conter os campos:
 
-## 3. Pré-visualização da Lista de Compras
-- Exibe todos os itens que **entrariam na lista** (conforme regras de negócio), agrupados por categoria e em ordem alfabética.
-- Para cada item: nome, quantidade sugerida, botões **+** / **-** para ajustar quantidade, e um botão **Resetar** (retorna à quantidade sugerida original).
-- Se a quantidade for ajustada para 0, o item some da lista (exclusão visual imediata).
-- Dois botões principais:
-  - **Salvar rascunho** → exporta o estado atual da lista em CSV ou JSON.
-  - **Finalizar** → gera o PDF final da lista (conforme regras de negócio).
+| Campo | Tipo | Obrigatório | Descrição |
+|-------|------|-------------|------------|
+| `id` | inteiro | Sim | Chave primária |
+| `item_id` | inteiro | Sim | FK para tabela de itens |
+| `data_compra` | data | Sim | Data da ida ao supermercado |
+| `quantidade_comprada` | inteiro | Sim | Quantidade efetivamente comprada |
+| `marca` | texto | Não | Marca do produto |
+| `preco` | decimal(10,2) | Não | Preço (total ou unitário – definir) |
 
-## 4. Tela de Edição de Estoque (pré-compra)
-- Lista todos os itens ativos, com: nome, categoria, quantidade atual (editável via botões +/- e reset).
-- Ordenação: por categoria + alfabética.
-- Botão **Salvar** → persiste as alterações feitas no banco (apenas itens modificados).
+**Regra de inserção:**  
+Ao clicar em "Finalizar" na tela pós-compra (RN50), o sistema deve inserir um registro nesta tabela para cada item cuja quantidade comprada > 0 (ou que teve marca/preço informados, conforme regra de negócio).
 
-## 5. Tela de Atualização Pós-Compra (após ir ao mercado)
-- Permite registrar o que foi efetivamente comprado.
-- Exibe: nome, categoria, quantidade (com botões +/- e reset).
-- Campos opcionais por item: **marca** (texto) e **preço** (número decimal).
-- Botões:
-  - **Salvar** → exporta dados em CSV/JSON (rascunho).
-  - **Finalizar** → persiste no banco (atualiza estoque e registra compra na tabela de histórico).
-- Lista ordenada por categoria + alfabética.
+---
 
-## 6. Listagem de Categorias
-- Exibe: ID e Nome de cada categoria ativa.
-- Ordenação alfabética.
-- Permite: editar, excluir (individual ou em massa) e visualizar.
+## 2. Atualização de Estoque Pós-Compra
 
-## 7. Feedback Visual e Experiência do Usuário
-- O sistema deve ser **responsivo** (funciona em desktop e mobile).
-- Estilo visual: **simples, limpo e agradável** (sugestão: "cute", com cores suaves e bordas arredondadas).
-- Erros de validação (campos obrigatórios, exclusão bloqueada, etc.) devem ser exibidos com mensagens claras e destaque visual.
-- Todas as ações destrutivas (exclusão, reset em massa) devem pedir confirmação.
+- O estoque dos itens deve ser **reduzido** pela quantidade comprada no momento da finalização da compra.
+- A operação (inserção no histórico + atualização do estoque) deve ser atômica.
+
+---
+
+## 3. Exclusão Lógica (Soft Delete) – RN27, RN38, RN58
+
+- Tabelas `itens` e `categorias` devem ter uma coluna `deleted_at` (timestamp, nulo quando ativo) ou `is_active` (booleano).
+- Listagens padrão e relatórios devem filtrar apenas registros com `deleted_at IS NULL` (ou `is_active = true`).
+
+---
+
+## 4. Persistência Seletiva (RN51)
+
+- Na tela de atualização pós-compra, o backend deve processar **apenas os itens cuja quantidade foi alterada** (comparada com o valor original em estoque antes da compra).
+- Itens sem alteração não geram INSERT/UPDATE.
+
+---
+
+## 5. Integridade Referencial
+
+- A exclusão de categorias é bloqueada se houver itens vinculados (RN39/RN40) – deve ser verificada no backend.
+- Itens com o mesmo nome dentro da mesma categoria são proibidos (RN20) – validação única composta.

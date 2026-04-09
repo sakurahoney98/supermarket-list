@@ -1,59 +1,48 @@
 # Regras de Relatórios
 
-## 1. Relatório de Itens Comprados por Mês
+## 1. Relatório de Itens Comprados por Mês (RN54)
 
-**Parâmetros obrigatórios:**
-- Mês (1 a 12)
-- Ano
+**Parâmetros:** mês, ano.
 
-**Conteúdo do relatório:**
-- Lista de itens comprados no período, com:
-  - Nome do item
-  - Quantidade total comprada
-  - Marca (se informada)
-  - Preço total gasto (soma dos preços registrados)
+**Conteúdo (por item comprado no período):**
+- Nome do item
+- Marca
+- Preço
+- Quantidade comprada
 
-**Formato:** PDF.
+**Formato de exportação:** XLSX (RN59).
 
 ---
 
-## 2. Relatório de Valores Gastos por Item
+## 2. Relatório de Gastos por Item (RN55)
 
-**Parâmetros obrigatórios:**
-- Item (selecionado a partir da lista de itens ativos)
-- Intervalo de tempo (data inicial e data final)
+**Parâmetros:** intervalo de tempo (data inicial e final), item específico.
 
 **Conteúdo:**
-- Nome do item
-- Período selecionado
-- Total gasto
-- Quantidade total comprada no período
-- Preço médio por unidade
+- Data da compra
+- Preço
+- Valor total pago (pode ser preço × quantidade, se o preço registrado for unitário – definir consistência)
 
-**Formato:** PDF.
+**Formato:** XLSX.
 
 ---
 
-## 3. Relatório de Consumo de Itens
+## 3. Relatório de Consumo de Itens (RN56, RN57)
 
-**Parâmetros obrigatórios:**
-- Um ou mais itens (seleção múltipla)
-- Intervalo de tempo (data inicial e data final)
+**Parâmetros:** item, intervalo de tempo.
 
-**Cálculo do consumo:**
+**Conteúdo:**
+- Data de compra
+- Quantidade comprada
+- **Diferença em dias entre a compra atual e a compra imediatamente anterior do mesmo item** (RN57)
 
-`consumo = (estoque_inicial + quantidade_comprada_no_periodo) - estoque_final`
+**Observação:** A diferença de dias ajuda a calcular a frequência de compra e o ritmo de consumo.
 
-Onde:
-- `estoque_inicial` = estoque no dia anterior à data inicial
-- `estoque_final` = estoque no dia seguinte à data final (ou atual, se final = hoje)
+**Formato:** XLSX.
 
-**Conteúdo do relatório:**
-- Nome do item
-- Quantidade comprada no período
-- Consumo estimado
-- Saldo inicial e final
+---
 
-**Formato:** PDF.
+## 4. Regra Geral de Relatórios
 
-> Nota: O sistema deve basear-se nas atualizações de estoque registradas pela tela pós-compra para calcular o consumo.
+- Todos os relatórios devem ser exportados no formato **XLSX** (RN59).
+- Itens/categorias excluídos logicamente não devem aparecer nos relatórios, a menos que explicitamente necessário (RN58).
