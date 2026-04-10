@@ -5,13 +5,14 @@
 ### 1.1. Campos obrigatórios (RN17)
 - Nome
 - Quantidade em estoque
-- Quantidade máxima de compra (agora obrigatório – mudou!)
+- Quantidade máxima de compra
 - Categoria
 - Duração da unidade do item (em dias)
+- Data da última compra
 
 ### 1.2. Campos opcionais
 - Peso ou unidade
-- Data da última compra
+
 
 ### 1.3. Validações específicas
 - **RN18/RN19:** Antes de permitir cadastro de item, deve existir pelo menos uma categoria cadastrada. Caso contrário, bloquear e exibir mensagem.
