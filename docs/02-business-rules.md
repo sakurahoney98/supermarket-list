@@ -74,6 +74,26 @@ O PDF final deve conter:
 - **Apenas itens com quantidade alterada** (diferente da quantidade em estoque antes da atualização) devem ser atualizados no banco (RN51).
 - Itens exibidos por categoria e ordem alfabética (RN52).
 
+### 5.1. Tratamento de data duplicada (RN60)
+
+Ao registrar uma compra, se já existir uma ou mais compras cadastradas para a mesma data informada:
+
+1. O sistema deve exibir a mensagem:  
+   *"Já existe(m) compra(s) registrada(s) para a data [data]. Deseja somar os itens a uma compra existente ou criar um novo registro de compra?"*
+
+2. Oferecer as opções: **"Somar"** e **"Novo cadastro"**.
+
+3. Se o usuário escolher **"Novo cadastro"**:
+   - Inserir um novo registro na tabela `compra` (com a mesma data) e seus respectivos itens em `item_compra`.
+
+4. Se o usuário escolher **"Somar"**:
+   - **Caso único**: Se existir apenas uma compra naquela data, somar automaticamente as quantidades dos itens da nova compra aos itens da compra existente (atualizando `item_compra.quantidade`).
+   - **Múltiplas compras**: Se existir mais de uma compra na data, exibir uma lista (ex: ID da compra, valor total, data) para o usuário escolher a qual compra deseja somar.
+   - Após a escolha, somar as quantidades dos itens à compra selecionada. Se um item não existir na compra original, adicionar um novo registro em `item_compra`.
+   - O usuário pode vincular um item mais de uma vez à mesma compra (permitido, mas a soma deve acumular quantidades).
+
+**Regras de negócio relacionadas:** RN46 a RN53.
+
 ---
 
 ## 6. Tabela de Itens Comprados (RN53)

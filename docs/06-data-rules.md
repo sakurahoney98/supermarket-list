@@ -1,39 +1,58 @@
-# Regras de Persistência e Modelo de Dados
+# Regras de Persistência e Modelo de Dados - Supermarket List
 
-## 1. Tabela de Itens Comprados (Histórico)
+## 1. Modelo Físico (PostgreSQL)
 
-O sistema deve armazenar cada compra finalizada na seguinte estrutura:
+### 1.1. Tabela `categoria`
 
-| Campo | Tipo | Obrigatório | Descrição |
-|-------|------|-------------|------------|
-| `id` | inteiro | Sim | Chave primária (auto incremento) |
-| `item_id` | inteiro | Sim | Referência ao item na tabela de itens (FK) |
-| `data_compra` | data | Sim | Data em que a compra foi registrada (padrão: data atual) |
-| `quantidade` | inteiro | Sim | Quantidade comprada |
-| `marca` | texto | Não | Marca do produto |
-| `preco` | decimal(10,2) | Não | Preço total pago (ou preço unitário – definir consistência) |
+| Campo | Tipo | Descrição |
+|-------|------|-------------|
+| `ide_categoria` | SERIAL PRIMARY KEY | Identificador único |
+| `dsc_categoria` | VARCHAR(100) NOT NULL | Nome da categoria |
+| `dtc_criacao` | DATE NOT NULL | Data de criação |
+| `dtc_exclusao` | DATE | Data de exclusão lógica |
+| `ind_ativo` | BOOLEAN DEFAULT TRUE | Ativo/inativo |
+| `cor_letra` | VARCHAR(20) NOT NULL | Cor do texto |
+| `cor_fundo` | VARCHAR(20) NOT NULL | Cor de fundo |
 
-**Regra de inserção:**  
-Sempre que o usuário clicar em **Finalizar** na tela pós-compra, o sistema deve inserir um registro nesta tabela para **cada item que teve quantidade > 0** (ou que teve marca/preço informados, mesmo que quantidade zero? – sugerimos apenas quantidade > 0).
+### 1.2. Tabela `item`
 
----
+| Campo | Tipo | Descrição |
+|-------|------|-------------|
+| `ide_item` | SERIAL PRIMARY KEY | Identificador único |
+| `nome_item` | VARCHAR(100) NOT NULL | Nome do item |
+| `unidade_medida` | VARCHAR(50) | Peso ou unidade |
+| `quantidade_estoque` | INTEGER NOT NULL | Quantidade atual |
+| `li_mite_de_compra` | INTEGER NOT NULL | Quantidade máxima de compra |
+| `data_ultima_compra` | DATE | Última compra registrada |
+| `ide_categoria` | INTEGER NOT NULL REFERENCES categoria(ide_categoria) | Chave estrangeira |
+| `duracao_dias` | INTEGER NOT NULL | Duração em dias (RN23) |
+| `dtc_criacao` | DATE NOT NULL | Data de criação |
+| `dtc_exclusao` | DATE | Data de exclusão lógica |
+| `ind_ativo` | BOOLEAN DEFAULT TRUE | Ativo/inativo |
+| **UNIQUE** | `(nome_item, ide_categoria)` | Garante RN20 |
 
-## 2. Atualização de Estoque Pós-Compra
+### 1.3. Tabela `compra`
 
-- O estoque dos itens deve ser **reduzido** pela quantidade comprada no momento da finalização da compra.
-- A operação deve ser atômica (inserção no histórico + atualização do estoque) para evitar inconsistências.
+| Campo | Tipo | Descrição |
+|-------|------|-------------|
+| `ide_compra` | SERIAL PRIMARY KEY | Identificador único |
+| `data_compra` | DATE NOT NULL | Data da ida ao mercado |
+| `valor_total` | NUMERIC(10,2) | Valor total da compra (opcional, pode ser calculado) |
 
----
+### 1.4. Tabela `item_compra` (associativa)
 
-## 3. Exclusão Lógica (Soft Delete)
+| Campo | Tipo | Descrição |
+|-------|------|-------------|
+| `ide_item_compra` | SERIAL PRIMARY KEY | Identificador único |
+| `ide_compra` | INTEGER NOT NULL REFERENCES compra(ide_compra) | Chave estrangeira para compra |
+| `ide_item` | INTEGER NOT NULL REFERENCES item(ide_item) | Chave estrangeira para item |
+| `quantidade` | INTEGER NOT NULL | Quantidade comprada |
+| `preco` | NUMERIC(10,2) | Preço unitário ou total (definir) |
+| `marca` | VARCHAR(100) | Marca do produto |
 
-- As tabelas `itens` e `categorias` devem conter um campo `deleted_at` (timestamp, nulo quando ativo) ou `ativo` (booleano).
-- Todas as consultas para listagem, busca, relatórios e cálculos devem filtrar apenas registros com `deleted_at IS NULL` (ou `ativo = true`).
-- A exclusão em massa (RN-12 e RN-21) deve preencher `deleted_at` com a data/hora atual para todos os registros selecionados.
+### 1.5. Regras de integridade
 
----
+- Soft delete via `ind_ativo` e `dtc_exclusao` (itens e categorias).
+- Exclusão lógica em cascata? Não, deve ser tratada pela aplicação.
+- A RN60 (soma de compras com mesma data) é implementada via lógica de aplicação, não por constraint.
 
-## 4. Persistência Seletiva (Performance)
-
-- Nas telas de edição de estoque e pós-compra, o frontend deve enviar ao backend **apenas os itens cujos valores foram alterados**.
-- O backend deve atualizar somente os registros recebidos, sem tocar nos demais.
