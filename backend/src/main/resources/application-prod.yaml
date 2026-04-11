@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: supermarketlist
+  datasource:
+    url: ${DB_URL} 
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    show-sql: false
