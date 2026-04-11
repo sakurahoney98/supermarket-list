@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: supermarketlist
+  datasource:
+    url: jdbc:postgresql://localhost:5432/supermarketlist
+    username: postgres
+    password: postgres
