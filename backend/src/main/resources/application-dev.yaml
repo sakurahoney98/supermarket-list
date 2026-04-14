@@ -1,7 +1,27 @@
 spring:
   application:
     name: supermarketlist
+
   datasource:
     url: jdbc:postgresql://localhost:5432/supermarketlist
     username: postgres
     password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+        use_sql_comments: true
+
+logging:
+  level:
+    root: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+    org.springframework.transaction: DEBUG
+    org.springframework.web: DEBUG

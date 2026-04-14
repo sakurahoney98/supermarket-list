@@ -2,8 +2,5 @@ spring:
   application:
     name: supermarket-list
 
-  jpa:
-    hibernate:
-      ddl-auto: update
   profiles:
     default: dev
