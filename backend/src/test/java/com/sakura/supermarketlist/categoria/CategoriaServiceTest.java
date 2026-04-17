@@ -63,11 +63,11 @@ public class CategoriaServiceTest {
 		
 		when(repository.existsByDscCategoriaAndIndAtivoTrue("Teste")).thenReturn(true);
 	    
-	    RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+	    CategoriaDuplicadaException exception = assertThrows(CategoriaDuplicadaException.class, () -> {
 	        service.cadastrarCategoria(request);
 	    });
 
-	    assertEquals("Categoria já existe.", exception.getMessage());
+	    assertEquals("Já existe uma categoria ativa com o nome Teste", exception.getMessage());
 	        
 
 	}
