@@ -1,12 +1,20 @@
 package com.sakura.supermarketlist.categoria;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.sakura.supermarketlist.item.ItemRepository;
 
 @Service
 public class CategoriaService {
 	@Autowired
 	CategoriaRepository repository;
+	
+	@Autowired
+	ItemRepository itemRepository;
 	
 	public CategoriaResponseDTO cadastrarCategoria(CategoriaRequestDTO request) {
 		
@@ -31,5 +39,40 @@ public class CategoriaService {
 		    );
 		
 	}
+	
+	public boolean excluirCategoria(Long ideCategoria){
+		Categoria categoria = repository.findByIdeCategoriaAndIndAtivoTrue(ideCategoria).orElseThrow(() -> new RuntimeException("Identificador não existe ou a categoria já se encontra inativada"));
+		
+		List<String> itensVinculadosCategoria = itemRepository.findNomesByCategoriaIdeCategoriaAndIndAtivoTrue(ideCategoria);
+		
+		if(isExclusaoPermitida(itensVinculadosCategoria)) {
+			
+			categoria.setIndAtivo(false);
+			categoria.setDtcExclusao(LocalDateTime.now());
+			
+			repository.save(categoria);
+			
+		}else {
+			throw new CategoriaVinculadaItensAtivosException(itensVinculadosCategoria);
+		}
+		
+		return true;
+		
+		
+	}
+	
+	private boolean isExclusaoPermitida(List <String> itensVinculadosCategoria) {
+		
+		if(itensVinculadosCategoria.size() > 0) {
+			return false;
+			
+		}
+		
+		return true;
+		
+	}
+	
+	
+	
 
 }
