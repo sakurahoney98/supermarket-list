@@ -11,7 +11,7 @@ public class CategoriaService {
 	public CategoriaResponseDTO cadastrarCategoria(CategoriaRequestDTO request) {
 		
 		if(repository.existsByDscCategoriaAndIndAtivoTrue(request.nome())) {
-			throw new RuntimeException("Categoria já existe.");
+			throw new CategoriaDuplicadaException(request.nome());
 			
 		}
 		

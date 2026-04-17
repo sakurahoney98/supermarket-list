@@ -22,7 +22,7 @@ public class Categoria {
 	private Long ideCategoria;
 	
 	 @NotBlank(message = "Nome é obrigatório")
-	 @Column(name="dsc_categoria", nullable = false, unique = true)
+	 @Column(name="dsc_categoria", nullable = false)
 	 private String dscCategoria;
 	 
 	 @NotBlank(message = "Cor da letra é obrigatório")
