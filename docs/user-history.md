@@ -57,8 +57,8 @@
 **Para** incluí-lo no controle de compras  
 
 **Critérios de aceite:**  
-- O formulário deve conter os campos obrigatórios: Nome, Quantidade em estoque, Quantidade máxima de compra, Categoria, Duração (em dias) – conforme RN17  
-- Campos opcionais: Peso ou unidade, Data da última compra – RN17  
+- O formulário deve conter os campos obrigatórios: Nome, Quantidade em estoque, Quantidade máxima de compra, Categoria, Duração (em dias), Data da última compra – conforme RN17  
+- Campos opcionais: Peso ou unidade  – RN17  
 - Antes de permitir o cadastro, o sistema deve verificar se existe pelo menos uma categoria cadastrada (RN18). Caso não exista, bloquear e exibir mensagem (RN19)  
 - Não é permitido cadastrar dois itens com o mesmo nome dentro da mesma categoria (RN20)  
 - Duração deve ser maior que 0 (RN23)  
