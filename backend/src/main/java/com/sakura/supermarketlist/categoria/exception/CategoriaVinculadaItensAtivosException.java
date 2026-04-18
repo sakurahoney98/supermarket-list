@@ -1,4 +1,4 @@
-package com.sakura.supermarketlist.categoria;
+package com.sakura.supermarketlist.categoria.exception;
 
 import java.util.List;
 
