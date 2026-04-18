@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -45,12 +46,13 @@ public class Item {
 	 @Column(name="data_ultima_compra", nullable = false)
 	 private LocalDateTime dataUltimaCompra;
 	 
-	 @NotBlank(message = "A vinculação do item com uma categoria é obrigatório")
+	 @NotNull(message = "A vinculação do item com uma categoria é obrigatório")
 	 @ManyToOne
 	 @JoinColumn(name = "ide_categoria", nullable = false)
 	 private Categoria categoria;
 	 
 	 @NotNull(message = "Nome é obrigatório")
+	 @Min(1)
 	 @Column(name="duracao_dias", nullable = false)
 	 private Integer duracaoDias;
 	 

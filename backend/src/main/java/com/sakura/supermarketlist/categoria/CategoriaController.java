@@ -1,5 +1,7 @@
 package com.sakura.supermarketlist.categoria;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,21 +15,22 @@ import jakarta.validation.Valid;
 @RequestMapping("/categorias")
 public class CategoriaController {
 
-    private final CategoriaService service;
+	private final CategoriaService service;
 
-    public CategoriaController(CategoriaService service) {
-        this.service = service;
-    }
+	public CategoriaController(CategoriaService service) {
+		this.service = service;
+	}
 
-    @PostMapping
-    public CategoriaResponseDTO cadastrarCategoria(
-            @RequestBody @Valid CategoriaRequestDTO request
-    ) {
-        return service.cadastrarCategoria(request);
-    }
-    
-    @DeleteMapping ("/{ideCategoria}")
-    public boolean excluirCategoria(@PathVariable Long ideCategoria) {
-    	return service.excluirCategoria(ideCategoria);
-    }
+	@PostMapping
+	public ResponseEntity<CategoriaResponseDTO> cadastrarCategoria(@RequestBody @Valid CategoriaRequestDTO request) {
+		CategoriaResponseDTO response = service.cadastrarCategoria(request);
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);
+	}
+
+	@DeleteMapping("/{ideCategoria}")
+	public ResponseEntity<Void> excluirCategoria(@PathVariable Long ideCategoria) {
+		service.excluirCategoria(ideCategoria);
+		return ResponseEntity.noContent().build();
+
+	}
 }

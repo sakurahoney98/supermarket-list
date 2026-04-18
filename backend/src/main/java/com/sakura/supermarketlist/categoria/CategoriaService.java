@@ -63,12 +63,7 @@ public class CategoriaService {
 	
 	private boolean isExclusaoPermitida(List <String> itensVinculadosCategoria) {
 		
-		if(itensVinculadosCategoria.size() > 0) {
-			return false;
-			
-		}
-		
-		return true;
+		return itensVinculadosCategoria.isEmpty();
 		
 	}
 	
