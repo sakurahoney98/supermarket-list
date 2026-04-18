@@ -43,9 +43,9 @@
 - O sistema deve exibir uma tela com a lista de todas as categorias **ativas** (não excluídas logicamente) – RN36, RN58  
 - Cada linha da lista deve mostrar: **ID** e **Nome** da categoria (aplicando as cores definidas – letra e fundo) – RN36  
 - A lista deve ser ordenada **alfabeticamente** pelo nome da categoria  
-- A tela deve permitir ações por categoria: **Editar**, **Excluir** (individual) e, se desejado, **Visualizar detalhes**  
+- A tela deve permitir ações por categoria: **Excluir** individual.
 - Deve haver suporte para **exclusão em massa** (selecionar múltiplas categorias e excluir de uma vez), respeitando a regra de bloqueio para categorias vinculadas a itens (nenhuma das selecionadas pode ter itens) – RN37, RN39, RN40  
-- Opcional, mas recomendado: campo de busca por nome para filtrar categorias  
+- Campo de busca por nome para filtrar categorias  
 
 **Regras de negócio relacionadas:** RN36, RN37, RN38, RN39, RN40, RN58 (conforme `03-interface-rules.md` e `02-validation-rules.md`)
 
