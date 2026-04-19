@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sakura.supermarketlist.categoria.exception.CategoriaDuplicadaException;
+import com.sakura.supermarketlist.categoria.exception.CategoriaInexistenteException;
 import com.sakura.supermarketlist.categoria.exception.CategoriaVinculadaItensAtivosException;
 import com.sakura.supermarketlist.item.ItemRepository;
 
@@ -20,16 +21,15 @@ public class CategoriaService {
 	ItemRepository itemRepository;
 
 	public CategoriaResponseDTO cadastrarCategoria(CategoriaRequestDTO request) {
+		
+		
 
 		if (repository.existsByDscCategoriaAndIndAtivoTrue(request.nome())) {
 			throw new CategoriaDuplicadaException(request.nome());
 
 		}
 
-		Categoria categoria = new Categoria();
-		categoria.setDscCategoria(request.nome());
-		categoria.setCorLetra(request.corLetra());
-		categoria.setCorFundo(request.corFundo());
+		Categoria categoria = conversaoDTOParaEntidade(request);
 
 		Categoria objeto = repository.save(categoria);
 
@@ -39,7 +39,7 @@ public class CategoriaService {
 
 	public boolean excluirCategoria(Long ideCategoria) {
 		Categoria categoria = repository.findByIdeCategoriaAndIndAtivoTrue(ideCategoria).orElseThrow(
-				() -> new RuntimeException("Identificador não existe ou a categoria já se encontra inativada"));
+				() -> new CategoriaInexistenteException());
 
 		List<String> itensVinculadosCategoria = itemRepository
 				.findNomesByCategoriaIdeCategoriaAndIndAtivoTrue(ideCategoria);
@@ -79,6 +79,15 @@ public class CategoriaService {
 
 		return geracaoDeListaDTO(lista);
 
+	}
+	
+	private Categoria conversaoDTOParaEntidade(CategoriaRequestDTO request) {
+		Categoria categoria = new Categoria();
+		categoria.setDscCategoria(request.nome());
+		categoria.setCorLetra(request.corLetra());
+		categoria.setCorFundo(request.corFundo());
+		
+		return categoria;
 	}
 
 	private CategoriaResponseDTO conversaoEntidadeParaDTO(Categoria objeto) {

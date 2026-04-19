@@ -11,5 +11,7 @@ public interface ItemRepository  extends JpaRepository<Item, Long> {
 	@Query("SELECT i.nomeItem FROM Item i WHERE i.categoria.ideCategoria = :categoriaId AND i.indAtivo = true")
     List<String> findNomesByCategoriaIdeCategoriaAndIndAtivoTrue(@Param("categoriaId") Long categoriaId);
 	
+	boolean existsByNomeItemAndCategoriaIdeCategoriaAndIndAtivoTrue (String nome, Long ideCategoria);
+	
 
 }

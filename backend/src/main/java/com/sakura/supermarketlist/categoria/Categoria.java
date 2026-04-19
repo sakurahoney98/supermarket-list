@@ -64,6 +64,10 @@ public class Categoria {
 		this.dtcExclusao = dtcExclusao;
 		this.indAtivo = indAtivo;
 	 }
+	 
+	 public Categoria(Long ideCategoria) {
+		 this.ideCategoria = ideCategoria;
+	 }
 
 
 
