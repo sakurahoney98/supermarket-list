@@ -1,9 +1,11 @@
 package com.sakura.supermarketlist.item;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sakura.supermarketlist.categoria.Categoria;
 
 import jakarta.persistence.Column;
@@ -42,9 +44,10 @@ public class Item {
 	 @Column(name="limite_compra", nullable = false)
 	 private Integer limiteCompra;
 	 
-	 @NotNull(message = "data da última compra do item é obrigatório")
+	 @NotNull(message = "Data da última compra é obrigatória")
+	 @JsonFormat(pattern = "yyyy-MM-dd")
 	 @Column(name="data_ultima_compra", nullable = false)
-	 private LocalDateTime dataUltimaCompra;
+	 private LocalDate dataUltimaCompra;
 	 
 	 @NotNull(message = "A vinculação do item com uma categoria é obrigatório")
 	 @ManyToOne
@@ -79,7 +82,7 @@ public class Item {
 	 public Item(Long ideItem, @NotBlank(message = "Nome é obrigatório") String nomeItem, String unidadeMedida,
 			@NotBlank(message = "A quantidade em estoque é obrigatório") Integer quantidadeEstoque,
 			@NotBlank(message = "O limite de compra de item é obrigatório") Integer limiteCompra,
-			@NotBlank(message = "data da última compra do item é obrigatório") LocalDateTime dataUltimaCompra,
+			@NotBlank(message = "data da última compra do item é obrigatório") LocalDate dataUltimaCompra,
 			@NotBlank(message = "A vinculação do item com uma categoria é obrigatório") Categoria categoria,
 			@NotBlank(message = "Nome é obrigatório") Integer duracaoDias, LocalDateTime dtcCriacao,
 			LocalDateTime dtcExclusao, boolean indAtivo) {
@@ -170,14 +173,14 @@ public class Item {
 
 
 
-	 public LocalDateTime getDataUltimaCompra() {
+	 public LocalDate getDataUltimaCompra() {
 		 return dataUltimaCompra;
 	 }
 
 
 
 
-	 public void setDataUltimaCompra(LocalDateTime dataUltimaCompra) {
+	 public void setDataUltimaCompra(LocalDate dataUltimaCompra) {
 		 this.dataUltimaCompra = dataUltimaCompra;
 	 }
 
