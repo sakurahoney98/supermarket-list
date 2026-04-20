@@ -1,6 +1,7 @@
 package com.sakura.supermarketlist.item;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,6 +13,8 @@ public interface ItemRepository  extends JpaRepository<Item, Long> {
     List<String> findNomesByCategoriaIdeCategoriaAndIndAtivoTrue(@Param("categoriaId") Long categoriaId);
 	
 	boolean existsByNomeItemAndCategoriaIdeCategoriaAndIndAtivoTrue (String nome, Long ideCategoria);
+	
+	Optional <Item> findByIdeItemAndIndAtivoTrue(Long ideItem);
 	
 
 }
