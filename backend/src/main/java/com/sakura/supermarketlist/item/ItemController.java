@@ -2,7 +2,9 @@ package com.sakura.supermarketlist.item;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +26,14 @@ public class ItemController {
 		ItemResponseDTO response = service.cadastrarItem(request);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
+	}
+	
+	
+	@PutMapping("/{ideItem}")
+	public ResponseEntity<ItemResponseDTO> editarItem(@RequestBody @Valid ItemRequestDTO request, @PathVariable Long ideItem) {
+		ItemResponseDTO response = service.editarItem(request, ideItem);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
 }

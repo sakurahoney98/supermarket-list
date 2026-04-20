@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -17,11 +18,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.BeanUtils;
 
 import com.sakura.supermarketlist.categoria.Categoria;
 import com.sakura.supermarketlist.categoria.CategoriaRepository;
 import com.sakura.supermarketlist.categoria.exception.CategoriaInexistenteException;
 import com.sakura.supermarketlist.item.exception.ItemDuplicadoNaCategoria;
+import com.sakura.supermarketlist.item.exception.ItemInexistenteException;
 import com.sakura.supermarketlist.item.exception.NenhumaCategoriaCadastrada;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,8 +38,10 @@ public class ItemServiceTest {
 	@InjectMocks
 	private ItemService service;
 	
-	private Item item;
-	private ItemRequestDTO requestSucesso;
+	private Item itemCadastro;
+	private Item itemEditado;
+	private ItemRequestDTO requestCadastro;
+	private ItemRequestDTO requestEdicao;
 	private Categoria categoriaTest;
 	
 	@BeforeEach
@@ -44,28 +49,33 @@ public class ItemServiceTest {
 		
 		categoriaTest = new Categoria(2L);
 		
-		item = new Item();
-		item.setNomeItem("Item Sucesso");
-		item.setUnidadeMedida("1kg");
-		item.setQuantidadeEstoque(1);
-		item.setLimiteCompra(4);
-		item.setDataUltimaCompra(LocalDate.of(2026, 3, 14));
-		item.setCategoria(categoriaTest);
-		item.setDuracaoDias(10);
+		itemCadastro = new Item();
+		itemCadastro.setNomeItem("Item Sucesso");
+		itemCadastro.setUnidadeMedida("1kg");
+		itemCadastro.setQuantidadeEstoque(1);
+		itemCadastro.setLimiteCompra(4);
+		itemCadastro.setDataUltimaCompra(LocalDate.of(2026, 3, 14));
+		itemCadastro.setCategoria(categoriaTest);
+		itemCadastro.setDuracaoDias(10);
+		
+		itemEditado = new Item();
+		BeanUtils.copyProperties(itemCadastro, itemEditado);
+		itemEditado.setNomeItem("Item Editado");
 
-		requestSucesso = new ItemRequestDTO("Item Sucesso", "1Kg", 1, 4, LocalDate.of(2026,3,14), 2L, 10);
+		requestCadastro = new ItemRequestDTO("Item Sucesso", "1Kg", 1, 4, LocalDate.of(2026,3,14), 2L, 10);
+		requestEdicao = new ItemRequestDTO("Item Editado", "1Kg", 1, 4, LocalDate.of(2026,3,14), 2L, 10);
 		
 	}
 	
 	@Test
 	void cadastrarItemComSucesso() {
 		when(categoriaRepository.existsByIndAtivoTrue()).thenReturn(true);
-		when(categoriaRepository.existsByIdeCategoriaAndIndAtivoTrue(requestSucesso.categoria())).thenReturn(true);
-		when(repository.existsByNomeItemAndCategoriaIdeCategoriaAndIndAtivoTrue(requestSucesso.nome(), requestSucesso.categoria())).thenReturn(false);
-		when(categoriaRepository.findById(requestSucesso.categoria())).thenReturn(Optional.of(categoriaTest));
-		when(repository.save(any(Item.class))).thenReturn(item);
+		when(categoriaRepository.existsByIdeCategoriaAndIndAtivoTrue(requestCadastro.categoria())).thenReturn(true);
+		when(repository.existsByNomeItemAndCategoriaIdeCategoriaAndIndAtivoTrue(requestCadastro.nome(), requestCadastro.categoria())).thenReturn(false);
+		when(categoriaRepository.findById(requestCadastro.categoria())).thenReturn(Optional.of(categoriaTest));
+		when(repository.save(any(Item.class))).thenReturn(itemCadastro);
 		
-		ItemResponseDTO response = service.cadastrarItem(requestSucesso);
+		ItemResponseDTO response = service.cadastrarItem(requestCadastro);
 		
 		assertNotNull(response);
 		assertEquals("Item Sucesso", response.nome());
@@ -81,7 +91,7 @@ public class ItemServiceTest {
 	
 		
 		NenhumaCategoriaCadastrada exception = assertThrows(NenhumaCategoriaCadastrada.class, () -> {
-			service.cadastrarItem(requestSucesso);
+			service.cadastrarItem(requestCadastro);
 		});
 
 		assertEquals("Necessário haver pelo menos uma categoria cadastrada.", exception.getMessage());
@@ -94,11 +104,11 @@ public class ItemServiceTest {
 	@Test
 	void cadastrarItemCategoriaInexistente() {
 		when(categoriaRepository.existsByIndAtivoTrue()).thenReturn(true);
-		when(categoriaRepository.existsByIdeCategoriaAndIndAtivoTrue(requestSucesso.categoria())).thenReturn(false);
+		when(categoriaRepository.existsByIdeCategoriaAndIndAtivoTrue(requestCadastro.categoria())).thenReturn(false);
 	
 		
 		CategoriaInexistenteException exception = assertThrows(CategoriaInexistenteException.class, () -> {
-			service.cadastrarItem(requestSucesso);
+			service.cadastrarItem(requestCadastro);
 		});
 
 		assertEquals("Identificador não existe ou a categoria já se encontra inativada.", exception.getMessage());
@@ -111,20 +121,53 @@ public class ItemServiceTest {
 	@Test
 	void cadastrarItemDuplicadoNaCategoria() {
 		when(categoriaRepository.existsByIndAtivoTrue()).thenReturn(true);
-		when(categoriaRepository.existsByIdeCategoriaAndIndAtivoTrue(requestSucesso.categoria())).thenReturn(true);
-		when(repository.existsByNomeItemAndCategoriaIdeCategoriaAndIndAtivoTrue(requestSucesso.nome(), requestSucesso.categoria())).thenReturn(true);
+		when(categoriaRepository.existsByIdeCategoriaAndIndAtivoTrue(requestCadastro.categoria())).thenReturn(true);
+		when(repository.existsByNomeItemAndCategoriaIdeCategoriaAndIndAtivoTrue(requestCadastro.nome(), requestCadastro.categoria())).thenReturn(true);
 		
-		
-	
 		
 		ItemDuplicadoNaCategoria exception = assertThrows(ItemDuplicadoNaCategoria.class, () -> {
-			service.cadastrarItem(requestSucesso);
+			service.cadastrarItem(requestCadastro);
 		});
+		
 
 		assertEquals("Já existe um item com o mesmo nome cadastrado nessa categoria.", exception.getMessage());
 		
 		verify(repository, never()).save(any(Item.class));
 		
+		
+	}
+	
+	@Test
+	void editarItemSucesso() {
+		when(categoriaRepository.existsByIndAtivoTrue()).thenReturn(true);
+		when(categoriaRepository.existsByIdeCategoriaAndIndAtivoTrue(requestEdicao.categoria())).thenReturn(true);
+		when(categoriaRepository.findById(requestCadastro.categoria())).thenReturn(Optional.of(categoriaTest));
+		when(repository.existsByNomeItemAndCategoriaIdeCategoriaAndIndAtivoTrue(requestEdicao.nome(), requestEdicao.categoria())).thenReturn(false);
+		when(repository.findByIdeItemAndIndAtivoTrue(1L)).thenReturn(Optional.of(itemCadastro));
+		when(repository.save(itemCadastro)).thenReturn(itemEditado);
+		
+		ItemResponseDTO response = service.editarItem(requestEdicao, 1L);
+		
+		assertEquals("Item Editado", response.nome());
+
+		verify(repository, times(1)).save(any(Item.class));
+		
+	}
+	
+	@Test
+	void editarItemInexistente() {
+		
+		when(repository.findByIdeItemAndIndAtivoTrue(1L)).thenReturn(Optional.empty());
+		
+		ItemInexistenteException exception = assertThrows(ItemInexistenteException.class, () -> {
+			service.editarItem(requestEdicao, 1L);
+		});
+		
+		
+		
+		assertEquals("Identificador não existe ou o item já se encontra inativado.", exception.getMessage());
+
+		verify(repository, never()).save(any(Item.class));
 		
 	}
 
