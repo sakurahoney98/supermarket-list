@@ -38,6 +38,13 @@ public class CategoriaController {
 
 	}
 	
+	@DeleteMapping
+	public ResponseEntity<Void> excluirCategoria(@RequestBody List<Long> ideCategoria) {
+		service.excluirCategoria(ideCategoria);
+		return ResponseEntity.noContent().build();
+
+	}
+	
 	@GetMapping("/ordenar-por-nome")
 	public ResponseEntity<List<CategoriaResponseDTO>> exibirCategoriasPorNome() {
 		

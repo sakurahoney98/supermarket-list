@@ -21,8 +21,6 @@ public class CategoriaService {
 	ItemRepository itemRepository;
 
 	public CategoriaResponseDTO cadastrarCategoria(CategoriaRequestDTO request) {
-		
-		
 
 		if (repository.existsByDscCategoriaAndIndAtivoTrue(request.nome())) {
 			throw new CategoriaDuplicadaException(request.nome());
@@ -38,8 +36,8 @@ public class CategoriaService {
 	}
 
 	public boolean excluirCategoria(Long ideCategoria) {
-		Categoria categoria = repository.findByIdeCategoriaAndIndAtivoTrue(ideCategoria).orElseThrow(
-				() -> new CategoriaInexistenteException());
+		Categoria categoria = repository.findByIdeCategoriaAndIndAtivoTrue(ideCategoria)
+				.orElseThrow(() -> new CategoriaInexistenteException());
 
 		List<String> itensVinculadosCategoria = itemRepository
 				.findNomesByCategoriaIdeCategoriaAndIndAtivoTrue(ideCategoria);
@@ -53,6 +51,39 @@ public class CategoriaService {
 
 		} else {
 			throw new CategoriaVinculadaItensAtivosException(itensVinculadosCategoria);
+		}
+
+		return true;
+
+	}
+
+	public boolean excluirCategoria(List<Long> listaCategorias) {
+
+		List<String> categoriasComBloqueioDeExclusao = new ArrayList<String>();
+
+		for (Long ideCategoria : listaCategorias) {
+			Categoria categoria = repository.findByIdeCategoriaAndIndAtivoTrue(ideCategoria)
+					.orElseThrow(() -> new CategoriaInexistenteException());
+
+			List<String> itensVinculadosCategoria = new ArrayList<String>();
+			itensVinculadosCategoria = itemRepository.findNomesByCategoriaIdeCategoriaAndIndAtivoTrue(ideCategoria);
+
+			if (isExclusaoPermitida(itensVinculadosCategoria)) {
+
+				categoria.setIndAtivo(false);
+				categoria.setDtcExclusao(LocalDateTime.now());
+
+				repository.save(categoria);
+
+			} else {
+				categoriasComBloqueioDeExclusao.add(categoria.getDscCategoria() + ": " + itensVinculadosCategoria.toString());
+
+			}
+
+		}
+
+		if (!categoriasComBloqueioDeExclusao.isEmpty()) {
+			throw new CategoriaVinculadaItensAtivosException(categoriasComBloqueioDeExclusao);
 		}
 
 		return true;
@@ -80,20 +111,24 @@ public class CategoriaService {
 		return geracaoDeListaDTO(lista);
 
 	}
-	
+
 	private Categoria conversaoDTOParaEntidade(CategoriaRequestDTO request) {
 		Categoria categoria = new Categoria();
 		categoria.setDscCategoria(request.nome());
 		categoria.setCorLetra(request.corLetra());
 		categoria.setCorFundo(request.corFundo());
-		
+
 		return categoria;
 	}
 
 	private CategoriaResponseDTO conversaoEntidadeParaDTO(Categoria objeto) {
-		CategoriaResponseDTO dto = new CategoriaResponseDTO(objeto.getIdeCategoria(), objeto.getDscCategoria(),
-				objeto.getCorLetra(), objeto.getCorFundo(), objeto.isIndAtivo());
-		
+		CategoriaResponseDTO dto = new CategoriaResponseDTO(
+				objeto.getIdeCategoria(), 
+				objeto.getDscCategoria(),
+				objeto.getCorLetra(), 
+				objeto.getCorFundo(),
+				objeto.isIndAtivo());
+
 		return dto;
 	}
 

@@ -40,6 +40,7 @@ public class CategoriaServiceTest {
 	private CategoriaRequestDTO request;
 	private Categoria categoria;
 	private List<Categoria> categoriasMock;
+	private List<Long> listaCategorias;
 
 	@BeforeEach
 	void setUp() {
@@ -82,6 +83,12 @@ public class CategoriaServiceTest {
 		categoriasMock.add(cat1);
 		categoriasMock.add(cat2);
 		categoriasMock.add(cat3);
+		
+		listaCategorias = new ArrayList<Long>();
+		
+		listaCategorias.add(cat1.getIdeCategoria());
+		listaCategorias.add(cat2.getIdeCategoria());
+		listaCategorias.add(cat3.getIdeCategoria());
 
 	}
 
@@ -152,6 +159,54 @@ public class CategoriaServiceTest {
 		verify(repository, times(1)).save(any(Categoria.class));
 
 		assertFalse(categoria.isIndAtivo());
+
+	}
+	
+	@Test
+	void excluirListaCategoriaComVinculo() {
+		List<String> itensComVinculo = new ArrayList<String>();
+		itensComVinculo.add("Item teste");
+		
+		List<String> categoriasComBloqueioDeExclusao = new ArrayList<String>();
+		categoriasComBloqueioDeExclusao.add(categoriasMock.get(0).getDscCategoria() + ": " + itensComVinculo.toString());
+
+		when(itemRepository.findNomesByCategoriaIdeCategoriaAndIndAtivoTrue(1L)).thenReturn(itensComVinculo);
+		when(repository.findByIdeCategoriaAndIndAtivoTrue(1L)).thenReturn(Optional.of(categoriasMock.get(0)));
+		when(repository.findByIdeCategoriaAndIndAtivoTrue(2L)).thenReturn(Optional.of(categoriasMock.get(1)));
+		when(repository.findByIdeCategoriaAndIndAtivoTrue(3L)).thenReturn(Optional.of(categoriasMock.get(2)));
+
+		CategoriaVinculadaItensAtivosException exception = assertThrows(CategoriaVinculadaItensAtivosException.class,
+				() -> {
+					service.excluirCategoria(listaCategorias);
+				});
+		
+
+		assertEquals(categoriasComBloqueioDeExclusao.toString(), exception.getMessage());
+
+		verify(repository, never()).save(categoriasMock.get(0));
+		verify(repository, times(2)).save(any(Categoria.class));
+
+	}
+	
+	@Test
+	void excluirListaCategoriaSemVinculo() {
+
+		List<String> itensComVinculo = new ArrayList<String>();
+
+		when(itemRepository.findNomesByCategoriaIdeCategoriaAndIndAtivoTrue(1L)).thenReturn(itensComVinculo);
+		when(repository.findByIdeCategoriaAndIndAtivoTrue(1L)).thenReturn(Optional.of(categoriasMock.get(0)));
+		when(repository.findByIdeCategoriaAndIndAtivoTrue(2L)).thenReturn(Optional.of(categoriasMock.get(1)));
+		when(repository.findByIdeCategoriaAndIndAtivoTrue(3L)).thenReturn(Optional.of(categoriasMock.get(2)));
+
+		service.excluirCategoria(1L);
+		service.excluirCategoria(2L);
+		service.excluirCategoria(3L);
+
+		verify(repository, times(3)).save(any(Categoria.class));
+
+		assertFalse(categoriasMock.get(0).isIndAtivo());
+		assertFalse(categoriasMock.get(1).isIndAtivo());
+		assertFalse(categoriasMock.get(2).isIndAtivo());
 
 	}
 
