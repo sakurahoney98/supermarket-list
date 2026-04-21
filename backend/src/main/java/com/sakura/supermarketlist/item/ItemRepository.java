@@ -12,11 +12,23 @@ public interface ItemRepository  extends JpaRepository<Item, Long> {
 	@Query("SELECT i.nomeItem FROM Item i WHERE i.categoria.ideCategoria = :categoriaId AND i.indAtivo = true")
     List<String> findNomesByCategoriaIdeCategoriaAndIndAtivoTrue(@Param("categoriaId") Long categoriaId);
 	
-	boolean existsByNomeItemAndCategoriaIdeCategoriaAndIndAtivoTrue (String nome, Long ideCategoria);
+	boolean existsByNomeItemAndCategoriaIdeCategoriaAndIndAtivoTrue(String nome, Long ideCategoria);
+	
+	boolean existsByNomeItemAndCategoriaIdeCategoriaAndIndAtivoTrueAndIdeItemNot(String nome, Long ideCategoria, Long ideItem);
 	
 	Optional <Item> findByIdeItemAndIndAtivoTrue(Long ideItem);
 	
 	List <Item> findAllByIdeItemInAndIndAtivoTrue(List<Long> idesItens);
+	
+	List<Item> findByIndAtivoTrueOrderByCategoriaIdeCategoriaAscNomeItemAsc();
+	
+	List<Item> findByIndAtivoTrueOrderByDtcCriacaoDesc();
+	
+	List <Item> findByNomeItemContainingIgnoreCaseAndIndAtivoTrueOrderByNomeItemAsc(String termo);
+	
+	List <Item> findByCategoriaIdeCategoriaAndIndAtivoTrueOrderByNomeItemAsc(Long ideCategoria);
+		
+	List <Item> findByCategoriaIdeCategoriaAndNomeItemContainingIgnoreCaseAndIndAtivoTrueOrderByNomeItemAsc(Long ideCategoria, String termo);
 	
 
 	

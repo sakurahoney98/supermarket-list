@@ -8,9 +8,11 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sakura.supermarketlist.categoria.Categoria;
 import com.sakura.supermarketlist.categoria.CategoriaRepository;
+import com.sakura.supermarketlist.categoria.CategoriaResponseDTO;
 import com.sakura.supermarketlist.categoria.exception.CategoriaInexistenteException;
 import com.sakura.supermarketlist.common.dto.ExclusaoResponseDTO;
 import com.sakura.supermarketlist.item.exception.ItemDuplicadoNaCategoria;
@@ -29,6 +31,7 @@ public class ItemService {
 	public ItemResponseDTO cadastrarItem(ItemRequestDTO request) {
 
 		validarItem(request);
+		validarInclusao(request);
 
 		Item item = conversaoDTOParaEntidade(request);
 
@@ -43,6 +46,7 @@ public class ItemService {
 		Item item = repository.findByIdeItemAndIndAtivoTrue(ideItem).orElseThrow(() -> new ItemInexistenteException(ideItem));
 
 		validarItem(request);
+		validarEdicao(request, ideItem);
 
 		atualizarDados(item, request);
 
@@ -68,22 +72,21 @@ public class ItemService {
 		return objetoRespostaDeExclusao(1, dataExclusao, itensParaExclusao);
 	}
 	
+	@Transactional
 	public ExclusaoResponseDTO excluirItem(List<Long> listaItens) {
 		
 		validarListaDeExclusao(listaItens);
 		
 		LocalDateTime dataExclusao = LocalDateTime.now();
-		List <Item> itensParaExclusao = new ArrayList<Item>();
 		
-		for(Long ideItem : listaItens) {
-		Item item = repository.findByIdeItemAndIndAtivoTrue(ideItem).orElseThrow(() -> new ItemInexistenteException(ideItem));
-		
-		item.setIndAtivo(false);
-		item.setDtcExclusao(dataExclusao);
-		
-		repository.save(item);
-		itensParaExclusao.add(item);
-		}
+		List<Item> itensParaExclusao = repository.findAllByIdeItemInAndIndAtivoTrue(listaItens);
+	    
+	    for (Item item : itensParaExclusao) {
+	        item.setIndAtivo(false);
+	        item.setDtcExclusao(dataExclusao);
+	    }
+	    
+	    repository.saveAll(itensParaExclusao); 
 		
 		return objetoRespostaDeExclusao(itensParaExclusao.size(), dataExclusao, itensParaExclusao);
 	}
@@ -98,11 +101,58 @@ public class ItemService {
 			throw new CategoriaInexistenteException(request.categoria());
 		}
 
+
+	}
+	
+	private void validarInclusao(ItemRequestDTO request) {
 		if (repository.existsByNomeItemAndCategoriaIdeCategoriaAndIndAtivoTrue(request.nome(), request.categoria())) {
 			throw new ItemDuplicadoNaCategoria();
 		}
-
 	}
+	
+	private void validarEdicao(ItemRequestDTO request, Long ideItem) {
+		if (repository.existsByNomeItemAndCategoriaIdeCategoriaAndIndAtivoTrueAndIdeItemNot(request.nome(), request.categoria(), ideItem)) {
+			throw new ItemDuplicadoNaCategoria();
+		}
+	}
+	
+	public ItemResponseDTO buscarItemPorId(Long ideItem) {
+		Item item = repository.findByIdeItemAndIndAtivoTrue(ideItem).orElseThrow(() -> new ItemInexistenteException(ideItem));
+		
+		return conversaoEntidadeParaDTO(item);
+	}
+	
+	public List<ItemResponseDTO> buscarTodosItensAtivosOrdenadosPorCategoriaENome() {
+		List<Item> lista = repository.findByIndAtivoTrueOrderByCategoriaIdeCategoriaAscNomeItemAsc();
+		
+		return listaDeResposta(lista);
+		
+	}
+	
+	public List<ItemResponseDTO> buscarTodosItensAtivosOrdenadosPorDataCriacao() {
+		List<Item> lista =  repository.findByIndAtivoTrueOrderByDtcCriacaoDesc();
+		
+		return listaDeResposta(lista);
+	}
+	
+	public List<ItemResponseDTO> filtrarItensAtivosPorNome(String nome) {
+		List<Item> lista =  repository.findByNomeItemContainingIgnoreCaseAndIndAtivoTrueOrderByNomeItemAsc(nome);
+		
+		return listaDeResposta(lista);
+	}
+	
+	public List<ItemResponseDTO> filtrarItensAtivosPorCategoria(Long ideCategoria) {
+		List<Item> lista =  repository.findByCategoriaIdeCategoriaAndIndAtivoTrueOrderByNomeItemAsc(ideCategoria);
+		
+		return listaDeResposta(lista);
+	}
+	
+	public List<ItemResponseDTO> filtrarItensAtivosNacategoriaPorNome(Long ideCategoria, String nome) {
+		List<Item> lista =  repository.findByCategoriaIdeCategoriaAndNomeItemContainingIgnoreCaseAndIndAtivoTrueOrderByNomeItemAsc(ideCategoria, nome);
+		
+		return listaDeResposta(lista);
+	}
+	
 	
 	private void validarListaDeExclusao(List<Long> idesItem) {
 		List<Item> itensParaExclusao = repository.findAllByIdeItemInAndIndAtivoTrue(idesItem);
@@ -118,6 +168,19 @@ public class ItemService {
 		}
 
 		
+	}
+	
+	private List<ItemResponseDTO> listaDeResposta(List<Item> lista){
+		
+		List<ItemResponseDTO> listaFinal = new ArrayList<ItemResponseDTO>();
+		
+		for (Item item : lista) {
+			ItemResponseDTO objeto = conversaoEntidadeParaDTO(item);
+			
+			listaFinal.add(objeto);
+		}
+		
+		return listaFinal;
 	}
 
 	private Item conversaoDTOParaEntidade(ItemRequestDTO request) {
@@ -138,6 +201,16 @@ public class ItemService {
 	}
 
 	private ItemResponseDTO conversaoEntidadeParaDTO(Item item) {
+		Categoria categoria = item.getCategoria();
+	   
+	    CategoriaResponseDTO categoriaDTO = new CategoriaResponseDTO(
+	        categoria.getIdeCategoria(),
+	        categoria.getDscCategoria(),
+	        categoria.getCorLetra(),
+	        categoria.getCorFundo(),
+	        categoria.isIndAtivo()
+	    );
+	    
 		ItemResponseDTO objeto = new ItemResponseDTO(
 				item.getIdeItem(), 
 				item.getNomeItem(), 
@@ -145,7 +218,7 @@ public class ItemService {
 				item.getQuantidadeEstoque(), 
 				item.getLimiteCompra(), 
 				item.getDataUltimaCompra(), 
-				item.getCategoria(),
+				categoriaDTO,
 				item.getDuracaoDias(), 
 				item.isIndAtivo());
 
@@ -157,7 +230,6 @@ public class ItemService {
 		Categoria categoria = categoriaRepository.findById(request.categoria())
 				.orElseThrow(() -> new CategoriaInexistenteException(request.categoria()));
 
-		item.setNomeItem(request.nome());
 		item.setNomeItem(request.nome());
 		item.setUnidadeMedida(request.unidadeMedida());
 		item.setQuantidadeEstoque(request.quantidadeEstoque());
