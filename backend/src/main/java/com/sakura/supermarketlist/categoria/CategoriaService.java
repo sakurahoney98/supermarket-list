@@ -65,12 +65,12 @@ public class CategoriaService {
 
 	@Transactional
 	public ExclusaoResponseDTO excluirCategoria(List<Long> listaCategorias) {
-
-		validarListaDeExclusao(listaCategorias);
-
-		LocalDateTime dataExclusao = LocalDateTime.now();
 		List<Categoria> categoriasExcluidas = repository.findAllByIdeCategoriaInAndIndAtivoTrue(listaCategorias);
 
+		validarListaDeExclusao(listaCategorias, categoriasExcluidas);
+
+		LocalDateTime dataExclusao = LocalDateTime.now();
+		
 		for (Categoria categoria : categoriasExcluidas) {
 
 			categoria.setIndAtivo(false);
@@ -145,8 +145,7 @@ public class CategoriaService {
 
 	}
 
-	private void validarListaDeExclusao(List<Long> idesCategoria) {
-		List<Categoria> categoriasparaExclusao = repository.findAllByIdeCategoriaInAndIndAtivoTrue(idesCategoria);
+	private void validarListaDeExclusao(List<Long> idesCategoria, List<Categoria> categoriasparaExclusao) {
 
 		if (categoriasparaExclusao.size() != idesCategoria.size()) {
 			Set<Long> idsEncontrados = categoriasparaExclusao.stream().map(Categoria::getIdeCategoria)
