@@ -23,6 +23,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.sakura.supermarketlist.categoria.dto.CategoriaRequestDTO;
+import com.sakura.supermarketlist.categoria.dto.CategoriaResponseDTO;
 import com.sakura.supermarketlist.categoria.exception.CategoriaDuplicadaException;
 import com.sakura.supermarketlist.categoria.exception.CategoriaVinculadaItensAtivosException;
 import com.sakura.supermarketlist.common.dto.ExclusaoResponseDTO;

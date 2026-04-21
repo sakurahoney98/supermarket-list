@@ -1,4 +1,4 @@
-package com.sakura.supermarketlist.common.dto;
+package com.sakura.supermarketlist.item.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

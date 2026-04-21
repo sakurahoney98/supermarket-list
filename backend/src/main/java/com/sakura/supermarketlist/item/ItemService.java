@@ -13,10 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sakura.supermarketlist.categoria.Categoria;
 import com.sakura.supermarketlist.categoria.CategoriaRepository;
-import com.sakura.supermarketlist.categoria.CategoriaResponseDTO;
+import com.sakura.supermarketlist.categoria.dto.CategoriaResponseDTO;
 import com.sakura.supermarketlist.categoria.exception.CategoriaInexistenteException;
-import com.sakura.supermarketlist.common.dto.AtualizacaoEstoqueRequestDTO;
 import com.sakura.supermarketlist.common.dto.ExclusaoResponseDTO;
+import com.sakura.supermarketlist.item.dto.AtualizacaoEstoqueRequestDTO;
+import com.sakura.supermarketlist.item.dto.ItemRequestDTO;
+import com.sakura.supermarketlist.item.dto.ItemResponseDTO;
 import com.sakura.supermarketlist.item.exception.ItemDuplicadoNaCategoria;
 import com.sakura.supermarketlist.item.exception.ItemInexistenteException;
 import com.sakura.supermarketlist.item.exception.ListaItemInexistenteException;

@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sakura.supermarketlist.common.dto.AtualizacaoEstoqueRequestDTO;
 import com.sakura.supermarketlist.common.dto.ExclusaoResponseDTO;
+import com.sakura.supermarketlist.item.dto.AtualizacaoEstoqueRequestDTO;
+import com.sakura.supermarketlist.item.dto.ItemRequestDTO;
+import com.sakura.supermarketlist.item.dto.ItemResponseDTO;
 
 import jakarta.validation.Valid;
 

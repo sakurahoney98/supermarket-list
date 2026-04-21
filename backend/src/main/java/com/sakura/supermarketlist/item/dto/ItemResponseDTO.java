@@ -1,8 +1,8 @@
-package com.sakura.supermarketlist.item;
+package com.sakura.supermarketlist.item.dto;
 
 import java.time.LocalDate;
 
-import com.sakura.supermarketlist.categoria.CategoriaResponseDTO;
+import com.sakura.supermarketlist.categoria.dto.CategoriaResponseDTO;
 
 public record ItemResponseDTO(
 		Long id,

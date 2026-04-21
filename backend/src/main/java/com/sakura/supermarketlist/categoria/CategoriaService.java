@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sakura.supermarketlist.categoria.dto.CategoriaRequestDTO;
+import com.sakura.supermarketlist.categoria.dto.CategoriaResponseDTO;
 import com.sakura.supermarketlist.categoria.exception.CategoriaDuplicadaException;
 import com.sakura.supermarketlist.categoria.exception.CategoriaInexistenteException;
 import com.sakura.supermarketlist.categoria.exception.CategoriaVinculadaItensAtivosException;

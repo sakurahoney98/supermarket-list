@@ -1,4 +1,4 @@
-package com.sakura.supermarketlist.item;
+package com.sakura.supermarketlist.item.dto;
 
 import java.time.LocalDate;
 

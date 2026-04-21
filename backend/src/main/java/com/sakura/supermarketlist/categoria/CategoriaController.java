@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sakura.supermarketlist.categoria.dto.CategoriaRequestDTO;
+import com.sakura.supermarketlist.categoria.dto.CategoriaResponseDTO;
 import com.sakura.supermarketlist.common.dto.ExclusaoResponseDTO;
 
 import jakarta.validation.Valid;
