@@ -3,6 +3,8 @@ package com.sakura.supermarketlist.categoria;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Service;
 import com.sakura.supermarketlist.categoria.exception.CategoriaDuplicadaException;
 import com.sakura.supermarketlist.categoria.exception.CategoriaInexistenteException;
 import com.sakura.supermarketlist.categoria.exception.CategoriaVinculadaItensAtivosException;
+import com.sakura.supermarketlist.categoria.exception.ListaCategoriaInexistenteException;
+import com.sakura.supermarketlist.common.dto.ExclusaoResponseDTO;
 import com.sakura.supermarketlist.item.ItemRepository;
 
 @Service
@@ -19,6 +23,7 @@ public class CategoriaService {
 
 	@Autowired
 	ItemRepository itemRepository;
+
 
 	public CategoriaResponseDTO cadastrarCategoria(CategoriaRequestDTO request) {
 
@@ -35,58 +40,49 @@ public class CategoriaService {
 
 	}
 
-	public boolean excluirCategoria(Long ideCategoria) {
+	public ExclusaoResponseDTO excluirCategoria(Long ideCategoria) {
+		
 		Categoria categoria = repository.findByIdeCategoriaAndIndAtivoTrue(ideCategoria)
-				.orElseThrow(() -> new CategoriaInexistenteException());
+				.orElseThrow(() -> new CategoriaInexistenteException(ideCategoria));
 
-		List<String> itensVinculadosCategoria = itemRepository
-				.findNomesByCategoriaIdeCategoriaAndIndAtivoTrue(ideCategoria);
+		validarItemDeExclusao(ideCategoria);
 
-		if (isExclusaoPermitida(itensVinculadosCategoria)) {
+		LocalDateTime dataExclusao = LocalDateTime.now();
+		List<Categoria> categoriasExcluidas = new ArrayList<Categoria>();
 
+		dataExclusao = LocalDateTime.now();
+		categoria.setIndAtivo(false);
+		categoria.setDtcExclusao(dataExclusao);
+
+		repository.save(categoria);
+		
+		categoriasExcluidas.add(categoria);
+
+		return objetoRespostaDeExclusao(1, dataExclusao, categoriasExcluidas);
+
+	}
+
+	public ExclusaoResponseDTO excluirCategoria(List<Long> listaCategorias) {
+
+		validarListaDeExclusao(listaCategorias);
+
+		LocalDateTime dataExclusao = LocalDateTime.now();
+		List<Categoria> categoriasExcluidas = new ArrayList<Categoria>();
+
+		for (Long ideCategoria : listaCategorias) {
+			Categoria categoria = repository.findByIdeCategoriaAndIndAtivoTrue(ideCategoria)
+					.orElseThrow(() -> new CategoriaInexistenteException(ideCategoria));
+
+			dataExclusao = LocalDateTime.now();
 			categoria.setIndAtivo(false);
 			categoria.setDtcExclusao(LocalDateTime.now());
 
 			repository.save(categoria);
 
-		} else {
-			throw new CategoriaVinculadaItensAtivosException(itensVinculadosCategoria);
+			categoriasExcluidas.add(categoria);
 		}
 
-		return true;
-
-	}
-
-	public boolean excluirCategoria(List<Long> listaCategorias) {
-
-		List<String> categoriasComBloqueioDeExclusao = new ArrayList<String>();
-
-		for (Long ideCategoria : listaCategorias) {
-			Categoria categoria = repository.findByIdeCategoriaAndIndAtivoTrue(ideCategoria)
-					.orElseThrow(() -> new CategoriaInexistenteException());
-
-			List<String> itensVinculadosCategoria = new ArrayList<String>();
-			itensVinculadosCategoria = itemRepository.findNomesByCategoriaIdeCategoriaAndIndAtivoTrue(ideCategoria);
-
-			if (isExclusaoPermitida(itensVinculadosCategoria)) {
-
-				categoria.setIndAtivo(false);
-				categoria.setDtcExclusao(LocalDateTime.now());
-
-				repository.save(categoria);
-
-			} else {
-				categoriasComBloqueioDeExclusao.add(categoria.getDscCategoria() + ": " + itensVinculadosCategoria.toString());
-
-			}
-
-		}
-
-		if (!categoriasComBloqueioDeExclusao.isEmpty()) {
-			throw new CategoriaVinculadaItensAtivosException(categoriasComBloqueioDeExclusao);
-		}
-
-		return true;
+		return objetoRespostaDeExclusao(categoriasExcluidas.size(), dataExclusao, categoriasExcluidas);
 
 	}
 
@@ -122,12 +118,8 @@ public class CategoriaService {
 	}
 
 	private CategoriaResponseDTO conversaoEntidadeParaDTO(Categoria objeto) {
-		CategoriaResponseDTO dto = new CategoriaResponseDTO(
-				objeto.getIdeCategoria(), 
-				objeto.getDscCategoria(),
-				objeto.getCorLetra(), 
-				objeto.getCorFundo(),
-				objeto.isIndAtivo());
+		CategoriaResponseDTO dto = new CategoriaResponseDTO(objeto.getIdeCategoria(), objeto.getDscCategoria(),
+				objeto.getCorLetra(), objeto.getCorFundo(), objeto.isIndAtivo());
 
 		return dto;
 	}
@@ -144,10 +136,54 @@ public class CategoriaService {
 
 	}
 
-	private boolean isExclusaoPermitida(List<String> itensVinculadosCategoria) {
+	private void validarItemDeExclusao(Long ideCategoria) {
 
-		return itensVinculadosCategoria.isEmpty();
+		List<String> itensVinculadosCategoria = itemRepository
+				.findNomesByCategoriaIdeCategoriaAndIndAtivoTrue(ideCategoria);
 
+		if (!itensVinculadosCategoria.isEmpty()) {
+			throw new CategoriaVinculadaItensAtivosException(itensVinculadosCategoria);
+		}
+
+	}
+
+	private void validarListaDeExclusao(List<Long> idesCategoria) {
+		List<Categoria> categoriasparaExclusao = repository.findAllByIdeCategoriaInAndIndAtivoTrue(idesCategoria);
+
+		if (categoriasparaExclusao.size() != idesCategoria.size()) {
+			Set<Long> idsEncontrados = categoriasparaExclusao.stream().map(Categoria::getIdeCategoria)
+					.collect(Collectors.toSet());
+
+			List<Long> idsNaoEncontrados = idesCategoria.stream().filter(id -> !idsEncontrados.contains(id))
+					.collect(Collectors.toList());
+
+			throw new ListaCategoriaInexistenteException(idsNaoEncontrados);
+		}
+
+		List<String> categoriasVinculadasAItens = new ArrayList<String>();
+
+		for (Categoria categoria : categoriasparaExclusao) {
+			List<String> itensVinculadosCategoria = new ArrayList<String>();
+			itensVinculadosCategoria = itemRepository
+					.findNomesByCategoriaIdeCategoriaAndIndAtivoTrue(categoria.getIdeCategoria());
+
+			if (!itensVinculadosCategoria.isEmpty()) {
+				categoriasVinculadasAItens
+						.add(categoria.getDscCategoria() + ": " + itensVinculadosCategoria.toString());
+			}
+
+		}
+
+		if (!categoriasVinculadasAItens.isEmpty()) {
+			throw new CategoriaVinculadaItensAtivosException(categoriasVinculadasAItens);
+		}
+
+	}
+
+	private ExclusaoResponseDTO objetoRespostaDeExclusao(Integer quantidadeExcluida, LocalDateTime dataExclusao,
+			List<Categoria> categoriasExcluidas) {
+		return new ExclusaoResponseDTO(quantidadeExcluida, dataExclusao,
+				categoriasExcluidas.stream().map(Categoria::getDscCategoria).collect(Collectors.toList()));
 	}
 
 }

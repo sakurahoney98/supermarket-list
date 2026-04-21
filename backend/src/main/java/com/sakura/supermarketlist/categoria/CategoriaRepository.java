@@ -17,6 +17,8 @@ public interface CategoriaRepository extends JpaRepository<Categoria, Long>{
 	
 	List <Categoria> findByDscCategoriaContainingIgnoreCaseAndIndAtivoTrueOrderByDscCategoriaAsc(String termo);
 	
+	List<Categoria> findAllByIdeCategoriaInAndIndAtivoTrue(List<Long> idsCategorias);
+	
 	boolean existsByIndAtivoTrue();
 	
 	boolean existsByIdeCategoriaAndIndAtivoTrue(Long ideCategoria);

@@ -171,9 +171,7 @@ public class CategoriaServiceTest {
 		categoriasComBloqueioDeExclusao.add(categoriasMock.get(0).getDscCategoria() + ": " + itensComVinculo.toString());
 
 		when(itemRepository.findNomesByCategoriaIdeCategoriaAndIndAtivoTrue(1L)).thenReturn(itensComVinculo);
-		when(repository.findByIdeCategoriaAndIndAtivoTrue(1L)).thenReturn(Optional.of(categoriasMock.get(0)));
-		when(repository.findByIdeCategoriaAndIndAtivoTrue(2L)).thenReturn(Optional.of(categoriasMock.get(1)));
-		when(repository.findByIdeCategoriaAndIndAtivoTrue(3L)).thenReturn(Optional.of(categoriasMock.get(2)));
+		when(repository.findAllByIdeCategoriaInAndIndAtivoTrue(listaCategorias)).thenReturn(categoriasMock);
 
 		CategoriaVinculadaItensAtivosException exception = assertThrows(CategoriaVinculadaItensAtivosException.class,
 				() -> {
@@ -183,8 +181,8 @@ public class CategoriaServiceTest {
 
 		assertEquals(categoriasComBloqueioDeExclusao.toString(), exception.getMessage());
 
-		verify(repository, never()).save(categoriasMock.get(0));
-		verify(repository, times(2)).save(any(Categoria.class));
+		verify(repository, never()).save(any(Categoria.class));
+		
 
 	}
 	

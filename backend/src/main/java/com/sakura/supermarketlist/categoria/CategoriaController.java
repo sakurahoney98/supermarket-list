@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sakura.supermarketlist.common.dto.ExclusaoResponseDTO;
+
 import jakarta.validation.Valid;
 
 @RestController
@@ -32,16 +34,16 @@ public class CategoriaController {
 	}
 
 	@DeleteMapping("/{ideCategoria}")
-	public ResponseEntity<Void> excluirCategoria(@PathVariable Long ideCategoria) {
-		service.excluirCategoria(ideCategoria);
-		return ResponseEntity.noContent().build();
+	public ResponseEntity<ExclusaoResponseDTO> excluirCategoria(@PathVariable Long ideCategoria) {
+		ExclusaoResponseDTO response = service.excluirCategoria(ideCategoria);
+		return ResponseEntity.status(HttpStatus.OK).body(response);
 
 	}
 	
 	@DeleteMapping
-	public ResponseEntity<Void> excluirCategoria(@RequestBody List<Long> ideCategoria) {
-		service.excluirCategoria(ideCategoria);
-		return ResponseEntity.noContent().build();
+	public ResponseEntity<ExclusaoResponseDTO> excluirCategoria(@RequestBody List<Long> ideCategoria) {
+		ExclusaoResponseDTO response = service.excluirCategoria(ideCategoria);
+		return ResponseEntity.status(HttpStatus.OK).body(response);
 
 	}
 	
