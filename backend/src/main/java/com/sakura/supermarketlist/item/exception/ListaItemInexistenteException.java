@@ -5,7 +5,7 @@ import java.util.List;
 public class ListaItemInexistenteException extends RuntimeException {
 	
 	public ListaItemInexistenteException(List<Long> idesItem) {
-		super("Identificador " + idesItem.toString() + " não existe ou a categoria já se encontra inativada."); 
+		super("Identificador " + idesItem.toString() + " não existe ou o item já se encontra inativado."); 
 	}
 
 }

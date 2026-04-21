@@ -16,5 +16,9 @@ public interface ItemRepository  extends JpaRepository<Item, Long> {
 	
 	Optional <Item> findByIdeItemAndIndAtivoTrue(Long ideItem);
 	
+	List <Item> findAllByIdeItemInAndIndAtivoTrue(List<Long> idesItens);
+	
+
+	
 
 }

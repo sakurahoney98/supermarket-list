@@ -41,6 +41,8 @@ public class CategoriaServiceTest {
 	private Categoria categoria;
 	private List<Categoria> categoriasMock;
 	private List<Long> listaCategorias;
+	private List<String> itensComVinculo;
+	private List<String> itensComVinculoVazia;
 
 	@BeforeEach
 	void setUp() {
@@ -85,10 +87,17 @@ public class CategoriaServiceTest {
 		categoriasMock.add(cat3);
 		
 		listaCategorias = new ArrayList<Long>();
-		
 		listaCategorias.add(cat1.getIdeCategoria());
 		listaCategorias.add(cat2.getIdeCategoria());
 		listaCategorias.add(cat3.getIdeCategoria());
+		
+		itensComVinculo = new ArrayList<String>();
+		itensComVinculo.add("Item teste");
+		
+		itensComVinculoVazia = new ArrayList<String>();
+
+		
+		
 
 	}
 
@@ -128,9 +137,6 @@ public class CategoriaServiceTest {
 
 	@Test
 	void excluirCategoriaComVinculo() {
-		List<String> itensComVinculo = new ArrayList<String>();
-
-		itensComVinculo.add("Item teste");
 
 		when(itemRepository.findNomesByCategoriaIdeCategoriaAndIndAtivoTrue(1L)).thenReturn(itensComVinculo);
 		when(repository.findByIdeCategoriaAndIndAtivoTrue(1L)).thenReturn(Optional.of(categoria));
@@ -149,9 +155,7 @@ public class CategoriaServiceTest {
 	@Test
 	void excluirCategoriaSemVinculo() {
 
-		List<String> itensComVinculo = new ArrayList<String>();
-
-		when(itemRepository.findNomesByCategoriaIdeCategoriaAndIndAtivoTrue(1L)).thenReturn(itensComVinculo);
+		when(itemRepository.findNomesByCategoriaIdeCategoriaAndIndAtivoTrue(1L)).thenReturn(itensComVinculoVazia);
 		when(repository.findByIdeCategoriaAndIndAtivoTrue(1L)).thenReturn(Optional.of(categoria));
 
 		service.excluirCategoria(1L);
@@ -164,8 +168,6 @@ public class CategoriaServiceTest {
 	
 	@Test
 	void excluirListaCategoriaComVinculo() {
-		List<String> itensComVinculo = new ArrayList<String>();
-		itensComVinculo.add("Item teste");
 		
 		List<String> categoriasComBloqueioDeExclusao = new ArrayList<String>();
 		categoriasComBloqueioDeExclusao.add(categoriasMock.get(0).getDscCategoria() + ": " + itensComVinculo.toString());
@@ -189,9 +191,7 @@ public class CategoriaServiceTest {
 	@Test
 	void excluirListaCategoriaSemVinculo() {
 
-		List<String> itensComVinculo = new ArrayList<String>();
-
-		when(itemRepository.findNomesByCategoriaIdeCategoriaAndIndAtivoTrue(1L)).thenReturn(itensComVinculo);
+		when(itemRepository.findNomesByCategoriaIdeCategoriaAndIndAtivoTrue(1L)).thenReturn(itensComVinculoVazia);
 		when(repository.findByIdeCategoriaAndIndAtivoTrue(1L)).thenReturn(Optional.of(categoriasMock.get(0)));
 		when(repository.findByIdeCategoriaAndIndAtivoTrue(2L)).thenReturn(Optional.of(categoriasMock.get(1)));
 		when(repository.findByIdeCategoriaAndIndAtivoTrue(3L)).thenReturn(Optional.of(categoriasMock.get(2)));
