@@ -25,6 +25,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.sakura.supermarketlist.categoria.exception.CategoriaDuplicadaException;
 import com.sakura.supermarketlist.categoria.exception.CategoriaVinculadaItensAtivosException;
+import com.sakura.supermarketlist.common.dto.ExclusaoResponseDTO;
 import com.sakura.supermarketlist.item.ItemRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -189,7 +190,7 @@ public class CategoriaServiceTest {
 	}
 	
 	@Test
-	void excluirListaCategoriaSemVinculo() {
+	void excluirListaCategoriaVazia() {
 
 		when(itemRepository.findNomesByCategoriaIdeCategoriaAndIndAtivoTrue(1L)).thenReturn(itensComVinculoVazia);
 		when(repository.findByIdeCategoriaAndIndAtivoTrue(1L)).thenReturn(Optional.of(categoriasMock.get(0)));
@@ -205,6 +206,24 @@ public class CategoriaServiceTest {
 		assertFalse(categoriasMock.get(0).isIndAtivo());
 		assertFalse(categoriasMock.get(1).isIndAtivo());
 		assertFalse(categoriasMock.get(2).isIndAtivo());
+
+	}
+	
+	@Test
+	void excluirListaCategoriaSemVinculo() {
+
+		when(itemRepository.findNomesByCategoriaIdeCategoriaAndIndAtivoTrue(1L)).thenReturn(itensComVinculoVazia);
+		when(repository.findAllByIdeCategoriaInAndIndAtivoTrue(listaCategorias)).thenReturn(categoriasMock);
+
+		ExclusaoResponseDTO response = service.excluirCategoria(listaCategorias);
+		
+		assertEquals(3, response.quantidadeExcluida());
+
+		assertFalse(categoriasMock.get(0).isIndAtivo());
+		assertFalse(categoriasMock.get(1).isIndAtivo());
+		assertFalse(categoriasMock.get(2).isIndAtivo());
+		
+		verify(repository, times(1)).saveAll(any(ArrayList.class));
 
 	}
 

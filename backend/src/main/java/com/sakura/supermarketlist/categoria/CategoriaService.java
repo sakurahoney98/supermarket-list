@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sakura.supermarketlist.categoria.exception.CategoriaDuplicadaException;
 import com.sakura.supermarketlist.categoria.exception.CategoriaInexistenteException;
@@ -62,25 +63,22 @@ public class CategoriaService {
 
 	}
 
+	@Transactional
 	public ExclusaoResponseDTO excluirCategoria(List<Long> listaCategorias) {
 
 		validarListaDeExclusao(listaCategorias);
 
 		LocalDateTime dataExclusao = LocalDateTime.now();
-		List<Categoria> categoriasExcluidas = new ArrayList<Categoria>();
+		List<Categoria> categoriasExcluidas = repository.findAllByIdeCategoriaInAndIndAtivoTrue(listaCategorias);
 
-		for (Long ideCategoria : listaCategorias) {
-			Categoria categoria = repository.findByIdeCategoriaAndIndAtivoTrue(ideCategoria)
-					.orElseThrow(() -> new CategoriaInexistenteException(ideCategoria));
+		for (Categoria categoria : categoriasExcluidas) {
 
-			dataExclusao = LocalDateTime.now();
 			categoria.setIndAtivo(false);
-			categoria.setDtcExclusao(LocalDateTime.now());
+			categoria.setDtcExclusao(dataExclusao);
 
-			repository.save(categoria);
-
-			categoriasExcluidas.add(categoria);
 		}
+		
+		repository.saveAll(categoriasExcluidas);
 
 		return objetoRespostaDeExclusao(categoriasExcluidas.size(), dataExclusao, categoriasExcluidas);
 
