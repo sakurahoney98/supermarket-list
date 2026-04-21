@@ -205,7 +205,6 @@ public class ItemServiceTest {
 		when(categoriaRepository.existsByIndAtivoTrue()).thenReturn(true);
 		when(categoriaRepository.existsByIdeCategoriaAndIndAtivoTrue(requestEdicao.categoria())).thenReturn(true);
 		when(categoriaRepository.findById(requestCadastro.categoria())).thenReturn(Optional.of(categoriaTest));
-		when(repository.existsByNomeItemAndCategoriaIdeCategoriaAndIndAtivoTrue(requestEdicao.nome(), requestEdicao.categoria())).thenReturn(false);
 		when(repository.findByIdeItemAndIndAtivoTrue(1L)).thenReturn(Optional.of(itemCadastro));
 		when(repository.save(itemCadastro)).thenReturn(itemEditado);
 		
@@ -263,9 +262,7 @@ public class ItemServiceTest {
 	
 	@Test
 	void excluirListaItemComSucesso() {
-		when(repository.findByIdeItemAndIndAtivoTrue(1L)).thenReturn(Optional.of(listaItem.get(0)));
-		when(repository.findByIdeItemAndIndAtivoTrue(2L)).thenReturn(Optional.of(listaItem.get(1)));
-		when(repository.findByIdeItemAndIndAtivoTrue(3L)).thenReturn(Optional.of(listaItem.get(2)));
+
 		when(repository.findAllByIdeItemInAndIndAtivoTrue(listaIDs)).thenReturn(listaItem);
 		
 		ExclusaoResponseDTO response = service.excluirItem(listaIDs);
@@ -275,7 +272,7 @@ public class ItemServiceTest {
 		assertFalse(listaItem.get(1).isIndAtivo());
 		assertFalse(listaItem.get(2).isIndAtivo());
 		
-		verify(repository, times(3)).save(any(Item.class));
+		verify(repository, times(1)).saveAll(any(ArrayList.class));
 		
 	}
 	
@@ -307,6 +304,26 @@ public class ItemServiceTest {
 		assertTrue(listaItem.get(2).isIndAtivo());
 		
 		verify(repository, never()).save(any(Item.class));
+		
+	}
+	
+	@Test
+	void exibirTodosOsItens() {
+		when(repository.findByIndAtivoTrueOrderByCategoriaIdeCategoriaAscNomeItemAsc()).thenReturn(listaItem);
+		
+		List<ItemResponseDTO> response = service.buscarTodosItensAtivosOrdenadosPorCategoriaENome();
+		
+		assertEquals(3, response.size());
+		
+	}
+	
+	@Test
+	void exibirDetalhesDoItem() {
+		when(repository.findByIdeItemAndIndAtivoTrue(1L)).thenReturn(Optional.of(listaItem.get(0)));
+		
+		ItemResponseDTO response = service.buscarItemPorId(1L);
+		
+		assertEquals(listaItem.get(0).getNomeItem(), response.nome());
 		
 	}
 	

@@ -2,7 +2,7 @@ package com.sakura.supermarketlist.item;
 
 import java.time.LocalDate;
 
-import com.sakura.supermarketlist.categoria.Categoria;
+import com.sakura.supermarketlist.categoria.CategoriaResponseDTO;
 
 public record ItemResponseDTO(
 		Long id,
@@ -11,7 +11,7 @@ public record ItemResponseDTO(
 		Integer quantidadeEstoque,
 		Integer limiteCompra,
 		LocalDate dataUltimaCompra,
-		Categoria categoria,
+		CategoriaResponseDTO categoria,
 		Integer duracaoDias,
 		boolean indAtivo
 		) {}
