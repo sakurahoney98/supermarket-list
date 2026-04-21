@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sakura.supermarketlist.common.dto.AtualizacaoEstoqueRequestDTO;
 import com.sakura.supermarketlist.common.dto.ExclusaoResponseDTO;
 
 import jakarta.validation.Valid;
@@ -39,6 +40,13 @@ public class ItemController {
 	@PutMapping("/{ideItem}")
 	public ResponseEntity<ItemResponseDTO> editarItem(@RequestBody @Valid ItemRequestDTO request, @PathVariable Long ideItem) {
 		ItemResponseDTO response = service.editarItem(request, ideItem);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+	
+	@PutMapping("/estoque")
+	public ResponseEntity<List<ItemResponseDTO>> atualizarEstoque(@RequestBody @Valid List<AtualizacaoEstoqueRequestDTO> request) {
+		List<ItemResponseDTO> response = service.atualizarEstoque(request);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
