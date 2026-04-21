@@ -3,6 +3,7 @@ package com.sakura.supermarketlist.item;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -14,6 +15,7 @@ import com.sakura.supermarketlist.categoria.Categoria;
 import com.sakura.supermarketlist.categoria.CategoriaRepository;
 import com.sakura.supermarketlist.categoria.CategoriaResponseDTO;
 import com.sakura.supermarketlist.categoria.exception.CategoriaInexistenteException;
+import com.sakura.supermarketlist.common.dto.AtualizacaoEstoqueRequestDTO;
 import com.sakura.supermarketlist.common.dto.ExclusaoResponseDTO;
 import com.sakura.supermarketlist.item.exception.ItemDuplicadoNaCategoria;
 import com.sakura.supermarketlist.item.exception.ItemInexistenteException;
@@ -27,6 +29,46 @@ public class ItemService {
 
 	@Autowired
 	private CategoriaRepository categoriaRepository;
+	
+	public ItemResponseDTO buscarItemPorId(Long ideItem) {
+		Item item = repository.findByIdeItemAndIndAtivoTrue(ideItem)
+				.orElseThrow(() -> new ItemInexistenteException(ideItem));
+
+		return conversaoEntidadeParaDTO(item);
+	}
+
+	public List<ItemResponseDTO> buscarTodosItensAtivosOrdenadosPorCategoriaENome() {
+		List<Item> lista = repository.findByIndAtivoTrueOrderByCategoriaIdeCategoriaAscNomeItemAsc();
+
+		return listaDeResposta(lista);
+
+	}
+
+	public List<ItemResponseDTO> buscarTodosItensAtivosOrdenadosPorDataCriacao() {
+		List<Item> lista = repository.findByIndAtivoTrueOrderByDtcCriacaoDesc();
+
+		return listaDeResposta(lista);
+	}
+
+	public List<ItemResponseDTO> filtrarItensAtivosPorNome(String nome) {
+		List<Item> lista = repository.findByNomeItemContainingIgnoreCaseAndIndAtivoTrueOrderByNomeItemAsc(nome);
+
+		return listaDeResposta(lista);
+	}
+
+	public List<ItemResponseDTO> filtrarItensAtivosPorCategoria(Long ideCategoria) {
+		List<Item> lista = repository.findByCategoriaIdeCategoriaAndIndAtivoTrueOrderByNomeItemAsc(ideCategoria);
+
+		return listaDeResposta(lista);
+	}
+
+	public List<ItemResponseDTO> filtrarItensAtivosNacategoriaPorNome(Long ideCategoria, String nome) {
+		List<Item> lista = repository
+				.findByCategoriaIdeCategoriaAndNomeItemContainingIgnoreCaseAndIndAtivoTrueOrderByNomeItemAsc(
+						ideCategoria, nome);
+
+		return listaDeResposta(lista);
+	}
 
 	public ItemResponseDTO cadastrarItem(ItemRequestDTO request) {
 
@@ -43,7 +85,8 @@ public class ItemService {
 
 	public ItemResponseDTO editarItem(ItemRequestDTO request, Long ideItem) {
 
-		Item item = repository.findByIdeItemAndIndAtivoTrue(ideItem).orElseThrow(() -> new ItemInexistenteException(ideItem));
+		Item item = repository.findByIdeItemAndIndAtivoTrue(ideItem)
+				.orElseThrow(() -> new ItemInexistenteException(ideItem));
 
 		validarItem(request);
 		validarEdicao(request, ideItem);
@@ -55,40 +98,74 @@ public class ItemService {
 		return conversaoEntidadeParaDTO(objeto);
 
 	}
-	
+
 	public ExclusaoResponseDTO excluirItem(Long ideItem) {
-		
-		Item item = repository.findByIdeItemAndIndAtivoTrue(ideItem).orElseThrow(() -> new ItemInexistenteException(ideItem));
-		
+
+		Item item = repository.findByIdeItemAndIndAtivoTrue(ideItem)
+				.orElseThrow(() -> new ItemInexistenteException(ideItem));
+
 		LocalDateTime dataExclusao = LocalDateTime.now();
-		List <Item> itensParaExclusao = new ArrayList<Item>();
-		
+		List<Item> itensParaExclusao = new ArrayList<Item>();
+
 		item.setIndAtivo(false);
 		item.setDtcExclusao(dataExclusao);
-		
+
 		repository.save(item);
 		itensParaExclusao.add(item);
-		
+
 		return objetoRespostaDeExclusao(1, dataExclusao, itensParaExclusao);
+	}
+
+	@Transactional
+	public ExclusaoResponseDTO excluirItem(List<Long> listaItens) {
+
+		validarListaDeExclusao(listaItens);
+
+		LocalDateTime dataExclusao = LocalDateTime.now();
+
+		List<Item> itensParaExclusao = repository.findAllByIdeItemInAndIndAtivoTrue(listaItens);
+
+		for (Item item : itensParaExclusao) {
+			item.setIndAtivo(false);
+			item.setDtcExclusao(dataExclusao);
+		}
+
+		repository.saveAll(itensParaExclusao);
+
+		return objetoRespostaDeExclusao(itensParaExclusao.size(), dataExclusao, itensParaExclusao);
 	}
 	
 	@Transactional
-	public ExclusaoResponseDTO excluirItem(List<Long> listaItens) {
+	public List<ItemResponseDTO> atualizarEstoque(List<AtualizacaoEstoqueRequestDTO> listaRequest) {
 		
-		validarListaDeExclusao(listaItens);
+		List<Long> todosIds = extrairListaDeId(listaRequest);
 		
-		LocalDateTime dataExclusao = LocalDateTime.now();
-		
-		List<Item> itensParaExclusao = repository.findAllByIdeItemInAndIndAtivoTrue(listaItens);
-	    
-	    for (Item item : itensParaExclusao) {
-	        item.setIndAtivo(false);
-	        item.setDtcExclusao(dataExclusao);
+		List<Item> itensRecuperados = repository.findAllByIdeItemInAndIndAtivoTrue(todosIds);
+
+		validarListaDeAtualizacao(todosIds, itensRecuperados);
+
+		List<Item> itensAtualizados = new ArrayList<>();
+		Map<Long, Item> mapaItens = itensRecuperados.stream()
+		        .collect(Collectors.toMap(Item::getIdeItem, item -> item));
+
+		for (AtualizacaoEstoqueRequestDTO request : listaRequest) {
+
+			Item item = mapaItens.get(request.ideItem());
+
+			if (item.getQuantidadeEstoque() != request.quantidadeNova()) {
+				
+				item.setQuantidadeEstoque(request.quantidadeNova());
+				itensAtualizados.add(item);
+			}
+
+		}
+
+		if (!itensAtualizados.isEmpty()) {
+	        repository.saveAll(itensAtualizados);
 	    }
-	    
-	    repository.saveAll(itensParaExclusao); 
-		
-		return objetoRespostaDeExclusao(itensParaExclusao.size(), dataExclusao, itensParaExclusao);
+
+		return listaDeResposta(itensAtualizados);
+
 	}
 
 	private void validarItem(ItemRequestDTO request) {
@@ -101,65 +178,27 @@ public class ItemService {
 			throw new CategoriaInexistenteException(request.categoria());
 		}
 
-
 	}
-	
+
 	private void validarInclusao(ItemRequestDTO request) {
 		if (repository.existsByNomeItemAndCategoriaIdeCategoriaAndIndAtivoTrue(request.nome(), request.categoria())) {
 			throw new ItemDuplicadoNaCategoria();
 		}
 	}
-	
+
 	private void validarEdicao(ItemRequestDTO request, Long ideItem) {
-		if (repository.existsByNomeItemAndCategoriaIdeCategoriaAndIndAtivoTrueAndIdeItemNot(request.nome(), request.categoria(), ideItem)) {
+		if (repository.existsByNomeItemAndCategoriaIdeCategoriaAndIndAtivoTrueAndIdeItemNot(request.nome(),
+				request.categoria(), ideItem)) {
 			throw new ItemDuplicadoNaCategoria();
 		}
 	}
-	
-	public ItemResponseDTO buscarItemPorId(Long ideItem) {
-		Item item = repository.findByIdeItemAndIndAtivoTrue(ideItem).orElseThrow(() -> new ItemInexistenteException(ideItem));
-		
-		return conversaoEntidadeParaDTO(item);
-	}
-	
-	public List<ItemResponseDTO> buscarTodosItensAtivosOrdenadosPorCategoriaENome() {
-		List<Item> lista = repository.findByIndAtivoTrueOrderByCategoriaIdeCategoriaAscNomeItemAsc();
-		
-		return listaDeResposta(lista);
-		
-	}
-	
-	public List<ItemResponseDTO> buscarTodosItensAtivosOrdenadosPorDataCriacao() {
-		List<Item> lista =  repository.findByIndAtivoTrueOrderByDtcCriacaoDesc();
-		
-		return listaDeResposta(lista);
-	}
-	
-	public List<ItemResponseDTO> filtrarItensAtivosPorNome(String nome) {
-		List<Item> lista =  repository.findByNomeItemContainingIgnoreCaseAndIndAtivoTrueOrderByNomeItemAsc(nome);
-		
-		return listaDeResposta(lista);
-	}
-	
-	public List<ItemResponseDTO> filtrarItensAtivosPorCategoria(Long ideCategoria) {
-		List<Item> lista =  repository.findByCategoriaIdeCategoriaAndIndAtivoTrueOrderByNomeItemAsc(ideCategoria);
-		
-		return listaDeResposta(lista);
-	}
-	
-	public List<ItemResponseDTO> filtrarItensAtivosNacategoriaPorNome(Long ideCategoria, String nome) {
-		List<Item> lista =  repository.findByCategoriaIdeCategoriaAndNomeItemContainingIgnoreCaseAndIndAtivoTrueOrderByNomeItemAsc(ideCategoria, nome);
-		
-		return listaDeResposta(lista);
-	}
-	
-	
+
+
 	private void validarListaDeExclusao(List<Long> idesItem) {
 		List<Item> itensParaExclusao = repository.findAllByIdeItemInAndIndAtivoTrue(idesItem);
 
 		if (itensParaExclusao.size() != idesItem.size()) {
-			Set<Long> idsEncontrados = itensParaExclusao.stream().map(Item::getIdeItem)
-					.collect(Collectors.toSet());
+			Set<Long> idsEncontrados = itensParaExclusao.stream().map(Item::getIdeItem).collect(Collectors.toSet());
 
 			List<Long> idsNaoEncontrados = idesItem.stream().filter(id -> !idsEncontrados.contains(id))
 					.collect(Collectors.toList());
@@ -167,19 +206,50 @@ public class ItemService {
 			throw new ListaItemInexistenteException(idsNaoEncontrados);
 		}
 
-		
 	}
-	
-	private List<ItemResponseDTO> listaDeResposta(List<Item> lista){
-		
+
+	private void validarListaDeAtualizacao(List<Long> idsRequest, List<Item> itensEncontrados) {
+
+		   if (itensEncontrados.size() != idsRequest.size()) {
+		        Set<Long> idsEncontrados = itensEncontrados.stream()
+		            .map(Item::getIdeItem)
+		            .collect(Collectors.toSet());
+		        
+		        List<Long> idsNaoEncontrados = idsRequest.stream()
+		            .filter(id -> !idsEncontrados.contains(id))
+		            .collect(Collectors.toList());
+		        
+		        if(!idsNaoEncontrados.isEmpty()) {
+		        	throw new ListaItemInexistenteException(idsNaoEncontrados);
+		        }
+		        
+		    }
+
+	}
+
+	private List<Long> extrairListaDeId(List<AtualizacaoEstoqueRequestDTO> listaRequest) {
+
+		List<Long> listaID = new ArrayList<Long>();
+
+		for (AtualizacaoEstoqueRequestDTO item : listaRequest) {
+
+			listaID.add(item.ideItem());
+
+		}
+
+		return listaID;
+	}
+
+	private List<ItemResponseDTO> listaDeResposta(List<Item> lista) {
+
 		List<ItemResponseDTO> listaFinal = new ArrayList<ItemResponseDTO>();
-		
+
 		for (Item item : lista) {
 			ItemResponseDTO objeto = conversaoEntidadeParaDTO(item);
-			
+
 			listaFinal.add(objeto);
 		}
-		
+
 		return listaFinal;
 	}
 
@@ -202,18 +272,16 @@ public class ItemService {
 
 	private ItemResponseDTO conversaoEntidadeParaDTO(Item item) {
 		Categoria categoria = item.getCategoria();
-	   
-	    CategoriaResponseDTO categoriaDTO = new CategoriaResponseDTO(
-	        categoria.getIdeCategoria(),
-	        categoria.getDscCategoria(),
-	        categoria.getCorLetra(),
-	        categoria.getCorFundo(),
-	        categoria.isIndAtivo()
-	    );
-	    
+
+		CategoriaResponseDTO categoriaDTO = new CategoriaResponseDTO(
+				categoria.getIdeCategoria(),
+				categoria.getDscCategoria(), 
+				categoria.getCorLetra(), 
+				categoria.getCorFundo(), 
+				categoria.isIndAtivo());
+
 		ItemResponseDTO objeto = new ItemResponseDTO(
-				item.getIdeItem(), 
-				item.getNomeItem(), 
+				item.getIdeItem(), item.getNomeItem(), 
 				item.getUnidadeMedida(),
 				item.getQuantidadeEstoque(), 
 				item.getLimiteCompra(), 
@@ -239,7 +307,7 @@ public class ItemService {
 		item.setDuracaoDias(request.duracaoDias());
 
 	}
-	
+
 	private ExclusaoResponseDTO objetoRespostaDeExclusao(Integer quantidadeExcluida, LocalDateTime dataExclusao,
 			List<Item> itensExcluidos) {
 		return new ExclusaoResponseDTO(
