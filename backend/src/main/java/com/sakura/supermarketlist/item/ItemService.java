@@ -32,7 +32,7 @@ public class ItemService {
 
 	public ItemResponseDTO editarItem(ItemRequestDTO request, Long ideItem) {
 
-		Item item = repository.findByIdeItemAndIndAtivoTrue(ideItem).orElseThrow(() -> new ItemInexistenteException());
+		Item item = repository.findByIdeItemAndIndAtivoTrue(ideItem).orElseThrow(() -> new ItemInexistenteException(ideItem));
 
 		validarItem(request);
 
@@ -51,7 +51,7 @@ public class ItemService {
 		}
 
 		if (!categoriaRepository.existsByIdeCategoriaAndIndAtivoTrue(request.categoria())) {
-			throw new CategoriaInexistenteException();
+			throw new CategoriaInexistenteException(request.categoria());
 		}
 
 		if (repository.existsByNomeItemAndCategoriaIdeCategoriaAndIndAtivoTrue(request.nome(), request.categoria())) {
@@ -63,7 +63,7 @@ public class ItemService {
 	private Item conversaoDTOParaEntidade(ItemRequestDTO request) {
 		Item item = new Item();
 		Categoria categoria = categoriaRepository.findById(request.categoria())
-				.orElseThrow(() -> new CategoriaInexistenteException());
+				.orElseThrow(() -> new CategoriaInexistenteException(request.categoria()));
 
 		item.setNomeItem(request.nome());
 		item.setUnidadeMedida(request.unidadeMedida());
@@ -95,7 +95,7 @@ public class ItemService {
 
 	private void atualizarDados(Item item, ItemRequestDTO request) {
 		Categoria categoria = categoriaRepository.findById(request.categoria())
-				.orElseThrow(() -> new CategoriaInexistenteException());
+				.orElseThrow(() -> new CategoriaInexistenteException(request.categoria()));
 
 		item.setNomeItem(request.nome());
 		item.setNomeItem(request.nome());
