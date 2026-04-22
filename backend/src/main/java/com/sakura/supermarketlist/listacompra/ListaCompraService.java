@@ -50,7 +50,7 @@ public class ListaCompraService {
 					Integer fatorDuracao = Math.ceilDiv(30, item.getDuracaoDias());
 					Integer quantidadePorDuracao = fatorDuracao - item.getQuantidadeEstoque();
 					
-					Integer valorSugerido = quantidadeBase > quantidadePorDuracao ? quantidadePorDuracao : quantidadeBase;
+					Integer valorSugerido = quantidadePorDuracao > 0 && quantidadeBase > quantidadePorDuracao ? quantidadePorDuracao : quantidadeBase;
 					
 					ListaCompraResponseDTO objeto = conversaoEntidadeParaDTO(item, valorSugerido);
 					

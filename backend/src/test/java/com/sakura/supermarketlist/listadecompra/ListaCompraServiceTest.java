@@ -76,12 +76,23 @@ public class ListaCompraServiceTest {
 		item4.setCategoria(categoriaTest);
 		item4.setDuracaoDias(12);
 		
+		Item item5 = new Item();
+		item5.setIdeItem(1L);
+		item5.setNomeItem("Item 5");
+		item5.setUnidadeMedida("1kg");
+		item5.setQuantidadeEstoque(3);
+		item5.setLimiteCompra(6);
+		item5.setDataUltimaCompra(LocalDate.of(2026, 3, 14));
+		item5.setCategoria(categoriaTest);
+		item5.setDuracaoDias(20);
+		
 		listaItem = new ArrayList<Item>();
 		
 		listaItem.add(item1);
 		listaItem.add(item2);
 		listaItem.add(item3);
 		listaItem.add(item4);
+		listaItem.add(item5);
 		
 		
 		
@@ -97,6 +108,7 @@ public class ListaCompraServiceTest {
 		assertEquals(2, response.get(1).quantidadeSugerida());
 		assertEquals(1, response.get(2).quantidadeSugerida());
 		assertEquals(2, response.get(3).quantidadeSugerida());
+		assertEquals(3, response.get(4).quantidadeSugerida());
 	}
 
 }
