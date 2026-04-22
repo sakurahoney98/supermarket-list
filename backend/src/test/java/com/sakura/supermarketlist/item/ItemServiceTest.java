@@ -55,6 +55,7 @@ public class ItemServiceTest {
 	private List<Long> listaIDsVazia;
 	private List<Item> listaItem;
 	private List<Item> listaItensIncompleta;
+
 	
 	@BeforeEach
 	void setUp() {
@@ -82,42 +83,54 @@ public class ItemServiceTest {
 		item1.setNomeItem("Item 1");
 		item1.setUnidadeMedida("1kg");
 		item1.setQuantidadeEstoque(1);
-		item1.setLimiteCompra(4);
+		item1.setLimiteCompra(1);
 		item1.setDataUltimaCompra(LocalDate.of(2026, 3, 14));
 		item1.setCategoria(categoriaTest);
-		item1.setDuracaoDias(10);
+		item1.setDuracaoDias(30);
 		
 		Item item2 = new Item();
 		item2.setIdeItem(2L);
 		item2.setNomeItem("Item 2");
 		item2.setUnidadeMedida("1kg");
-		item2.setQuantidadeEstoque(1);
-		item2.setLimiteCompra(4);
+		item2.setQuantidadeEstoque(0);
+		item2.setLimiteCompra(2);
 		item2.setDataUltimaCompra(LocalDate.of(2026, 3, 14));
 		item2.setCategoria(categoriaTest);
-		item2.setDuracaoDias(10);
+		item2.setDuracaoDias(30);
 		
 		Item item3 = new Item();
 		item3.setIdeItem(3L);
 		item3.setNomeItem("Item 3");
 		item3.setUnidadeMedida("1kg");
 		item3.setQuantidadeEstoque(1);
-		item3.setLimiteCompra(4);
+		item3.setLimiteCompra(2);
 		item3.setDataUltimaCompra(LocalDate.of(2026, 3, 14));
 		item3.setCategoria(categoriaTest);
 		item3.setDuracaoDias(10);
+		
+		Item item4 = new Item();
+		item4.setIdeItem(1L);
+		item4.setNomeItem("Item 1");
+		item4.setUnidadeMedida("1kg");
+		item4.setQuantidadeEstoque(1);
+		item4.setLimiteCompra(4);
+		item4.setDataUltimaCompra(LocalDate.of(2026, 3, 14));
+		item4.setCategoria(categoriaTest);
+		item4.setDuracaoDias(12);
 		
 		listaItem = new ArrayList<Item>();
 		
 		listaItem.add(item1);
 		listaItem.add(item2);
 		listaItem.add(item3);
+		listaItem.add(item4);
 		
 		listaIDs = new ArrayList<Long>();
 		
 		listaIDs.add(listaItem.get(0).getIdeItem());
 		listaIDs.add(listaItem.get(1).getIdeItem());
 		listaIDs.add(listaItem.get(2).getIdeItem());
+		listaIDs.add(listaItem.get(3).getIdeItem());
 		
 		listaIDsVazia = new ArrayList<Long>();
 		
@@ -269,10 +282,11 @@ public class ItemServiceTest {
 		
 		ExclusaoResponseDTO response = service.excluirItem(listaIDs);
 		
-		assertEquals(3, response.quantidadeExcluida());
+		assertEquals(listaItem.size(), response.quantidadeExcluida());
 		assertFalse(listaItem.get(0).isIndAtivo());
 		assertFalse(listaItem.get(1).isIndAtivo());
 		assertFalse(listaItem.get(2).isIndAtivo());
+		assertFalse(listaItem.get(3).isIndAtivo());
 		
 		verify(repository, times(1)).saveAll(any(ArrayList.class));
 		
@@ -315,7 +329,7 @@ public class ItemServiceTest {
 		
 		List<ItemResponseDTO> response = service.buscarTodosItensAtivosOrdenadosPorCategoriaENome();
 		
-		assertEquals(3, response.size());
+		assertEquals(listaItem.size(), response.size());
 		
 	}
 	
@@ -328,6 +342,8 @@ public class ItemServiceTest {
 		assertEquals(listaItem.get(0).getNomeItem(), response.nome());
 		
 	}
+	
+	
 	
 	
 
