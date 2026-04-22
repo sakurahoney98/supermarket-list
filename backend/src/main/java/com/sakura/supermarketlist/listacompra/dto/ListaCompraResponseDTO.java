@@ -1,4 +1,4 @@
-package com.sakura.supermarketlist.listacompra;
+package com.sakura.supermarketlist.listacompra.dto;
 
 import com.sakura.supermarketlist.categoria.dto.CategoriaResponseDTO;
 

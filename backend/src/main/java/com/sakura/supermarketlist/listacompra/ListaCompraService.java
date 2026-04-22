@@ -10,6 +10,7 @@ import com.sakura.supermarketlist.categoria.Categoria;
 import com.sakura.supermarketlist.categoria.dto.CategoriaResponseDTO;
 import com.sakura.supermarketlist.item.Item;
 import com.sakura.supermarketlist.item.ItemRepository;
+import com.sakura.supermarketlist.listacompra.dto.ListaCompraResponseDTO;
 
 @Service
 public class ListaCompraService {

@@ -17,8 +17,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.sakura.supermarketlist.categoria.Categoria;
 import com.sakura.supermarketlist.item.Item;
 import com.sakura.supermarketlist.item.ItemRepository;
-import com.sakura.supermarketlist.listacompra.ListaCompraResponseDTO;
 import com.sakura.supermarketlist.listacompra.ListaCompraService;
+import com.sakura.supermarketlist.listacompra.dto.ListaCompraResponseDTO;
 
 @ExtendWith(MockitoExtension.class)
 public class ListaCompraServiceTest {
