@@ -28,6 +28,7 @@ import com.sakura.supermarketlist.categoria.Categoria;
 import com.sakura.supermarketlist.categoria.CategoriaRepository;
 import com.sakura.supermarketlist.categoria.exception.CategoriaInexistenteException;
 import com.sakura.supermarketlist.common.dto.ExclusaoResponseDTO;
+import com.sakura.supermarketlist.item.dto.AtualizacaoEstoqueRequestDTO;
 import com.sakura.supermarketlist.item.dto.ItemRequestDTO;
 import com.sakura.supermarketlist.item.dto.ItemResponseDTO;
 import com.sakura.supermarketlist.item.exception.ItemDuplicadoNaCategoria;
@@ -55,6 +56,7 @@ public class ItemServiceTest {
 	private List<Long> listaIDsVazia;
 	private List<Item> listaItem;
 	private List<Item> listaItensIncompleta;
+	private List<AtualizacaoEstoqueRequestDTO> listaRequest;
 
 	
 	@BeforeEach
@@ -109,8 +111,8 @@ public class ItemServiceTest {
 		item3.setDuracaoDias(10);
 		
 		Item item4 = new Item();
-		item4.setIdeItem(1L);
-		item4.setNomeItem("Item 1");
+		item4.setIdeItem(4L);
+		item4.setNomeItem("Item 4");
 		item4.setUnidadeMedida("1kg");
 		item4.setQuantidadeEstoque(1);
 		item4.setLimiteCompra(4);
@@ -139,9 +141,7 @@ public class ItemServiceTest {
 		listaItensIncompleta.add(listaItem.get(0));
 		listaItensIncompleta.add(listaItem.get(2));
 		
-		
-		
-		
+		listaRequest = new ArrayList<AtualizacaoEstoqueRequestDTO>();
 		
 	}
 	
@@ -315,7 +315,7 @@ public class ItemServiceTest {
 		});
 		
 		
-		assertEquals("Identificador [2] não existe ou o item já se encontra inativado.", exception.getMessage());
+		assertEquals("Identificador [2, 4] não existe ou o item já se encontra inativado.", exception.getMessage());
 		assertTrue(listaItem.get(0).isIndAtivo());
 		assertTrue(listaItem.get(2).isIndAtivo());
 		
@@ -341,6 +341,57 @@ public class ItemServiceTest {
 		
 		assertEquals(listaItem.get(0).getNomeItem(), response.nome());
 		
+	}
+	
+	@Test
+	void atualizarEstoqueTodosItensModificados() {
+		AtualizacaoEstoqueRequestDTO request1 = new AtualizacaoEstoqueRequestDTO(1L, 1, 2);
+		AtualizacaoEstoqueRequestDTO request2 = new AtualizacaoEstoqueRequestDTO(2L, 1, 2);
+		AtualizacaoEstoqueRequestDTO request3 = new AtualizacaoEstoqueRequestDTO(3L, 1, 2);
+		AtualizacaoEstoqueRequestDTO request4 = new AtualizacaoEstoqueRequestDTO(4L, 1, 2);
+		
+		listaRequest.add(request1);
+		listaRequest.add(request2);
+		listaRequest.add(request3);
+		listaRequest.add(request4);
+		
+		when(repository.findAllByIdeItemInAndIndAtivoTrue(listaIDs)).thenReturn(listaItem);
+		
+		List<ItemResponseDTO> response = service.atualizarEstoque(listaRequest);
+		
+		assertEquals(2, response.get(0).quantidadeEstoque());
+		assertEquals(2, response.get(1).quantidadeEstoque());
+		assertEquals(2, response.get(2).quantidadeEstoque());
+		assertEquals(2, response.get(3).quantidadeEstoque());
+		
+		verify(repository, times(1)).saveAll(any(ArrayList.class));
+	}
+	
+	@Test
+	void atualizarEstoqueNenhumItemModificado() {
+		AtualizacaoEstoqueRequestDTO request1 = new AtualizacaoEstoqueRequestDTO(1L, 1, 1);
+		AtualizacaoEstoqueRequestDTO request2 = new AtualizacaoEstoqueRequestDTO(2L, 0, 0);
+		AtualizacaoEstoqueRequestDTO request3 = new AtualizacaoEstoqueRequestDTO(3L, 1, 1);
+		AtualizacaoEstoqueRequestDTO request4 = new AtualizacaoEstoqueRequestDTO(4L, 1, 1);
+		
+		listaRequest.add(request1);
+		listaRequest.add(request2);
+		listaRequest.add(request3);
+		listaRequest.add(request4);
+		
+		when(repository.findAllByIdeItemInAndIndAtivoTrue(listaIDs)).thenReturn(listaItem);
+		
+		List<ItemResponseDTO> response = service.atualizarEstoque(listaRequest);
+		
+		verify(repository, never()).saveAll(any(ArrayList.class));
+	}
+	
+	@Test
+	void atualizarEstoqueListaVazia() {
+		
+		List<ItemResponseDTO> response = service.atualizarEstoque(listaRequest);
+		
+		verify(repository, never()).saveAll(any(ArrayList.class));
 	}
 	
 	
