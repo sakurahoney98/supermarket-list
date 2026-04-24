@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Phrase;
@@ -118,7 +119,11 @@ public class ListaCompraPDFService {
 	private void adicionarItemCompra(PdfPTable table, String nome, Integer quantidade, String unidadeMedida) {
 
 		table.addCell(nome + " (" + unidadeMedida + ")");
-		table.addCell(String.valueOf(quantidade));
+		PdfPCell celulaQuantidade = new PdfPCell(new Phrase("x" + quantidade));
+		celulaQuantidade.setHorizontalAlignment(Element.ALIGN_RIGHT);
+		
+
+		table.addCell(celulaQuantidade);
 	}
 
 	private void adicionarLinhaEmBranco(PdfPTable table, int quantidade) {
