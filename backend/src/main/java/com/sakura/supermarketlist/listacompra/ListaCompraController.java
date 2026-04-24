@@ -16,12 +16,12 @@ import com.sakura.supermarketlist.listacompra.dto.ListaCompraResponseDTO;
 
 @RestController
 @RequestMapping("/lista-compras")
-public class ListaCompraContorller {
+public class ListaCompraController {
 	
 	private final ListaCompraService service;
 	private final ListaCompraPDFService pdfService;
 	
-	public ListaCompraContorller(ListaCompraService service, ListaCompraPDFService pdfService) {
+	public ListaCompraController(ListaCompraService service, ListaCompraPDFService pdfService) {
 		this.service = service;
 		this.pdfService = pdfService;
 	}
@@ -36,9 +36,6 @@ public class ListaCompraContorller {
 	
 	@PostMapping ("/pdf")
 	public ResponseEntity<byte[]> exportarListaEmPDF(@RequestBody List<ListaCompraRequestDTO> lista){
-		if (lista == null || lista.isEmpty()) {
-		    return ResponseEntity.badRequest().build();
-		}
 		
 		byte[] response = pdfService.exportarListaEmPDF(lista);
 		

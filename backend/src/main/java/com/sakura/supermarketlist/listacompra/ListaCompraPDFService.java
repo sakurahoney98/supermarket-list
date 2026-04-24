@@ -2,6 +2,7 @@ package com.sakura.supermarketlist.listacompra;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.sakura.supermarketlist.categoria.dto.CategoriaResponseDTO;
 import com.sakura.supermarketlist.listacompra.dto.ListaCompraRequestDTO;
+import com.sakura.supermarketlist.listacompra.exception.ListaDeComprasVaziaException;
 
 @Service
 public class ListaCompraPDFService {
@@ -25,14 +27,14 @@ public class ListaCompraPDFService {
 	public byte[] exportarListaEmPDF(List<ListaCompraRequestDTO> lista) {
 
 		try {
-			
+
 			if (!lista.isEmpty()) {
 				List<ListaCompraRequestDTO> listaFiltrada = lista.stream().filter(item -> item.quantidadeCompra() > 0)
 						.toList();
 
 				List<CategoriaResponseDTO> categorias = listaFiltrada.stream().map(ListaCompraRequestDTO::categoria)
-						.distinct().toList();
-				
+						.distinct().sorted(Comparator.comparing(cat -> cat.id())).toList();
+
 				ByteArrayOutputStream out = new ByteArrayOutputStream();
 				Document document = new Document(PageSize.A4);
 				PdfWriter.getInstance(document, out);
@@ -48,7 +50,8 @@ public class ListaCompraPDFService {
 					CategoriaResponseDTO ideCategoria1 = categorias.get(index);
 
 					List<ListaCompraRequestDTO> itensCategoria1 = listaFiltrada.stream()
-							.filter(item -> item.categoria().id().equals(ideCategoria1.id())).toList();
+							.filter(item -> item.categoria().id().equals(ideCategoria1.id()))
+							.sorted(Comparator.comparing(item -> item.nome().toLowerCase())).toList();
 
 					adicionarTituloDaCategoria(table, ideCategoria1.nome());
 
@@ -58,11 +61,12 @@ public class ListaCompraPDFService {
 						CategoriaResponseDTO ideCategoria2 = categorias.get(index + 1);
 
 						itensCategoria2 = listaFiltrada.stream()
-								.filter(item -> item.categoria().id().equals(ideCategoria2.id())).toList();
+								.filter(item -> item.categoria().id().equals(ideCategoria2.id()))
+								.sorted(Comparator.comparing(item -> item.nome().toLowerCase())).toList();
 
 						adicionarTituloDaCategoria(table, ideCategoria2.nome());
 
-					}else if(colunas == 4) {
+					} else if (colunas == 4) {
 						adicionarLinhaEmBranco(table, 2);
 					}
 
@@ -103,16 +107,20 @@ public class ListaCompraPDFService {
 			e.printStackTrace();
 		}
 
-		return null;
+		throw new ListaDeComprasVaziaException();
 
 	}
 
 	private void adicionarTituloDaCategoria(PdfPTable table, String nomeCategoria) {
-		PdfPCell tituloCategoria = new PdfPCell();
+		
 		Font font = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.WHITE);
+		
+		PdfPCell tituloCategoria = new PdfPCell();
+		
 		tituloCategoria.addElement(new Phrase(nomeCategoria, font));
 		tituloCategoria.setColspan(2);
 		tituloCategoria.setBackgroundColor(new BaseColor(255, 190, 203));
+		
 		table.addCell(tituloCategoria);
 	}
 
@@ -121,18 +129,16 @@ public class ListaCompraPDFService {
 		table.addCell(nome + " (" + unidadeMedida + ")");
 		PdfPCell celulaQuantidade = new PdfPCell(new Phrase("x" + quantidade));
 		celulaQuantidade.setHorizontalAlignment(Element.ALIGN_RIGHT);
-		
 
 		table.addCell(celulaQuantidade);
 	}
 
 	private void adicionarLinhaEmBranco(PdfPTable table, int quantidade) {
 
-		for(int i = 0; i < quantidade; i++) {
+		for (int i = 0; i < quantidade; i++) {
 			table.addCell(" ");
 		}
-		
-		
+
 	}
 
 }
