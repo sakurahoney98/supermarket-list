@@ -33,13 +33,13 @@ public class ItemCompra {
 	private Item item;
 	
 	@NotNull(message = "Informação de quantidade de compra é necessária.")
-	@Column(name = "quantidade")
+	@Column(name = "quantidade",  nullable = false)
 	private Integer quantidade;
 	
-	@Column(name = "preco")
+	@Column(name = "preco", precision = 10, scale = 2)
 	private BigDecimal preco;
 	
-	@Column(name = "marca")
+	@Column(name = "marca", length = 100)
 	private String marca;
 
 	public ItemCompra() {

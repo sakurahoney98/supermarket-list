@@ -1,4 +1,4 @@
-package com.sakura.supermarketlist.compra;
+package com.sakura.supermarketlist.compra.dto;
 
 import java.math.BigDecimal;
 

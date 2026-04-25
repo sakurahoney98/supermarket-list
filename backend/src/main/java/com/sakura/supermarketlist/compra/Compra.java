@@ -27,7 +27,7 @@ public class Compra {
 	@Column(name = "data_compra", nullable = false)
 	private LocalDate dataCompra;
 
-	@Column(name = "valor_total")
+	@Column(name = "valor_total", precision = 10, scale = 2)
 	private BigDecimal valorTotal;
 
 	public Compra() {

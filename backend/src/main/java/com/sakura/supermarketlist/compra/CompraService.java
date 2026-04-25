@@ -12,6 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sakura.supermarketlist.compra.dto.CompraRequestDTO;
+import com.sakura.supermarketlist.compra.dto.CompraResponseDTO;
+import com.sakura.supermarketlist.compra.dto.ItemCompraRequestDTO;
+import com.sakura.supermarketlist.compra.exception.CompraInexistenteException;
+import com.sakura.supermarketlist.compra.exception.ListaItensCompradosVaziaException;
 import com.sakura.supermarketlist.item.Item;
 import com.sakura.supermarketlist.item.ItemRepository;
 import com.sakura.supermarketlist.item.exception.ListaItemInexistenteException;
@@ -44,29 +49,53 @@ public class CompraService {
 	@Transactional
 	public CompraResponseDTO inserirNovaCompra (CompraRequestDTO request) {
 		
-		Compra compra = conversaoDTOParaEntidade(request);
+		List<ItemCompraRequestDTO> listaFiltrada = request.listaItens().stream().filter(item -> item.quantidadeComprada() > 0)
+				.toList();
 		
-		Compra resposta = compraRepository.save(compra);
+		if(!listaFiltrada.isEmpty()) {
+			
+			Compra compra = conversaoDTOParaEntidade(request, listaFiltrada);
+			
+			Compra resposta = compraRepository.save(compra);
+			
+			inserirItensNaCompra(compra, listaFiltrada);
+			
+			return conversaoEntidadeParaDTO(resposta);	
+			
+		}
 		
-		inserirItensNaCompra(compra, request.listaItens());
+		throw new ListaItensCompradosVaziaException();
 		
-		return conversaoEntidadeParaDTO(resposta);	
 		
 	}
 	
 	@Transactional
 	public CompraResponseDTO unirCompra(Long ideCompra, CompraRequestDTO request) {
-
-		Compra compra = compraRepository.findById(ideCompra)
-				.orElseThrow(() -> new CompraInexistenteException(ideCompra));
-
-		compra.setValorTotal(calcularValorTotal(request));
-
-		Compra resposta = compraRepository.save(compra);
-
-		inserirItensNaCompra(compra, request.listaItens());
 		
-		return conversaoEntidadeParaDTO(resposta);
+		List<ItemCompraRequestDTO> listaFiltrada = request.listaItens().stream().filter(item -> item.quantidadeComprada() > 0)
+				.toList();
+		
+		if(!listaFiltrada.isEmpty()) {
+			
+			Compra compra = compraRepository.findById(ideCompra)
+					.orElseThrow(() -> new CompraInexistenteException(ideCompra));
+			
+			BigDecimal novoValorTotal = compra.getValorTotal();
+			novoValorTotal = novoValorTotal.add(calcularValorTotal(listaFiltrada));
+
+			compra.setValorTotal(novoValorTotal);
+
+			Compra resposta = compraRepository.save(compra);
+
+			inserirItensNaCompra(compra, listaFiltrada);
+			
+			return conversaoEntidadeParaDTO(resposta);
+			
+		}
+		
+		throw new ListaItensCompradosVaziaException();
+
+		
 
 	}
 	
@@ -82,6 +111,7 @@ public class CompraService {
 		        .collect(Collectors.toMap(Item::getIdeItem, item -> item));
 		
 		List<ItemCompra> itensDaCompra = new ArrayList<ItemCompra>();
+		List<Item> itensParaAtualizar = new ArrayList<Item>();
 
 		for(ItemCompraRequestDTO objeto : listaItens) {
 			
@@ -93,18 +123,19 @@ public class CompraService {
 			itemCompra.setMarca(objeto.marca());
 			itemCompra.setPreco(objeto.valor());
 			itemCompra.setItem(item);
+			itemCompra.setQuantidade(objeto.quantidadeComprada());
+			
+			int quantidadeNovaItem = item.getQuantidadeEstoque() + objeto.quantidadeComprada();
+			item.setQuantidadeEstoque(quantidadeNovaItem);
 			
 			itensDaCompra.add(itemCompra);
+			itensParaAtualizar.add(item);
 			
 		}
 		
 		itemCompraRepository.saveAll(itensDaCompra);
-		
-		
-		
-		
-		
-		
+		itemRepository.saveAll(itensParaAtualizar);
+			
 	}
 	
 	private void validarListaDeItens(List<Long> listaID, List<Item> itensParaInserir) {
@@ -132,13 +163,21 @@ public class CompraService {
 		return listaID;
 	}
 	
-	private BigDecimal calcularValorTotal(CompraRequestDTO request) {
+	private BigDecimal calcularValorTotal(List<ItemCompraRequestDTO> lista) {
 		
 		BigDecimal valorTotalCompra = BigDecimal.ZERO;
+		
 
-		for (ItemCompraRequestDTO objeto : request.listaItens()) {
+		for (ItemCompraRequestDTO objeto : lista) {
 
-			valorTotalCompra.add(objeto.valor());
+			if (objeto.valor() != null) {
+				
+				BigDecimal valorTotalItem = objeto.valor();
+				
+				valorTotalItem = valorTotalItem.multiply(BigDecimal.valueOf(objeto.quantidadeComprada()));
+				
+	            valorTotalCompra = valorTotalCompra.add(valorTotalItem);
+	        }
 		}
 
 		return valorTotalCompra;
@@ -169,20 +208,15 @@ public class CompraService {
 
 	}
 	
-	private Compra conversaoDTOParaEntidade(CompraRequestDTO request) {
+	private Compra conversaoDTOParaEntidade(CompraRequestDTO request, List<ItemCompraRequestDTO> lista) {
 		
 		Compra compra = new Compra();
 		
 		compra.setDataCompra(request.dataCompra());
-		compra.setValorTotal(calcularValorTotal(request));
+		compra.setValorTotal(calcularValorTotal(lista));
 		
 		return compra;
 		
-		
-		
-
-		
-
 	}
 
 }
