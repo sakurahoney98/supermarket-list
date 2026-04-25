@@ -44,7 +44,7 @@ public class CompraController {
 	}
 	
 	@PostMapping("/unir/{ideCompra}")
-	public ResponseEntity<CompraResponseDTO> inserirCompra(@RequestBody @Valid CompraRequestDTO request, @PathVariable Long ideCompra) {
+	public ResponseEntity<CompraResponseDTO> unirCompra(@RequestBody @Valid CompraRequestDTO request, @PathVariable Long ideCompra) {
 		
 		CompraResponseDTO response = service.unirCompra(ideCompra, request);
 		

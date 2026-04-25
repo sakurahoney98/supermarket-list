@@ -127,6 +127,7 @@ public class CompraService {
 			
 			int quantidadeNovaItem = item.getQuantidadeEstoque() + objeto.quantidadeComprada();
 			item.setQuantidadeEstoque(quantidadeNovaItem);
+			item.setDataUltimaCompra(compra.getDataCompra());
 			
 			itensDaCompra.add(itemCompra);
 			itensParaAtualizar.add(item);
