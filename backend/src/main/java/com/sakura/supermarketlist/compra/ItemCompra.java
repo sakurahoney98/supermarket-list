@@ -40,7 +40,7 @@ public class ItemCompra {
 	private BigDecimal preco;
 	
 	@Column(name = "marca")
-	private BigDecimal marca;
+	private String marca;
 
 	public ItemCompra() {
 		super();
@@ -50,7 +50,7 @@ public class ItemCompra {
 	public ItemCompra(Long ideItemCompra, @NotNull(message = "Vinculação a uma compra é necessária.") Compra compra,
 			@NotNull(message = "Informação do item é necessária.") Item item,
 			@NotNull(message = "Informação de quantidade de compra é necessária.") Integer quantidade, BigDecimal preco,
-			BigDecimal marca) {
+			String marca) {
 		super();
 		this.ideItemCompra = ideItemCompra;
 		this.compra = compra;
@@ -100,17 +100,14 @@ public class ItemCompra {
 		this.preco = preco;
 	}
 
-	public BigDecimal getMarca() {
+	public String getMarca() {
 		return marca;
 	}
 
-	public void setMarca(BigDecimal marca) {
+	public void setMarca(String marca) {
 		this.marca = marca;
 	}
 
-	
-	
-	
 	
 	
 	
