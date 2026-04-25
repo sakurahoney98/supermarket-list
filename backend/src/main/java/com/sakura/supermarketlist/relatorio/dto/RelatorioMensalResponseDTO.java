@@ -1,4 +1,4 @@
-package com.sakura.supermarketlist.relatorio;
+package com.sakura.supermarketlist.relatorio.dto;
 
 import java.math.BigDecimal;
 
