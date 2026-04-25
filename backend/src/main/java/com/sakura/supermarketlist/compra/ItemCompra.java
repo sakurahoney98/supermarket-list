@@ -2,13 +2,15 @@ package com.sakura.supermarketlist.compra;
 
 import java.math.BigDecimal;
 
-import com.sakura.supermarketlist.item.dto.ItemResponseDTO;
+import com.sakura.supermarketlist.item.Item;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
@@ -21,12 +23,14 @@ public class ItemCompra {
 	private Long ideItemCompra;
 
 	@NotNull(message = "Vinculação a uma compra é necessária.")
-	@Column(name = "ide_compra", nullable = false)
+	@ManyToOne
+	@JoinColumn(name = "ide_compra", nullable = false)
 	private Compra compra;
 
 	@NotNull(message = "Informação do item é necessária.")
-	@Column(name = "ide_item")
-	private ItemResponseDTO item;
+	@ManyToOne
+	@JoinColumn(name = "ide_item", nullable = false)
+	private Item item;
 	
 	@NotNull(message = "Informação de quantidade de compra é necessária.")
 	@Column(name = "quantidade")
@@ -44,7 +48,7 @@ public class ItemCompra {
 	}
 
 	public ItemCompra(Long ideItemCompra, @NotNull(message = "Vinculação a uma compra é necessária.") Compra compra,
-			@NotNull(message = "Informação do item é necessária.") ItemResponseDTO item,
+			@NotNull(message = "Informação do item é necessária.") Item item,
 			@NotNull(message = "Informação de quantidade de compra é necessária.") Integer quantidade, BigDecimal preco,
 			BigDecimal marca) {
 		super();
@@ -72,11 +76,11 @@ public class ItemCompra {
 		this.compra = compra;
 	}
 
-	public ItemResponseDTO getItem() {
+	public Item getItem() {
 		return item;
 	}
 
-	public void setItem(ItemResponseDTO item) {
+	public void setItem(Item item) {
 		this.item = item;
 	}
 
@@ -103,7 +107,7 @@ public class ItemCompra {
 	public void setMarca(BigDecimal marca) {
 		this.marca = marca;
 	}
-	
+
 	
 	
 	
