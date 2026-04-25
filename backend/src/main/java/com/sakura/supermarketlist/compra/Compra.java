@@ -25,7 +25,7 @@ public class Compra {
 	@NotNull(message = "Data da compra é obrigatória")
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	@Column(name = "data_compra", nullable = false)
-	private LocalDate dataUltimaCompra;
+	private LocalDate dataCompra;
 
 	@Column(name = "valor_total")
 	private BigDecimal valorTotal;
@@ -35,11 +35,11 @@ public class Compra {
 		
 	}
 
-	public Compra(Long ideCompra, @NotNull(message = "Data da compra é obrigatória") LocalDate dataUltimaCompra,
+	public Compra(Long ideCompra, @NotNull(message = "Data da compra é obrigatória") LocalDate dataCompra,
 			BigDecimal valorTotal) {
 		super();
 		this.ideCompra = ideCompra;
-		this.dataUltimaCompra = dataUltimaCompra;
+		this.dataCompra = dataCompra;
 		this.valorTotal = valorTotal;
 	}
 
@@ -51,12 +51,12 @@ public class Compra {
 		this.ideCompra = ideCompra;
 	}
 
-	public LocalDate getDataUltimaCompra() {
-		return dataUltimaCompra;
+	public LocalDate getDataCompra() {
+		return dataCompra;
 	}
 
-	public void setDataUltimaCompra(LocalDate dataUltimaCompra) {
-		this.dataUltimaCompra = dataUltimaCompra;
+	public void setDataCompra(LocalDate dataCompra) {
+		this.dataCompra = dataCompra;
 	}
 
 	public BigDecimal getValorTotal() {
@@ -66,6 +66,7 @@ public class Compra {
 	public void setValorTotal(BigDecimal valorTotal) {
 		this.valorTotal = valorTotal;
 	}
+
 	
 	
 	
