@@ -36,7 +36,7 @@ public class RelatorioController {
 	@GetMapping("/gasto")
 	public ResponseEntity<RelatorioGastoResponseDTO> gerarRelatorioGasto(@RequestParam Long ideItem, @RequestParam LocalDate inicio, @RequestParam LocalDate fim){
 		
-		RelatorioGastoResponseDTO response = service.relatoriogastoItemPorPeriodo(ideItem, inicio, fim);
+		RelatorioGastoResponseDTO response = service.relatorioGastoItemPorPeriodo(ideItem, inicio, fim);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 		

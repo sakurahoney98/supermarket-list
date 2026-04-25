@@ -3,13 +3,15 @@ package com.sakura.supermarketlist.relatorio;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sakura.supermarketlist.compra.ItemCompraRepository;
-import com.sakura.supermarketlist.relatorio.dto.RelatorioGastoConsultaDTO;
+import com.sakura.supermarketlist.relatorio.dto.RelatorioConsultaDTO;
 import com.sakura.supermarketlist.relatorio.dto.RelatorioGastoItemResponseDTO;
 import com.sakura.supermarketlist.relatorio.dto.RelatorioGastoResponseDTO;
 import com.sakura.supermarketlist.relatorio.dto.RelatorioMensalResponseDTO;
@@ -26,9 +28,23 @@ public class RelatorioService {
 
 	}
 
+	public RelatorioGastoResponseDTO relatorioGastoItemPorPeriodo(Long ideItem, LocalDate inicio, LocalDate fim) {
+
+		List<RelatorioConsultaDTO> lista = itemCompraRepository.buscarGastoPorPeriodo(ideItem, inicio, fim);
+		lista = lista.stream().sorted(Comparator.comparing(RelatorioConsultaDTO::dataCompra).reversed())
+			    .collect(Collectors.toList());
+
+		List<RelatorioGastoItemResponseDTO> listaResposta = montarListaRelatorioGastoItem(lista);
+
+		return new RelatorioGastoResponseDTO(calcularValorTotal(listaResposta), listaResposta);
+
+	}
+	
 	public RelatorioGastoResponseDTO relatoriogastoItemPorPeriodo(Long ideItem, LocalDate inicio, LocalDate fim) {
 
-		List<RelatorioGastoConsultaDTO> lista = itemCompraRepository.buscarGastoPorPeriodo(ideItem, inicio, fim);
+		List<RelatorioConsultaDTO> lista = itemCompraRepository.buscarGastoPorPeriodo(ideItem, inicio, fim);
+		lista = lista.stream().sorted(Comparator.comparing(RelatorioConsultaDTO::dataCompra).reversed())
+			    .collect(Collectors.toList());
 
 		List<RelatorioGastoItemResponseDTO> listaResposta = montarListaRelatorioGastoItem(lista);
 
@@ -48,10 +64,10 @@ public class RelatorioService {
 
 	}
 
-	private List<RelatorioGastoItemResponseDTO> montarListaRelatorioGastoItem(List<RelatorioGastoConsultaDTO> lista) {
+	private List<RelatorioGastoItemResponseDTO> montarListaRelatorioGastoItem(List<RelatorioConsultaDTO> lista) {
 		List<RelatorioGastoItemResponseDTO> listaFinal = new ArrayList<RelatorioGastoItemResponseDTO>();
 
-		for (RelatorioGastoConsultaDTO item : lista) {
+		for (RelatorioConsultaDTO item : lista) {
 			RelatorioGastoItemResponseDTO objeto = conversaoDTOConsultaParaDTOResposta(item);
 
 			listaFinal.add(objeto);
@@ -61,7 +77,7 @@ public class RelatorioService {
 
 	}
 
-	private RelatorioGastoItemResponseDTO conversaoDTOConsultaParaDTOResposta(RelatorioGastoConsultaDTO consulta) {
+	private RelatorioGastoItemResponseDTO conversaoDTOConsultaParaDTOResposta(RelatorioConsultaDTO consulta) {
 
 		BigDecimal valorTotalPago = BigDecimal.ZERO;
 

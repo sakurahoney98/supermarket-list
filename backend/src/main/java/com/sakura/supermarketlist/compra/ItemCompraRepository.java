@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.sakura.supermarketlist.relatorio.dto.RelatorioGastoConsultaDTO;
+import com.sakura.supermarketlist.relatorio.dto.RelatorioConsultaDTO;
 import com.sakura.supermarketlist.relatorio.dto.RelatorioMensalResponseDTO;
 
 public interface ItemCompraRepository extends JpaRepository<ItemCompra, Long> {
@@ -31,7 +31,7 @@ public interface ItemCompraRepository extends JpaRepository<ItemCompra, Long> {
 	List<RelatorioMensalResponseDTO> buscarItensPorMesEAno(@Param("ano") int ano, @Param("mes") int mes);
 	
 	@Query("""
-		    SELECT NEW com.sakura.supermarketlist.relatorio.dto.RelatorioGastoConsultaDTO(
+		    SELECT NEW com.sakura.supermarketlist.relatorio.dto.RelatorioConsultaDTO(
 		        c.dataCompra,
 		        ic.marca,
 		        ic.preco,
@@ -41,8 +41,8 @@ public interface ItemCompraRepository extends JpaRepository<ItemCompra, Long> {
 		    JOIN ic.compra c
 		    WHERE ic.item.ideItem = :ideItem
 		      AND c.dataCompra BETWEEN :inicio AND :fim
-		    ORDER BY c.dataCompra DESC
+		    ORDER BY c.dataCompra
 		""")
-	List<RelatorioGastoConsultaDTO> buscarGastoPorPeriodo(@Param("ideItem") Long ideItem, @Param("inicio") LocalDate inicio, @Param("fim") LocalDate fim);
+	List<RelatorioConsultaDTO> buscarGastoPorPeriodo(@Param("ideItem") Long ideItem, @Param("inicio") LocalDate inicio, @Param("fim") LocalDate fim);
 
 }
