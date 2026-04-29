@@ -23,5 +23,7 @@ public interface CategoriaRepository extends JpaRepository<Categoria, Long>{
 	
 	boolean existsByIdeCategoriaAndIndAtivoTrue(Long ideCategoria);
 	
+	Integer countByIndAtivoTrue();
+	
 
 }
