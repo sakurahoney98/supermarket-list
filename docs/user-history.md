@@ -311,3 +311,20 @@
 - Itens excluídos logicamente não devem aparecer (RN58)  
 
 **Regras de negócio relacionadas:** RN56, RN57, RN58, RN59 (conforme `04-report-rules.md`)
+
+---
+
+## US18 - Exibição de indicadores na tela inicial
+
+**Como** usuário  
+**Quero** visualizar indicadores resumidos na tela inicial 
+**Para** acompanhar rapidamente o status das categorias e itens cadastrados
+
+**Critérios de aceite:**  
+- O sistema deve exibir a quantidade total de categorias cadastradas e ativas.
+- O sistema deve exibir a quantidade total de itens cadastrados e ativos.
+- O sistema deve exibir a quantidade de itens ativos com estoque igual a zero.
+- Os indicadores devem ser exibidos de forma clara e destacada na tela inicial.
+- Os valores exibidos devem refletir os dados atualizados do sistema.
+
+**Regras de negócio relacionadas:** RN60
