@@ -30,6 +30,10 @@ public interface ItemRepository  extends JpaRepository<Item, Long> {
 		
 	List <Item> findByCategoriaIdeCategoriaAndNomeItemContainingIgnoreCaseAndIndAtivoTrueOrderByNomeItemAsc(Long ideCategoria, String termo);
 	
+	Integer countByIndAtivoTrue();
+	
+	Integer countByQuantidadeEstoqueAndIndAtivoTrue (Integer quantidadeEstoque);
+	
 
 	
 

@@ -17,6 +17,7 @@ import com.sakura.supermarketlist.categoria.dto.CategoriaResponseDTO;
 import com.sakura.supermarketlist.categoria.exception.CategoriaInexistenteException;
 import com.sakura.supermarketlist.common.dto.ExclusaoResponseDTO;
 import com.sakura.supermarketlist.item.dto.AtualizacaoEstoqueRequestDTO;
+import com.sakura.supermarketlist.item.dto.DashboardResponseDTO;
 import com.sakura.supermarketlist.item.dto.ItemRequestDTO;
 import com.sakura.supermarketlist.item.dto.ItemResponseDTO;
 import com.sakura.supermarketlist.item.exception.ItemDuplicadoNaCategoria;
@@ -169,6 +170,15 @@ public class ItemService {
 		return listaDeResposta(itensAtualizados);
 
 	}
+	
+	public DashboardResponseDTO capturarIndicadores() {
+		Integer categorias = categoriaRepository.countByIndAtivoTrue();
+		Integer itens = repository.countByIndAtivoTrue();
+		Integer itensZerados = repository.countByQuantidadeEstoqueAndIndAtivoTrue(0);
+		
+		return new DashboardResponseDTO(categorias, itens, itensZerados);
+		
+	}
 
 	private void validarItem(ItemRequestDTO request) {
 
@@ -295,6 +305,7 @@ public class ItemService {
 		return objeto;
 
 	}
+	
 
 	private void atualizarDados(Item item, ItemRequestDTO request) {
 		Categoria categoria = categoriaRepository.findById(request.categoria())

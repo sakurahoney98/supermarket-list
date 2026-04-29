@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sakura.supermarketlist.common.dto.ExclusaoResponseDTO;
 import com.sakura.supermarketlist.item.dto.AtualizacaoEstoqueRequestDTO;
+import com.sakura.supermarketlist.item.dto.DashboardResponseDTO;
 import com.sakura.supermarketlist.item.dto.ItemRequestDTO;
 import com.sakura.supermarketlist.item.dto.ItemResponseDTO;
 
@@ -101,6 +102,13 @@ public class ItemController {
 	@GetMapping("/{ideItem}")
 	public ResponseEntity<ItemResponseDTO> exibirDetalhesDoItem(@PathVariable Long ideItem) {
 		ItemResponseDTO response = service.buscarItemPorId(ideItem);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+	
+	@GetMapping("/dashboard")
+	public ResponseEntity<DashboardResponseDTO> capturarIndicadores() {
+		DashboardResponseDTO response = service.capturarIndicadores();
 		
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
