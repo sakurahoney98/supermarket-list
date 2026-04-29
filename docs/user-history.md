@@ -314,7 +314,40 @@
 
 ---
 
-## US18 - Exibição de indicadores na tela inicial
+## US18 - Visualizar página inicial (Home)
+
+**Como** usuário  
+**Quero** acessar a página inicial do sistema
+**Para** visualizar um resumo geral e navegar pelas funcionalidades
+
+**Critérios de aceite:**  
+- O sistema deve exibir uma página inicial ao acessar a aplicação
+- A página deve conter:
+  - Nome do sistema
+  - Descrição breve
+- Deve exibir um resumo com:
+  - Quantidade de categorias cadastradas
+  - Quantidade de itens cadastrados
+  - Quantidade de itens sem estoque
+- Deve existir um menu de navegação lateral com acesso às funcionalidades:
+  - Categorias
+  - Itens
+  - Lista
+  - Estoque
+  - Compras
+  - Relatórios
+- Deve exibir atalhos para:
+  - Gerenciar categorias
+  - Gerenciar itens
+- Deve exibir um alerta quando houver itens sem estoque
+- O usuário deve conseguir navegar para outras telas a partir da Home
+
+**Regras de negócio relacionadas:** RN60, RN61, RN62, RN63
+
+
+---
+
+## US19 - Exibição de indicadores na tela inicial
 
 **Como** usuário  
 **Quero** visualizar indicadores resumidos na tela inicial 
@@ -327,4 +360,4 @@
 - Os indicadores devem ser exibidos de forma clara e destacada na tela inicial.
 - Os valores exibidos devem refletir os dados atualizados do sistema.
 
-**Regras de negócio relacionadas:** RN60
+**Regras de negócio relacionadas:** RN63
