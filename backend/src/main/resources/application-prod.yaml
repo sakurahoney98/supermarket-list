@@ -9,3 +9,8 @@ spring:
     show-sql: false
     hibernate:
       ddl-auto: validate
+
+app.cors.origins: 192.168.*:*
+app.cors.mappings: /**
+app.cors.methods: "*"
+app.cors.headers: "*"
