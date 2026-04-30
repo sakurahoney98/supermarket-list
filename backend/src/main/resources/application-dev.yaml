@@ -25,3 +25,8 @@ logging:
     org.hibernate.orm.jdbc.bind: TRACE
     org.springframework.transaction: DEBUG
     org.springframework.web: DEBUG
+
+app.cors.origins: "*"
+app.cors.mappings: /**
+app.cors.methods: "*"
+app.cors.headers: "*"
