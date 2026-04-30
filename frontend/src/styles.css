@@ -1,0 +1,35 @@
+
+
+:root {
+    --border: #db57831a;
+    --background-primary: 30 40% 99%;
+    --background-secondary: 36 45% 98%;
+    --background-hover: 340 40% 95%;
+    --pink-primary: 340 65% 60%;
+    --brown-text: 20 10% 50%;
+    --blue-background: 200 60% 92%;
+    --green-background: 160 45% 88%;
+    --orange-background: 40 90% 75%;
+    --orange-text: 20 80% 65%;
+    --green-text: 160 45% 65%;
+    --blue-text: 200 60% 70%;
+
+
+
+
+}
+
+* {
+    box-sizing: border-box;
+    font-family: "Nunito", sans-serif;
+}
+
+body{
+    height: 100vh;
+    margin: 0;
+}
+
+
+
+
+
