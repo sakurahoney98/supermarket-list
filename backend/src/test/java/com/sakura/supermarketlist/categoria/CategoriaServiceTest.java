@@ -149,7 +149,7 @@ public class CategoriaServiceTest {
 					service.excluirCategoria(1L);
 				});
 
-		assertEquals(itensComVinculo.toString(), exception.getMessage());
+		assertEquals("Antes de realizar a exclusão você precisa modificar a categoria do(s) seguinte(s) item(ns):\n" + itensComVinculo.toString(), exception.getMessage());
 
 		verify(repository, never()).save(any(Categoria.class));
 

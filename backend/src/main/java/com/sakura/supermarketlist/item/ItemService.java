@@ -20,10 +20,10 @@ import com.sakura.supermarketlist.item.dto.AtualizacaoEstoqueRequestDTO;
 import com.sakura.supermarketlist.item.dto.DashboardResponseDTO;
 import com.sakura.supermarketlist.item.dto.ItemRequestDTO;
 import com.sakura.supermarketlist.item.dto.ItemResponseDTO;
-import com.sakura.supermarketlist.item.exception.ItemDuplicadoNaCategoria;
+import com.sakura.supermarketlist.item.exception.ItemDuplicadoNaCategoriaException;
 import com.sakura.supermarketlist.item.exception.ItemInexistenteException;
 import com.sakura.supermarketlist.item.exception.ListaItemInexistenteException;
-import com.sakura.supermarketlist.item.exception.NenhumaCategoriaCadastrada;
+import com.sakura.supermarketlist.item.exception.NenhumaCategoriaCadastradaException;
 
 @Service
 public class ItemService {
@@ -183,7 +183,7 @@ public class ItemService {
 	private void validarItem(ItemRequestDTO request) {
 
 		if (!categoriaRepository.existsByIndAtivoTrue()) {
-			throw new NenhumaCategoriaCadastrada();
+			throw new NenhumaCategoriaCadastradaException();
 		}
 
 		if (!categoriaRepository.existsByIdeCategoriaAndIndAtivoTrue(request.categoria())) {
@@ -194,14 +194,14 @@ public class ItemService {
 
 	private void validarInclusao(ItemRequestDTO request) {
 		if (repository.existsByNomeItemAndCategoriaIdeCategoriaAndIndAtivoTrue(request.nome(), request.categoria())) {
-			throw new ItemDuplicadoNaCategoria();
+			throw new ItemDuplicadoNaCategoriaException();
 		}
 	}
 
 	private void validarEdicao(ItemRequestDTO request, Long ideItem) {
 		if (repository.existsByNomeItemAndCategoriaIdeCategoriaAndIndAtivoTrueAndIdeItemNot(request.nome(),
 				request.categoria(), ideItem)) {
-			throw new ItemDuplicadoNaCategoria();
+			throw new ItemDuplicadoNaCategoriaException();
 		}
 	}
 

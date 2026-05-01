@@ -1,8 +1,8 @@
 package com.sakura.supermarketlist.item.exception;
 
-public class NenhumaCategoriaCadastrada  extends RuntimeException{
+public class NenhumaCategoriaCadastradaException  extends RuntimeException{
 	
-	public NenhumaCategoriaCadastrada() {
+	public NenhumaCategoriaCadastradaException() {
 		super("Necessário haver pelo menos uma categoria cadastrada.");
 	}
 	
