@@ -31,10 +31,10 @@ import com.sakura.supermarketlist.common.dto.ExclusaoResponseDTO;
 import com.sakura.supermarketlist.item.dto.AtualizacaoEstoqueRequestDTO;
 import com.sakura.supermarketlist.item.dto.ItemRequestDTO;
 import com.sakura.supermarketlist.item.dto.ItemResponseDTO;
-import com.sakura.supermarketlist.item.exception.ItemDuplicadoNaCategoria;
+import com.sakura.supermarketlist.item.exception.ItemDuplicadoNaCategoriaException;
 import com.sakura.supermarketlist.item.exception.ItemInexistenteException;
 import com.sakura.supermarketlist.item.exception.ListaItemInexistenteException;
-import com.sakura.supermarketlist.item.exception.NenhumaCategoriaCadastrada;
+import com.sakura.supermarketlist.item.exception.NenhumaCategoriaCadastradaException;
 
 @ExtendWith(MockitoExtension.class)
 public class ItemServiceTest {
@@ -168,7 +168,7 @@ public class ItemServiceTest {
 		when(categoriaRepository.existsByIndAtivoTrue()).thenReturn(false);
 	
 		
-		NenhumaCategoriaCadastrada exception = assertThrows(NenhumaCategoriaCadastrada.class, () -> {
+		NenhumaCategoriaCadastradaException exception = assertThrows(NenhumaCategoriaCadastradaException.class, () -> {
 			service.cadastrarItem(requestCadastro);
 		});
 
@@ -203,7 +203,7 @@ public class ItemServiceTest {
 		when(repository.existsByNomeItemAndCategoriaIdeCategoriaAndIndAtivoTrue(requestCadastro.nome(), requestCadastro.categoria())).thenReturn(true);
 		
 		
-		ItemDuplicadoNaCategoria exception = assertThrows(ItemDuplicadoNaCategoria.class, () -> {
+		ItemDuplicadoNaCategoriaException exception = assertThrows(ItemDuplicadoNaCategoriaException.class, () -> {
 			service.cadastrarItem(requestCadastro);
 		});
 		

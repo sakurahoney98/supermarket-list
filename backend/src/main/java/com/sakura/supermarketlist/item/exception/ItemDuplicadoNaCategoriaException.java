@@ -1,8 +1,8 @@
 package com.sakura.supermarketlist.item.exception;
 
-public class ItemDuplicadoNaCategoria extends RuntimeException{
+public class ItemDuplicadoNaCategoriaException extends RuntimeException{
 	
-	public ItemDuplicadoNaCategoria() {
+	public ItemDuplicadoNaCategoriaException() {
 		super("Já existe um item com o mesmo nome cadastrado nessa categoria.");
 	}
 
