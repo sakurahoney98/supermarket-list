@@ -3,8 +3,8 @@
 ## 📌 Informações Gerais
 - **Projeto:** Supermarket List  
 - **Autor:** Caroline  S.
-- **Versão:** 0.1  
-- **Data:** 04/04/2026  
+- **Versão:** 0.2  
+- **Data:** 02/05/2026  
 
 ---
 
@@ -51,6 +51,8 @@ O sistema não contemplará:
 - Download em formatos diferentes de PDF (lista) e Excel (relatórios)
 - Cadastro de marcas de produtos (MVP)
 - Relatórios não especificados
+- Edição de categoria
+- Edição de lista de compra
 
 ---
 
@@ -92,7 +94,6 @@ O sistema não contemplará:
 ### 📈 Relatórios
 - Itens comprados por mês
 - Gastos por item (intervalo de tempo)
-- Consumo de itens (intervalo de tempo)
 
 ---
 

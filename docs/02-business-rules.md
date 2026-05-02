@@ -51,7 +51,6 @@ O PDF final deve conter:
 
 - Itens e categorias devem ser **excluídos logicamente** (RN27, RN38).  
 - Registros excluídos logicamente **não aparecem nas listagens padrão** (RN58).  
-- Relatórios também devem ignorar registros excluídos, a menos que explicitamente incluídos.
 
 ---
 
@@ -91,6 +90,7 @@ Ao registrar uma compra, se já existir uma ou mais compras cadastradas para a m
    - **Múltiplas compras**: Se existir mais de uma compra na data, exibir uma lista (ex: ID da compra, valor total, data) para o usuário escolher a qual compra deseja somar.
    - Após a escolha, somar as quantidades dos itens à compra selecionada. Se um item não existir na compra original, adicionar um novo registro em `item_compra`.
    - O usuário pode vincular um item mais de uma vez à mesma compra (permitido, mas a soma deve acumular quantidades).
+   - Se o mesmo item for adicionado a mesma compra e possuir o mesmo preço, ele deve ser unido ao item compra já existente. Do contrário, deve ser registrado um novo item_compra.
 
 **Regras de negócio relacionadas:** RN46 a RN53.
 

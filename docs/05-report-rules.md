@@ -25,24 +25,10 @@
 
 **Formato:** XLSX.
 
----
-
-## 3. Relatório de Consumo de Itens (RN56, RN57)
-
-**Parâmetros:** item, intervalo de tempo.
-
-**Conteúdo:**
-- Data de compra
-- Quantidade comprada
-- **Diferença em dias entre a compra atual e a compra imediatamente anterior do mesmo item** (RN57)
-
-**Observação:** A diferença de dias ajuda a calcular a frequência de compra e o ritmo de consumo.
-
-**Formato:** XLSX.
 
 ---
 
-## 4. Regra Geral de Relatórios
+## 3. Regra Geral de Relatórios
 
 - Todos os relatórios devem ser exportados no formato **XLSX** (RN59).
 - Itens/categorias excluídos logicamente não devem aparecer nos relatórios, a menos que explicitamente necessário (RN58).
