@@ -1,5 +1,6 @@
 package com.sakura.supermarketlist.compra;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -44,5 +45,7 @@ public interface ItemCompraRepository extends JpaRepository<ItemCompra, Long> {
 		    ORDER BY c.dataCompra
 		""")
 	List<RelatorioConsultaDTO> buscarGastoPorPeriodo(@Param("ideItem") Long ideItem, @Param("inicio") LocalDate inicio, @Param("fim") LocalDate fim);
+	
+	ItemCompra findByCompraIdeCompraAndPrecoAndMarca(Long ideCompra, BigDecimal preco, String marca);
 
 }
