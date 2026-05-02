@@ -115,22 +115,32 @@ public class CompraService {
 
 		for(ItemCompraRequestDTO objeto : listaItens) {
 			
-			ItemCompra itemCompra = new ItemCompra();
 			Item item = mapaItens.get(objeto.ideItem());
+			ItemCompra itemCompra = itemCompraRepository.findByCompraIdeCompraAndPrecoAndMarca(compra.getIdeCompra(), objeto.valor(), objeto.marca());
 			
-			
-			itemCompra.setCompra(compra);
-			itemCompra.setMarca(objeto.marca());
-			itemCompra.setPreco(objeto.valor());
-			itemCompra.setItem(item);
-			itemCompra.setQuantidade(objeto.quantidadeComprada());
+			if(itemCompra != null) {
+				
+				int quantidadeNovaItemCompra = itemCompra.getQuantidade() + objeto.quantidadeComprada();
+				itemCompra.setQuantidade(quantidadeNovaItemCompra);
+				
+			}else {
+				
+				itemCompra = new ItemCompra();
+				
+				itemCompra.setCompra(compra);
+				itemCompra.setMarca(objeto.marca());
+				itemCompra.setPreco(objeto.valor());
+				itemCompra.setItem(item);
+				itemCompra.setQuantidade(objeto.quantidadeComprada());
+				
+			}
 			
 			int quantidadeNovaItem = item.getQuantidadeEstoque() + objeto.quantidadeComprada();
 			item.setQuantidadeEstoque(quantidadeNovaItem);
 			item.setDataUltimaCompra(compra.getDataCompra());
 			
-			itensDaCompra.add(itemCompra);
 			itensParaAtualizar.add(item);
+			itensDaCompra.add(itemCompra);
 			
 		}
 		
