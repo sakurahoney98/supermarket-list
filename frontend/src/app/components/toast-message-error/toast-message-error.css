@@ -1,0 +1,35 @@
+   .toast-message-error {
+       display: flex;
+       width: 500px;
+       max-width: 90%;
+       padding: 16px;
+       gap: 12px;
+       align-items: center;
+       background-color: white;
+       border: 1px solid hsl(var(--yellow-warning));
+       border-radius: 20px;
+       position: fixed;
+       z-index: 9999;
+       top: 50px;
+       left: 50%;
+       transform: translate(-50%, -50%) translateY(10px);
+       opacity: 0;
+       transition: all 0.5s ease;
+
+   }
+
+   .toast-message-error h1 {
+       margin: 0;
+       font-size: 16px;
+   }
+
+   .toast-message-error p {
+       margin: 0;
+       font-size: 14px;
+       white-space: pre-line;
+   }
+
+   .toast-message-error.show {
+       opacity: 1;
+       transform: translateX(-50%) translateY(0);
+   }

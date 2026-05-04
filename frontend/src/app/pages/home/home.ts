@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { DashboardService } from '../../services/dashboard';
-import { ChangeDetectorRef } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-home',
+  imports: [RouterLink],
   standalone: true,
   templateUrl: './home.html',
   styleUrl: './home.css',
@@ -14,20 +15,17 @@ export class Home implements OnInit{
   itensZerados = "-";
 
   constructor (
-    private dashboardService: DashboardService,
-    private cdr: ChangeDetectorRef
+    private dashboardService: DashboardService
   ){}
 
   ngOnInit(){
+
     this.dashboardService.getDashboard().subscribe({
       next: (data: any) => {
 
-        
         this.categorias = String(data.categorias);
         this.itens = String(data.itens);
         this.itensZerados = String(data.itensZerados);
-
-        this.cdr.detectChanges();
 
       },
       error: (err) => {

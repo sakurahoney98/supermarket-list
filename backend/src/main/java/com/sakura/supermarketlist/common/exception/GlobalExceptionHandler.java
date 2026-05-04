@@ -1,6 +1,9 @@
 package com.sakura.supermarketlist.common.exception;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -79,6 +82,27 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.badRequest().body(exception.getMessage());
 		
 	}
+	
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<String> handleValidacao(MethodArgumentNotValidException exception){
+		return ResponseEntity.badRequest().body(exception.getMessage());
+		
+	}
+	
+	@ExceptionHandler(HttpMessageNotReadableException.class)
+	public ResponseEntity<String> handleCorpoVazio(HttpMessageNotReadableException exception){
+		return ResponseEntity.badRequest().body(exception.getMessage());
+		
+	}
+	
+	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+	public ResponseEntity<String> handleRotaInexistente(HttpRequestMethodNotSupportedException exception){
+		return ResponseEntity.badRequest().body(exception.getMessage());
+		
+	}
+	
+	
+	
 	
 	
 

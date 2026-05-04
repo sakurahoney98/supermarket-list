@@ -13,6 +13,9 @@
     --orange-text: 20 80% 65%;
     --green-text: 160 45% 65%;
     --blue-text: 200 60% 70%;
+    --red-background: 0 70% 58%;
+    --border-input: 30 25% 88%;
+    --yellow-warning: 40 90% 55%;
 
 
 
@@ -29,6 +32,38 @@ body{
     margin: 0;
 }
 
+
+  .button-action {
+     border-radius: 15px;
+     border: none;
+     height: 40px;
+     padding: 8px;
+     color: white;
+     cursor: pointer;
+     width: 120px;
+     justify-content: center;
+     align-items: center;
+     gap: 12px;
+     display: flex;
+
+
+ }
+
+ .button-radio {
+     height: 16px;
+     width: 16px;
+     border-radius: 100%;
+     border: 1px solid hsl(var(--pink-primary));
+     background-color: white;
+     cursor: pointer;
+     padding: 0;
+
+ }
+
+ .button-radio__select-all--selected,
+ .button-radio__select-item--selected {
+     background-color: hsl(var(--pink-primary))
+ }
 
 
 

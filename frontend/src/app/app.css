@@ -1,19 +1,19 @@
 
- .flex {
+.flex {
         display: flex;
         flex: 1;
 
     }
 
-     .content {
+.content {
         flex: 1;
-        height: 100%;
         background-color: hsl(var(--background-secondary));
+        padding: 8px;
 
     }
 
-    .panel {
-    height: 100%;
+.panel {
+   height: 100%;
     display: flex;
     flex-direction: column;
 }
