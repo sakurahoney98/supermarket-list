@@ -1,0 +1,18 @@
+.button-action--delete {
+     background-color: hsl(var(--red-background));
+ }
+
+ .list-actions {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     padding: 0px 24px;
+ }
+
+ .select-all {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     gap: 8px;
+
+ }

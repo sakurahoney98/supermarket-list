@@ -4,6 +4,9 @@
      background-color: hsl(var(--background-primary));
      padding: 12px 40px;
      border-bottom: 2px solid var(--border);
+     display: flex;
+     gap: 20px;
+     align-items: center;
 
  }
 
