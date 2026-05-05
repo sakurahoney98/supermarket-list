@@ -1,18 +1,19 @@
+.list-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+}
+
+.list-actions__select-all {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+}
+
 .button-action--delete {
-     background-color: hsl(var(--red-background));
- }
+    background-color: hsl(var(--red-background));
+}
 
- .list-actions {
-     display: flex;
-     align-items: center;
-     justify-content: space-between;
-     padding: 0px 24px;
- }
-
- .select-all {
-     display: flex;
-     align-items: center;
-     justify-content: center;
-     gap: 8px;
-
- }

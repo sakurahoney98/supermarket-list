@@ -1,10 +1,12 @@
 
-<div class="toast-message-sucess"
+<div class="toast-success"
+role="status"
+aria-live="polite"
 [class.show]="mostrarToast">
-    <div class="message-icon">
-        <img [src]="iconeSucesso" alt="Ícone de sucesso" width="24px" height="24px">
+    <div class="toast-success__icon">
+        <img [src]="iconeSucesso" aria-hidden="true" alt="" width="24px" height="24px">
     </div>
-    <div class="message-text">
+    <div class="toast-success__content">
         {{ mensagem }}
 
     </div>

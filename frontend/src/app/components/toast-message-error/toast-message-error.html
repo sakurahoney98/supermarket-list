@@ -1,12 +1,14 @@
 
-<div class="toast-message-error"
+<div class="toast-error"
+role="alert"
+aria-live="assertive"
 [class.show]="mostrarToast">
-    <div class="message-icon">
-        <img [src]="iconeErro" alt="Ícone de erro" width="24px" height="24px">
+    <div class="toast-error__icon">
+        <img [src]="iconeErro" aria-hidden="true" alt="Ícone de erro" width="24px" height="24px">
     </div>
-    <div class="message-text">
-        <h1>{{ tituloErro }}</h1>
-        <p>{{ mensagem }}</p>
+    <div class="toast-error__content">
+        <h2 class="toast-error__title">{{ tituloErro }}</h2>
+        <p  class="toast-error__description">{{ mensagem }}</p>
 
     </div>
 </div>

@@ -1,30 +1,27 @@
-<div class="list-actions">
-    <div class="select-all">
-        <button class="button-radio" 
-        (click)="toggleBotaoSelecionarTudoAtivado()"
-        [class.button-radio__select-all--selected]="todosItensSelecionados">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+<section class="list-actions" aria-label="Ações da lista">
+    <div class="list-actions__select-all">
+        <button type="button" aria-label="Selecionar todos os itens" class="button-check"
+            [class.selected]="todosItensSelecionados" [attr.aria-pressed]="todosItensSelecionados"
+            (click)="toggleBotaoSelecionarTudoAtivado()">
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
                 fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-check-icon lucide-check">
                 <path d="M20 6 9 17l-5-5" />
             </svg>
-        </button> 
-        Selecionar tudo
+        </button>
+        <span class="list-actions__label">Selecionar tudo</span>
     </div>
-    <button class="button-action button-action--delete" 
-    *ngIf="quantidadeSelecionada > 0"
-    (click)="onExcluirClick()">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-            stroke-linejoin="round" class="lucide lucide-trash2-icon lucide-trash-2"
-            >
+    <button class="button-action button-action--delete" *ngIf="quantidadeSelecionada > 0" (click)="onExcluirClick()">
+        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="lucide lucide-trash2-icon lucide-trash-2">
             <path d="M10 11v6" />
             <path d="M14 11v6" />
             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
             <path d="M3 6h18" />
             <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-        </svg> 
-        Excluir ({{ quantidadeSelecionada }})
+        </svg>
+        Excluir <span class="sr-only">itens selecionados</span>({{ quantidadeSelecionada }})
     </button>
 
-</div>
+</section>

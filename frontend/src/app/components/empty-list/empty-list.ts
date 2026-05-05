@@ -6,8 +6,8 @@ import { Component, Input } from '@angular/core';
   templateUrl: './empty-list.html',
   styleUrl: './empty-list.css',
 })
-export class EmptyList {
+export class EmptyListComponent {
   @Input() emoji: string = '😔';
-  @Input() titulo: string = 'Lista vazia';
-  @Input() descricao: string = 'Não há itens para exibir';
+  @Input() titulo: string = 'Nenhum resultado encontrado';
+  @Input() descricao: string = 'Não há itens para exibir.';
 }

@@ -6,7 +6,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   templateUrl: './modal.html',
   styleUrl: './modal.css',
 })
-export class Modal {
+export class ModalComponent {
   @Input() titulo: string = "-"
   @Output() fecharModal = new EventEmitter<void>;
 

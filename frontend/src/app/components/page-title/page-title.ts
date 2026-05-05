@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core';
   templateUrl: './page-title.html',
   styleUrl: './page-title.css',
 })
-export class PageTitle {
+export class PageTitleComponent {
   @Input() titulo: string = '';
   @Input() descricao: string = '';
 }

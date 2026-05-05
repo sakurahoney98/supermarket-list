@@ -1,3 +1,4 @@
+
 .title-button {
     display: flex;
     align-items: center;
@@ -14,6 +15,7 @@
     flex-wrap: wrap;
     overflow-y: auto;
 }
+
 
 .card-list {
     height: 64px;
@@ -43,13 +45,12 @@
     text-overflow: ellipsis;
 }
 
-
 .form-line {
     padding: 8px 0px;
     flex: 1;
 }
 
-.form-line-title {
+.form-line__label {
     margin-bottom: 8px;
 }
 
@@ -64,14 +65,13 @@ input {
 input:focus {
     border: 1px solid hsl(var(--pink-primary));
 }
-
-.color-input {
+.color-input-group {
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
-.color-input input[type="color"] {
+.input-color {
     width: 60px;
 }
 
@@ -105,7 +105,7 @@ input:focus {
 
 }
 
-.preview {
+.form-line__preview {
     height: 36px;
     background-color: black;
     color: black;
@@ -130,13 +130,13 @@ button {
     cursor: pointer;
 }
 
-.form-line-button {
+.form-line__sugestions {
     position: relative;
 }
 
 .submodal {
     position: absolute;
-    top: 40px;
+    top: 20px;
     right: 0;
     width: 400px;
     background-color: white;
@@ -150,18 +150,22 @@ button {
     flex-wrap: wrap;
 }
 
-.submodal-btn{
+.submodal__btn{
     width: 80px;
     height: 24px;
     border-radius: 10px;
     border: none;
 }
 
-.submodal-btn:hover{
+.submodal__btn:hover{
     border: 2px solid hsl(var(--pink-primary));
 }
 
 .input-error {
   border: 2px solid red !important;
   border-radius: 4px;
+}
+
+li{
+    list-style: none;
 }

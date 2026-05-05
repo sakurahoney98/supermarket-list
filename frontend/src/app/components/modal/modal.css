@@ -8,27 +8,31 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        padding: 1rem;
     }
 
     .modal {
-        width: 376px;
+        min-width: 23.5rem;
+        max-width: 90%;
         background-color: hsl(var(--background-secondary));
-        border-radius: 10px;
-        padding: 24px;
-        border: 1px solid var(--border);
+        border-radius: 0.625rem;
+        padding: 1.5rem;
+        border: 0.063rem solid var(--border);
     }
 
-    .modal-title {
+    .modal__header {
         display: flex;
         justify-content: space-between;
-        font-size: 12px;
+        font-size: 0.75rem;
     }
 
-    .modal-title button {
+     .modal__title {
+        margin: 0;
+    }
+
+    .modal__button {
         background-color: transparent;
         border: none;
     }
 
-    .modal-title h1 {
-        margin: 0;
-    }
+   

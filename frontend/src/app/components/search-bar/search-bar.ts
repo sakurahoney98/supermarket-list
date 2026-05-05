@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './search-bar.html',
   styleUrl: './search-bar.css',
 })
-export class SearchBar {
+export class SearchBarComponent {
   termoBuscado: string = '';
   @Output() busca: EventEmitter<string> = new EventEmitter<string>();
 

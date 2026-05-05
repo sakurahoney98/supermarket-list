@@ -1,16 +1,16 @@
-<div class="home-title">
-    <h1>
+<header class="home-header">
+    <h2 class="home-header__emoji">
         🛒
-    </h1>
-    <h1>
+    </h2>
+    <h2 class="home-header__title">
         Supermarket List
-    </h1>
-    <p>Sua lista de compras inteligente</p>
+    </h2>
+    <p class="home-header__subtitle">Sua lista de compras inteligente</p>
 
-</div>
-<div class="home-data">
-    <div class="card">
-        <div class="card-icon card-icon--circle card-icon--blue">
+</header>
+<main class="home-content">
+    <article class="card">
+        <div class="card__icon card__icon--circle card__icon--blue">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-tag w-5 h-5">
@@ -21,15 +21,15 @@
             </svg>
 
         </div>
-        <div class="card-info">
-            <h1>{{ categorias }}</h1>
-            <p>Categorias</p>
+        <div class="card__info">
+            <h2 class="card__info__quantity">{{ categorias }}</h2>
+            <p class="card__info__name">Categorias</p>
 
         </div>
 
-    </div>
-    <div class="card">
-        <div class="card-icon card-icon--circle card-icon--green">
+    </article>
+    <article class="card">
+        <div class="card__icon card__icon--circle card__icon--green">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-package w-5 h-5">
@@ -42,15 +42,15 @@
             </svg>
 
         </div>
-        <div class="card-info">
-            <h1>{{ itens }}</h1>
-            <p>Itens</p>
+        <div class="card__info">
+            <h2 class="card__info__quantity">{{ itens }}</h2>
+            <p class="card__info__name">Itens</p>
 
         </div>
 
-    </div>
-    <div class="card">
-        <div class="card-icon card-icon--circle card-icon--orange">
+    </article>
+    <article class="card">
+        <div class="card__icon card__icon--circle card__icon--orange">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="lucide lucide-trending-up w-5 h-5">
@@ -59,40 +59,32 @@
             </svg>
 
         </div>
-        <div class="card-info">
-            <h1>{{ itensZerados }}</h1>
-            <p>Itens zerados no estoque</p>
+        <div class="card__info">
+            <h2 class="card__info__quantity">{{ itensZerados }}</h2>
+            <p class="card__info__name">Itens zerados no estoque</p>
 
         </div>
 
-    </div>
+    </article>
 
 
-</div>
-<div class="home-quick-options">
+</main>
+<section class="home-quick-options" aria-label="Ações rápidas">
     <a class="card card--inline" routerLink="/categoria">
-        <div class="card-icon card-icon--emoji">
+        <span class="card__icon card__icon--emoji">
             🏷️
-        </div>
-        <div class="card-info">
-            <h1>Gerenciar Categorias</h1>
+        </span>
+
+        <span class="card__info__title">Gerenciar Categorias</span>
 
 
-        </div>
-        
     </a>
 
     <a class="card card--inline">
-        <div class="card-icon card-icon--emoji">
+        <span class="card__icon card__icon--emoji">
             📦
-        </div>
-        <div class="card-info">
-            <h1>Gerenciar Itens</h1>
-
-
-        </div>
-
-
+        </span>
+        <span class="card__info__title">Gerenciar Itens</span>
     </a>
 
-</div>
+</section>

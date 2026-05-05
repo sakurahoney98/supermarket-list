@@ -101,6 +101,14 @@ public class GlobalExceptionHandler {
 		
 	}
 	
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<String> handleCaractereInvalido(IllegalArgumentException exception){
+		return ResponseEntity.badRequest().body(exception.getMessage());
+		
+	}
+	
+	
+	
 	
 	
 	

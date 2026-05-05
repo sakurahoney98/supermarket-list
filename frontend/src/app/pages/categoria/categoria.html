@@ -1,29 +1,36 @@
-<app-toast-message-sucess
-[mensagem]="mensagemToast"
-[mostrarToast]="exibirToastSucesso"
-></app-toast-message-sucess>
-<app-toast-message-error
-[mensagem]="mensagemToast"
-[mostrarToast]="exibirToastErro"
-></app-toast-message-error>
-<app-modal *ngIf="exibirModal" (fecharModal)="onFecharModal()" titulo="Nova categoria">
+<app-toast-message-sucess 
+[mensagem]="mensagemToast" 
+[mostrarToast]="exibirToastSucesso">
+</app-toast-message-sucess>
+
+<app-toast-message-error 
+[mensagem]="mensagemToast" 
+[mostrarToast]="exibirToastErro">
+</app-toast-message-error>
+
+<app-modal *ngIf="exibirModal" 
+(fecharModal)="onFecharModal()" 
+titulo="Nova categoria">
     <div class="form-line">
-        <div class="form-line-title">
+        <label class="form-line__label" for="nome-categoria">
             Nome *
-        </div>
-        <div class="form-line-input">
-            <input  [class.input-error]="!nomePreenchido" type="text" name="nome" placeholder="Ex.: Frios" [(ngModel)]="exemploTextoPreview">
+        </label>
+        <div class="form-line__control">
+            <input class="form-line__input" type="text" id="nome-categoria" name="nome" placeholder="Ex.: Frios" 
+            [class.input-error]="!nomePreenchido" 
+            [(ngModel)]="exemploTextoPreview">
         </div>
     </div>
 
     <div class="form-line form-line--flex form-line--space-between">
-        <div class="form-line-title">
+        <span class="form-line__label">
             Cores
-        </div>
-        <div class="form-line-button">
-            <button class="sugestions-btn" (click)="toggleModalSugestoes()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        </span>
+        <div class="form-line__sugestions">
+            <button class="sugestions-btn" 
+            (click)="toggleModalSugestoes()">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="lucide lucide-palette-icon lucide-palette">
                     <path
                         d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z" />
@@ -34,127 +41,135 @@
                 </svg>
                 Sugestões
             </button>
-            <div class="submodal" *ngIf="exibirModalSugestoes">
-                <button 
-                class="submodal-btn"
-                *ngFor="let s of listaSugestoes "
-                [style.backgroundColor]="s.corFundo"
-                [style.color]="s.corLetra"
-                (click)="selecionarSugestao(s)">
-                    {{ s.nome }}
-                </button>
-
-
-
-            </div>
+            <ul class="submodal" *ngIf="exibirModalSugestoes" role="listbox">
+                <li *ngFor="let s of listaSugestoes ">
+                    <button type="button" class="submodal__btn" 
+                    [style.backgroundColor]="s.corFundo"
+                    [style.color]="s.corLetra" 
+                    (click)="selecionarSugestao(s)">
+                        {{ s.nome }}
+                    </button>
+                </li>
+            </ul>
         </div>
 
     </div>
     <div class="form-line--flex">
-        
+
 
         <div class="form-line">
-            <div class="form-line-title">
+            <label class="form-line__label" for="cor-fundo">
                 Cor do fundo *
+            </label>
+            <div class="color-input-group">
+
+                <input class="form-line__input input-color" type="color" id="cor-fundo" aria-label="Seletor da cor de fundo da exibição da categoria"
+                [(ngModel)]="corFundo" 
+                    >
+
+                <input class="form-line__input" type="text" placeholder="#000000"
+                [class.input-error]="!corFundoPreenchido" 
+                [(ngModel)]="corFundo" >
+
             </div>
-            <div class="form-line-input">
-                <div class="color-input">
 
-                    <input type="color" [(ngModel)]="corFundo">
-
-                    <input [class.input-error]="!corFundoPreenchido" type="text" [(ngModel)]="corFundo" placeholder="#000000">
-
-                </div>
-            </div>
         </div>
 
         <div class="form-line">
-            <div class="form-line-title">
+            <label class="form-line__label" for="cor-letra">
                 Cor da letra *
+            </label>
+            <div class="color-input-group">
+
+                <input class="form-line__input input-color" type="color" id="cor-letra" aria-label="Seletor da cor da letra de exibião da categoria"
+                [(ngModel)]="corLetra">
+
+                <input class="form-line__input" type="text" placeholder="#000000"
+                [class.input-error]="!corLetraPreenchido" 
+                [(ngModel)]="corLetra" >
+
             </div>
-            <div class="form-line-input">
-                <div class="color-input">
 
-                    <input type="color" [(ngModel)]="corLetra">
-
-                    <input [class.input-error]="!corLetraPreenchido" type="text" [(ngModel)]="corLetra" placeholder="#000000">
-
-                </div>
-            </div>
         </div>
 
     </div>
 
     <div class="form-line">
-        <div class="form-line-title">
+        <span class="form-line__label">
             Pré-visualização
-        </div>
-        <div class="form-line-div">
-            <div class="preview" [style.backgroundColor]="corFundo" [style.color]="corLetra" [style.border]="corFundo">
-                {{ exemploTextoPreview }}
+        </span>
 
-            </div>
+        <div class="form-line__preview" 
+        [style.backgroundColor]="corFundo" 
+        [style.color]="corLetra"
+        [style.border]="corFundo">
+            {{ exemploTextoPreview }}
 
         </div>
+
+
     </div>
 
     <div class="form-line">
 
-        <button class="register-btn" (click)="cadastrarCategoria()">Cadastrar</button>
-
+        <button type="submit" class="register-btn" 
+        (click)="cadastrarCategoria()">Cadastrar</button>
 
     </div>
 
 </app-modal>
 
-<app-page-title titulo="Categoria" descricao="Gerencie as categorias dos seus itens">
-    <div class="title-button">
-        <button class="button-action button-action--new" (click)="onAbrirModal()"><svg
-                xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-plus-icon lucide-plus">
-                <path d="M5 12h14" />
-                <path d="M12 5v14" />
-            </svg>
-            Inserir
-        </button>
-    </div>
-</app-page-title>
-<app-search-bar
-    (busca)="onBusca($event)"
-    ></app-search-bar>
-<app-empty-list 
-*ngIf="listaCategoria.length === 0"
-[emoji]="emojiListaVazia"
-[titulo]="tituloListaVazia"
-[descricao]="descricaoListaVazia">
+<main class="category-page">
+    <app-page-title titulo="Categoria" descricao="Gerencie as categorias dos seus itens">
+        <div class="title-button">
+            <button type="button" class="button-action button-action--new" 
+            (click)="onAbrirModal()">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-plus-icon lucide-plus">
+                    <path d="M5 12h14" />
+                    <path d="M12 5v14" />
+                </svg>
+                Inserir
+            </button>
+        </div>
+    </app-page-title>
 
-</app-empty-list>
-<app-list-action *ngIf="listaCategoria.length !== 0" (selecionarTudo)="onSelecionarTudo($event)"
-    [quantidadeSelecionada]="quantidadeSelecionada" [todosItensSelecionados]="todosItensSelecionados"
+    <app-search-bar (busca)="onBusca($event)"></app-search-bar>
+
+    <app-empty-list *ngIf="listaCategoria.length === 0" 
+    [emoji]="emojiListaVazia" 
+    [titulo]="tituloListaVazia"
+    [descricao]="descricaoListaVazia">
+    </app-empty-list>
+
+    <app-list-action *ngIf="listaCategoria.length !== 0" 
+    (selecionarTudo)="onSelecionarTudo($event)"
+    [quantidadeSelecionada]="quantidadeSelecionada"
+    [todosItensSelecionados]="todosItensSelecionados"
     (excluir)="deletarCategoria()"></app-list-action>
 
 
-   
+    <ul class="category-list" *ngIf="listaCategoria.length !== 0">
+
+        <li class="card-list" *ngFor="let categoria of listaCategoria">
+            <button class="button-check"
+                (click)="categoria.selecionado = !categoria.selecionado; atualizarQuantidadeSelecionada()"
+                [class.selected]="categoria.selecionado">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                    stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-check-icon lucide-check">
+                    <path d="M20 6 9 17l-5-5" />
+                </svg>
+            </button>
+            <div class="category-name" 
+            [style.backgroundColor]="categoria.corFundo" 
+            [style.color]="categoria.corLetra">
+                {{ categoria.nome }}</div>
+
+        </li>
 
 
- 
-<div class="category-list" *ngIf="listaCategoria.length !== 0">
+    </ul>
 
-    <div class="card-list" *ngFor="let categoria of listaCategoria">
-        <button class="button-radio"
-            (click)="categoria.selecionado = !categoria.selecionado; atualizarQuantidadeSelecionada()"
-            [class.button-radio__select-item--selected]="categoria.selecionado">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                class="lucide lucide-check-icon lucide-check">
-                <path d="M20 6 9 17l-5-5" />
-            </svg>
-        </button>
-        <div class="category-name" [style.backgroundColor]="categoria.corFundo" [style.color]="categoria.corLetra">{{
-            categoria.nome }}</div>
-
-    </div>
-
-
-</div>
+</main>

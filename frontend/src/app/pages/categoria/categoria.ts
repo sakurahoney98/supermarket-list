@@ -1,25 +1,27 @@
 import { Component, OnInit } from '@angular/core';
-import { CategoriaService } from '../../services/categoria';
-import { CategoriaModel } from '../../models/categoria.model';
-import { PageTitle } from '../../components/page-title/page-title';
-import { Modal } from '../../components/modal/modal';
-import { ListAction } from '../../components/list-action/list-action';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { SugestaoModel } from '../../models/sugestao.model';
+
+import { CategoriaService } from '../../services/categoria';
 import { SugestaoService } from '../../services/sugestao';
+import { CategoriaModel } from '../../models/categoria.model';
+import { SugestaoModel } from '../../models/sugestao.model';
 import { CategoriaRequestModel } from '../../models/categoria-request.model';
-import { ToastMessageSucess } from '../../components/toast-message-sucess/toast-message-sucess';
-import { ToastMessageError } from '../../components/toast-message-error/toast-message-error';
-import { EmptyList } from '../../components/empty-list/empty-list';
-import { SearchBar } from '../../components/search-bar/search-bar';
+import { PageTitleComponent } from '../../components/page-title/page-title';
+import { ModalComponent } from '../../components/modal/modal';
+import { ListActionComponent } from '../../components/list-action/list-action';
+import { ToastMessageSucessComponent } from '../../components/toast-message-sucess/toast-message-sucess';
+import { ToastMessageErrorComponent } from '../../components/toast-message-error/toast-message-error';
+import { EmptyListComponent } from '../../components/empty-list/empty-list';
+import { SearchBarComponent } from '../../components/search-bar/search-bar';
+
 
 
 
 @Component({
   selector: 'app-categoria',
   standalone: true,
-  imports: [PageTitle, ListAction, CommonModule, Modal, FormsModule, ToastMessageSucess, ToastMessageError, EmptyList, SearchBar],
+  imports: [PageTitleComponent, ListActionComponent, CommonModule, ModalComponent, FormsModule, ToastMessageSucessComponent, ToastMessageErrorComponent, EmptyListComponent, SearchBarComponent],
   templateUrl: './categoria.html',
   styleUrl: './categoria.css',
 })
@@ -27,18 +29,21 @@ export class Categoria implements OnInit {
 
   listaCategoria: CategoriaModel[] = [];
   listaSugestoes: SugestaoModel[] = [];
-  quantidadeSelecionada: number = 0;
+
   todosItensSelecionados: boolean = false;
   exibirModal: boolean = false;
   exibirModalSugestoes: boolean = false;
   exibirToastSucesso: boolean = false;
   exibirToastErro: boolean = false;
-  corLetra: string = '#000000';
-  corFundo: string = '#FFFFFF';
-  exemploTextoPreview = '';
   nomePreenchido: boolean = true;
   corLetraPreenchido: boolean = true;
   corFundoPreenchido: boolean = true;
+
+  quantidadeSelecionada: number = 0;
+
+  corLetra: string = '#000000';
+  corFundo: string = '#FFFFFF';
+  exemploTextoPreview: string = '';
   mensagemToast: string = '';
   emojiListaVazia: string = '🏷️';
   tituloListaVazia: string = 'Nenhuma categoria encontrada';
@@ -94,22 +99,62 @@ export class Categoria implements OnInit {
     })
   }
 
-  onSelecionarTudo(selecionar: boolean) {
-    this.listaCategoria.forEach(categoria => {
-      categoria.selecionado = selecionar;
-    });
+  cadastrarCategoria() {
 
-    this.atualizarQuantidadeSelecionada();
-  }
+    this.nomePreenchido = true;
+    this.corLetraPreenchido = true;
+    this.corFundoPreenchido = true;
 
-  atualizarQuantidadeSelecionada() {
-    this.quantidadeSelecionada = this.listaCategoria.filter(c => c.selecionado).length;
+    if (this.exemploTextoPreview === '') {
+      this.nomePreenchido = false;
 
-    this.isTodosItensSelecionados();
-  }
+    }
+    if (this.corLetra === '') {
+      this.corLetraPreenchido = false;
 
-  isTodosItensSelecionados() {
-    this.todosItensSelecionados = this.listaCategoria.length == this.quantidadeSelecionada;
+    }
+    if (this.corFundo === '') {
+      this.corFundoPreenchido = false;
+
+    }
+
+    if (this.nomePreenchido && this.corLetraPreenchido && this.corFundoPreenchido) {
+      const categoria: CategoriaRequestModel = {
+        nome: this.exemploTextoPreview,
+        corLetra: this.corLetra,
+        corFundo: this.corFundo,
+      } as CategoriaRequestModel;
+
+      this.categoriaService.inserirCategoria(categoria).subscribe({
+        next: () => {
+          this.mensagemToast = "Categoria cadastrada com sucesso!";
+
+          this.exibirToastSucesso = true;
+          setTimeout(() => {
+            this.exibirToastSucesso = false;
+          }, 5000);
+
+          this.onFecharModal();
+          this.capturarCategorias();
+
+
+        },
+        error: (err) => {
+          this.mensagemToast = err.error;
+          this.exibirToastErro = true;
+          setTimeout(() => {
+            this.exibirToastErro = false;
+          }, 5000);
+        }
+      });
+    } else {
+      this.mensagemToast = "Preencha os campos obrigatórios";
+      this.exibirToastErro = true;
+      setTimeout(() => {
+        this.exibirToastErro = false;
+      }, 5000);
+    }
+
   }
 
   deletarCategoria() {
@@ -179,6 +224,35 @@ export class Categoria implements OnInit {
 
   }
 
+  onBusca(termo: string) {
+    this.categoriaService.buscarTermo(termo).subscribe({
+      next: (data: CategoriaModel[]) => {
+        this.listaCategoria = data.map(c => ({
+          ...c,
+          selecionado: false
+        }));
+
+        this.atualizarQuantidadeSelecionada();
+
+      },
+      error: (err) => {
+        this.mensagemToast = err.error;
+        this.exibirToastErro = true;
+        setTimeout(() => {
+          this.exibirToastErro = false;
+        }, 5000);
+      }
+    });
+  }
+
+  onSelecionarTudo(selecionar: boolean) {
+    this.listaCategoria.forEach(categoria => {
+      categoria.selecionado = selecionar;
+    });
+
+    this.atualizarQuantidadeSelecionada();
+  }
+
   onAbrirModal() {
     this.exibirModal = true;
   }
@@ -186,8 +260,19 @@ export class Categoria implements OnInit {
     this.exibirModal = false;
   }
 
+
   toggleModalSugestoes() {
     this.exibirModalSugestoes = !this.exibirModalSugestoes;
+  }
+
+  atualizarQuantidadeSelecionada() {
+    this.quantidadeSelecionada = this.listaCategoria.filter(c => c.selecionado).length;
+
+    this.isTodosItensSelecionados();
+  }
+
+  isTodosItensSelecionados() {
+    this.todosItensSelecionados = this.listaCategoria.length == this.quantidadeSelecionada;
   }
 
   selecionarSugestao(s: SugestaoModel) {
@@ -198,64 +283,6 @@ export class Categoria implements OnInit {
 
   }
 
-  cadastrarCategoria() {
-
-
-    this.nomePreenchido = true;
-    this.corLetraPreenchido = true;
-    this.corFundoPreenchido = true;
-
-    if (this.exemploTextoPreview === '') {
-      this.nomePreenchido = false;
-
-    }
-    if (this.corLetra === '') {
-      this.corLetraPreenchido = false;
-
-    }
-    if (this.corFundo === '') {
-      this.corFundoPreenchido = false;
-
-    }
-
-    if (this.nomePreenchido && this.corLetraPreenchido && this.corFundoPreenchido) {
-      const categoria: CategoriaRequestModel = {
-        nome: this.exemploTextoPreview,
-        corLetra: this.corLetra,
-        corFundo: this.corFundo,
-      } as CategoriaRequestModel;
-
-      this.categoriaService.inserirCategoria(categoria).subscribe({
-        next: () => {
-          this.mensagemToast = "Categoria cadastrada com sucesso!";
-
-          this.exibirToastSucesso = true;
-          setTimeout(() => {
-            this.exibirToastSucesso = false;
-          }, 5000);
-
-          this.onFecharModal();
-          this.capturarCategorias();
-
-
-        },
-        error: (err) => {
-          this.mensagemToast = err.error;
-          this.exibirToastErro = true;
-          setTimeout(() => {
-            this.exibirToastErro = false;
-          }, 5000);
-        }
-      });
-    } else {
-      this.mensagemToast = "Preencha os campos obrigatórios";
-      this.exibirToastErro = true;
-      setTimeout(() => {
-        this.exibirToastErro = false;
-      }, 5000);
-    }
-
-  }
 
   formatarMensagem(mensagem: string): string {
 
@@ -270,27 +297,6 @@ export class Categoria implements OnInit {
     return mensagemFormatada;
 
 
-  }
-
-  onBusca(termo: string) {
-  this.categoriaService.buscarTermo(termo).subscribe({
-    next: (data: CategoriaModel[]) => {
-      this.listaCategoria = data.map(c => ({
-        ...c,
-        selecionado: false
-      }));
-
-      this.atualizarQuantidadeSelecionada();
-
-    },
-    error: (err) => {
-      this.mensagemToast = err.error;
-      this.exibirToastErro = true;
-      setTimeout(() => {
-        this.exibirToastErro = false;
-      }, 5000);
-    }
-  });
   }
 
 

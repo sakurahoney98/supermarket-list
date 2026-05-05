@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core';
   templateUrl: './toast-message-error.html',
   styleUrl: './toast-message-error.css',
 })
-export class ToastMessageError {
+export class ToastMessageErrorComponent {
   @Input() tituloErro: string = 'Erro';
    @Input() mensagem: string = 'Mensagem de erro!';
   @Input() mostrarToast: boolean = true;

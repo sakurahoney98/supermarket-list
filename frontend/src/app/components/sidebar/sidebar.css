@@ -10,7 +10,7 @@
 
     }
 
-    .sidebar-option {
+    .sidebar__option {
         display: flex;
         gap: 16px;
         align-items: center;
@@ -22,7 +22,7 @@
 
     }
 
-    .sidebar-option:not(.selected-option):hover {
+    .sidebar__option:not(.selected-option):hover {
         background-color: hsl(var(--background-hover));
         border-radius: 15px;
     }

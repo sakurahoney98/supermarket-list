@@ -8,19 +8,17 @@ import { CommonModule } from '@angular/common';
   templateUrl: './list-action.html',
   styleUrl: './list-action.css',
 })
-export class ListAction {
+export class ListActionComponent{
   @Input() quantidadeSelecionada: number = 0
   @Input() todosItensSelecionados: boolean = false
   @Output() excluir = new EventEmitter<void>();
   @Output() selecionarTudo = new EventEmitter<boolean>();
 
-  toggleBotaoSelecionarTudoAtivado(){
-   
+  toggleBotaoSelecionarTudoAtivado() {
     this.selecionarTudo.emit(!this.todosItensSelecionados);
-
   }
 
-  onExcluirClick(){
+  onExcluirClick() {
     this.excluir.emit();
   }
 }

@@ -1,20 +1,12 @@
-<style>
-
-    
-
-
-
-    
-
-</style>
-
-<div class="background-modal">
-    <div class="modal">
-        <div class="modal-title">
-            <h1>{{ titulo }}</h1>
+<section class="background-modal" (click)="onClickFecharModal()">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" (click)="$event.stopPropagation()">
+        <div class="modal__header">
+            <h2 class="modal__title" id="modal-title">{{ titulo }}</h2>
             <button
-            (click)="onClickFecharModal()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            class="modal__button"
+            (click)="onClickFecharModal()"
+            aria-label="Fechar modal">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="lucide lucide-x-icon lucide-x">
                     <path d="M18 6 6 18" />
@@ -22,9 +14,9 @@
                 </svg>
             </button>
         </div>
+        
         <ng-content></ng-content>
-
 
     </div>
 
-</div>
+</section>

@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core';
   templateUrl: './toast-message-sucess.html',
   styleUrl: './toast-message-sucess.css',
 })
-export class ToastMessageSucess {
+export class ToastMessageSucessComponent {
   @Input() mensagem: string = '';
   @Input() mostrarToast: boolean = false;
   iconeSucesso = 'success-icon.png';

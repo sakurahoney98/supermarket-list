@@ -1,42 +1,42 @@
-.home-title {
-    padding: 12px 0px 4px 0px;
+.home-header {
+    padding: 0.75rem 0 0.25rem 0;
     text-align: center;
 }
 
-.home-title h1 {
+.home-header__emoji, .home-header__title {
     margin: 0;
 }
 
-.home-title p {
+.home-header__subtitle {
     color: hsl(var(--brown-text));
 }
 
-.home-data {
-    padding: 12px 40px;
+.home-content {
+    padding: 0.75rem 2.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 20px
+    gap: 1.25rem
 }
 
 .card {
-    border-radius: 15px;
+    border-radius: 0.938rem;
     border: 1px solid var(--border);
-    height: 100px;
+    height: 6.25rem;
     flex: 1;
     display: flex;
     align-items: center;
-    padding: 20px;
-    gap: 16px;
+    padding: 1.25rem;
+    gap: 1rem;
     background-color: hsl(var(--background-primary));
 
 }
 
 .card--inline {
     display: inline-grid;
-    gap: 4px;
+    gap: 0.25rem;
     text-align: center;
-    height: 120px;
+    height: 7.5rem;
     cursor: pointer;
     text-decoration: none;
     color: black;
@@ -47,8 +47,8 @@
     color: hsl(var(--pink-primary));
 }
 
-.card-icon {
-    min-width: 50px;
+.card__icon {
+    min-width: 3.125rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -56,56 +56,57 @@
     height: 100%;
 }
 
-.card-icon--circle{
-    width: 50px;
-    height: 50px;
+.card__icon--circle{
+    width: 3.125rem;
+    height: 3.125rem;
 }
 
-.card-icon--blue {
+.card__icon--blue {
     background-color: hsl(var(--blue-background));
     color: hsl(var(--blue-text));
 
 }
 
-.card-icon--green {
+.card__icon--green {
     background-color: hsl(var(--green-background));
     color: hsl(var(--green-text));
 
 }
 
-.card-icon--orange {
+.card__icon--orange {
     background-color: hsl(var(--orange-background));
     color: hsl(var(--orange-text));
 
 }
 
-.card-info h1,
-.card-info p {
+.card__info__quantity,
+.card__info__name {
     margin: 0;
 }
 
-.card-info h1 {
-    font-size: 24px;
+.card__info__quantity {
+    font-size: 1.5rem;
 }
 
-.card-info p {
-    font-size: 14px;
+.card__info__name {
+    font-size: 0.875rem;
     color: hsl(var(--brown-text));
 }
 
 .home-quick-options {
-    padding: 12px 40px;
+    padding: 0.75rem 2.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 20px;
+    gap: 1.25rem;
 
 }
 
-.card-icon--emoji {
-    font-size: 20px;
+.card__icon--emoji {
+    font-size: 1.25rem;
 }
 
-.home-quick-options h1 {
-    font-size: 20px;
+.card__info__title {
+    font-size: 1.25rem;
+    font-weight: 700;
 }
