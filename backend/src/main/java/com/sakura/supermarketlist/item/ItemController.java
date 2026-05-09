@@ -63,7 +63,7 @@ public class ItemController {
 	}
 	
 	@DeleteMapping
-	public ResponseEntity<ExclusaoResponseDTO> excluirItens(@RequestParam List<Long> ids) {
+	public ResponseEntity<ExclusaoResponseDTO> excluirItens(@RequestBody List<Long> ids) {
 	    ExclusaoResponseDTO response = service.excluirItem(ids);
 	    return ResponseEntity.ok(response);
 	}
@@ -86,7 +86,7 @@ public class ItemController {
 	        response = service.filtrarItensAtivosPorCategoria(ideCategoria);
 	        
 	    } else {
-	        response = service.buscarTodosItensAtivosOrdenadosPorCategoriaENome();
+	        response = service.buscarTodosItensAtivosOrdenadosPorNome();
 	    }
 
 	    return ResponseEntity.ok(response);

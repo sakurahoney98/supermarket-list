@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -106,6 +107,14 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.badRequest().body(exception.getMessage());
 		
 	}
+	
+	@ExceptionHandler(MissingServletRequestParameterException.class)
+	public ResponseEntity<String> handleSemParametro(MissingServletRequestParameterException exception){
+		return ResponseEntity.badRequest().body(exception.getMessage());
+		
+	}
+	
+	
 	
 	
 	
