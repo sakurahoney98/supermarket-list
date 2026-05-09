@@ -7,6 +7,7 @@
     --background-hover: 340 40% 95%;
     --pink-primary: 340 65% 60%;
     --brown-text: 20 10% 50%;
+    --brown-strong-text: 21 19.6% 21%;
     --blue-background: 200 60% 92%;
     --green-background: 160 45% 88%;
     --orange-background: 40 90% 75%;
@@ -16,6 +17,7 @@
     --red-background: 0 70% 58%;
     --border-input: 30 25% 88%;
     --yellow-warning: 40 90% 55%;
+    --pink-hover: 340 50% 85%;
 
 
 
@@ -24,6 +26,11 @@
 
 * {
     box-sizing: border-box;
+    font-family: "Quicksand", sans-serif;
+    
+}
+
+h1, h2{
     font-family: "Nunito", sans-serif;
 }
 
@@ -34,26 +41,30 @@ body{
 
 
   .button-action {
-     border-radius: 15px;
+     border-radius: 0.938rem;
      border: none;
-     height: 40px;
-     padding: 8px;
+     height: 2.5rem;
+     padding: 0.5rem;
      color: white;
      cursor: pointer;
-     width: 120px;
+     width: 7.5rem;
      justify-content: center;
      align-items: center;
-     gap: 12px;
+     gap: 0.75rem;
      display: flex;
 
 
  }
 
+ .button-action--new {
+    background-color: hsl(var(--pink-primary));
+}
+
  .button-check {
-     height: 16px;
-     width: 16px;
+     height: 1rem;
+     width: 1rem;
      border-radius: 100%;
-     border: 1px solid hsl(var(--pink-primary));
+     border: 0.065rem solid hsl(var(--pink-primary));
      background-color: white;
      cursor: pointer;
      padding: 0;
@@ -66,13 +77,18 @@ body{
 
  .sr-only {
     position: absolute;
-    width: 1px;
-    height: 1px;
+    width: 0.065rem;
+    height: 0.065rem;
     padding: 0;
-    margin: -1px;
+    margin: -0.065rem;
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
     border: 0;
+}
+
+.title-button {
+    display: flex;
+    align-items: center;
 }
 
 

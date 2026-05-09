@@ -1,0 +1,303 @@
+<app-toast-message-success [mensagem]="mensagemToast" [mostrarToast]="exibirToastSucesso">
+</app-toast-message-success>
+
+<app-toast-message-error [mensagem]="mensagemToast" [mostrarToast]="exibirToastErro">
+</app-toast-message-error>
+
+<app-modal *ngIf="exibirModalCadastro" (fecharModal)="onFecharModal()" titulo="Novo item">
+    <div class="form-line">
+        <label class="form-line__label" for="nome-item">
+            Nome *
+        </label>
+        <div class="form-line__control">
+            <input class="form-line__input" type="text" id="nome-item" name="nome" placeholder="Ex.: Arroz"
+                [class.input-error]="!nomePreenchido" [ngModel]="itemCadastro.nome"
+                (ngModelChange)="itemCadastro.nome = $event">
+        </div>
+    </div>
+    <div class="form-line--flex">
+        <div class="form-line position--relative">
+            <label class="form-line__label" for="categoria">
+                Categoria *
+            </label>
+            <button class="form-line__input form-line__select" id="categoria"
+                (click)="exibirListaCategoria = !exibirListaCategoria">
+                <span class="select--text-selected"> {{ categoriaCadastroSelecionada.nome }}</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-chevron-down-icon lucide-chevron-down">
+                    <path d="m6 9 6 6 6-6" />
+                </svg>
+            </button>
+            <ul class="select__list" *ngIf="exibirListaCategoria">
+                <li class="select__list__item text--small" *ngFor="let categoria of listaCategorias"
+                    (click)="toggleSelecionarCategoriaCadastro(categoria)">
+                    {{ categoria.nome }}
+                </li>
+            </ul>
+
+
+        </div>
+        <div class="form-line">
+            <label class="form-line__label" for="unidade-medida">
+                Unidade peso
+            </label>
+            <input class="form-line__input" id="unidade-medida" type="text" placeholder="Ex.: 1kg"
+                [ngModel]="itemCadastro.unidadeMedida" (ngModelChange)="itemCadastro.unidadeMedida = $event">
+
+
+        </div>
+
+
+    </div>
+
+    <div class="form-line--flex">
+        <div class="form-line">
+            <label class="form-line__label" for="estoque">
+                Qtd em estoque *
+            </label>
+            <input class="form-line__input" id="estoque" type="number" min="0" [class.input-error]="!estoquePreenchido"
+                [ngModel]="itemCadastro.quantidadeEstoque" (ngModelChange)="itemCadastro.quantidadeEstoque = $event">
+
+
+        </div>
+        <div class="form-line">
+            <label class="form-line__label" for="maximo-compra">
+                Qtd máx. compra *
+            </label>
+            <input class="form-line__input" id="maximo-compra" type="number" min="1"
+                [class.input-error]="!maximoCompraPreenchido" [ngModel]="itemCadastro.limiteCompra"
+                (ngModelChange)="itemCadastro.limiteCompra = $event">
+
+
+        </div>
+
+
+    </div>
+
+    <div class="form-line--flex">
+        <div class="form-line">
+            <label class="form-line__label" for="duracao">
+                Duração (dias) *
+            </label>
+            <input class="form-line__input" id="duracao" type="number" min="1" [class.input-error]="!duracaoPreenchido"
+                [ngModel]="itemCadastro.duracaoDias" (ngModelChange)="itemCadastro.duracaoDias = $event">
+
+
+        </div>
+        <div class="form-line">
+            <label class="form-line__label" for="data-compra">
+                Última compra *
+            </label>
+            <input class="form-line__input" id="data-compra" type="date" [class.input-error]="!ultimaCompraPreenchido"
+                [ngModel]="itemCadastro.dataUltimaCompra" (ngModelChange)="itemCadastro.dataUltimaCompra = $event">
+
+
+        </div>
+
+
+
+
+    </div>
+    <div class="form-line">
+
+        <button type="submit" class="register-btn" (click)="cadastrarItem()">Cadastrar</button>
+
+    </div>
+
+</app-modal>
+
+<app-modal *ngIf="exibirModalEdicao" (fecharModal)="onFecharModalEdicao()" titulo="Editar item">
+    <div class="form-line">
+        <label class="form-line__label" for="nome-item-edicao">
+            Nome *
+        </label>
+        <div class="form-line__control">
+            <input class="form-line__input" type="text" id="nome-item-edicao" name="nome" placeholder="Ex.: Arroz"
+                [class.input-error]="!nomePreenchido" [(ngModel)]="itemEdicao.nome">
+        </div>
+    </div>
+    <div class="form-line--flex">
+        <div class="form-line position--relative">
+            <label class="form-line__label" for="categoria-edicao">
+                Categoria *
+            </label>
+            <button class="form-line__input form-line__select" id="categoria-edicao"
+                (click)="exibirListaCategoria = !exibirListaCategoria">
+                <span class="select--text-selected"> {{ categoriaEdicaoSelecionada.nome }}</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-chevron-down-icon lucide-chevron-down">
+                    <path d="m6 9 6 6 6-6" />
+                </svg>
+            </button>
+            <ul class="select__list" *ngIf="exibirListaCategoria">
+                <li class="select__list__item text--small" *ngFor="let categoria of listaCategorias"
+                    (click)="toggleSelecionarCategoriaEdicao(categoria)">
+                    {{ categoria.nome }}
+                </li>
+            </ul>
+
+
+        </div>
+        <div class="form-line">
+            <label class="form-line__label" for="unidade-medida-edicao">
+                Unidade peso
+            </label>
+            <input class="form-line__input" id="unidade-medida-edicao" type="text" placeholder="Ex.: 1kg"
+                [(ngModel)]="itemEdicao.unidadeMedida">
+
+
+        </div>
+
+
+    </div>
+
+    <div class="form-line--flex">
+        <div class="form-line">
+            <label class="form-line__label" for="estoque-edicao">
+                Qtd em estoque *
+            </label>
+            <input class="form-line__input" id="estoque-edicao" type="number" min="0"
+                [class.input-error]="!estoquePreenchido" [(ngModel)]="itemEdicao.quantidadeEstoque">
+
+
+        </div>
+        <div class="form-line">
+            <label class="form-line__label" for="maximo-compra-edicao">
+                Qtd máx. compra *
+            </label>
+            <input class="form-line__input" id="maximo-compra-edicao" type="number" min="1"
+                [class.input-error]="!maximoCompraPreenchido" [(ngModel)]="itemEdicao.limiteCompra">
+
+
+        </div>
+
+
+    </div>
+
+    <div class="form-line--flex">
+        <div class="form-line">
+            <label class="form-line__label" for="duracao-edicao">
+                Duração (dias) *
+            </label>
+            <input class="form-line__input" id="duracao-edicao" type="number" min="1"
+                [class.input-error]="!duracaoPreenchido" [(ngModel)]="itemEdicao.duracaoDias">
+
+
+        </div>
+        <div class="form-line">
+            <label class="form-line__label" for="data-compra-edicao">
+                Última compra *
+            </label>
+            <input class="form-line__input" id="data-compra-edicao" type="date"
+                [class.input-error]="!ultimaCompraPreenchido" [(ngModel)]="itemEdicao.dataUltimaCompra">
+
+
+        </div>
+
+
+
+
+    </div>
+    <div class="form-line">
+
+        <button type="submit" class="register-btn" (click)="editarItem()">Salvar alteraçoes</button>
+
+    </div>
+
+</app-modal>
+
+<main class="item-page">
+    <app-page-title titulo="Itens" descricao="Gerencie seus itens de supermercado">
+        <div class="title-button">
+            <button type="button" class="button-action button-action--new" (click)="onAbrirModal()">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-plus-icon lucide-plus">
+                    <path d="M5 12h14" />
+                    <path d="M12 5v14" />
+                </svg>
+                Inserir
+            </button>
+        </div>
+    </app-page-title>
+
+    <app-search-bar (busca)="onBusca($event)">
+        <div class="filter-category">
+            <button class="filter-category__select" (click)="exibirFiltro = !exibirFiltro">
+                <span class="select--text-selected"> {{ categoriaSelecionada.nome }} </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-chevron-down-icon lucide-chevron-down">
+                    <path d="m6 9 6 6 6-6" />
+                </svg>
+            </button>
+            <ul class="select__list" *ngIf="exibirFiltro">
+                <li class="select__list__item" *ngFor="let categoria of listaCategoriasFiltro"
+                    (click)="toggleSelecionarCategoriaFiltro(categoria)">
+                    {{ categoria.nome }}
+                </li>
+            </ul>
+        </div>
+    </app-search-bar>
+
+    <app-empty-list *ngIf="listaItens.length === 0" [emoji]="emojiListaVazia" [titulo]="tituloListaVazia"
+        [descricao]="descricaoListaVazia">
+    </app-empty-list>
+
+    <app-list-action *ngIf="listaItens.length !== 0" (selecionarTudo)="onSelecionarTudo($event)"
+        [quantidadeSelecionada]="quantidadeSelecionada" [todosItensSelecionados]="todosItensSelecionados"
+        (excluir)="deletarItens()"></app-list-action>
+
+    <ul class="item-list" *ngIf="listaItens.length !== 0">
+
+        <li class="card-list" *ngFor="let item of listaItens">
+            <button class="button-check"
+                (click)="item.selecionado = !item.selecionado; atualizarQuantidadeSelecionada()"
+                [class.selected]="item.selecionado">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                    stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-check-icon lucide-check">
+                    <path d="M20 6 9 17l-5-5" />
+                </svg>
+            </button>
+            <div class="info-item-list">
+                <div class="item-name">
+                    <span class="item-name__name">{{ item.nome }} </span>
+                    <span class="item-name__category" [style.background-color]="item.categoria.corFundo"
+                        [style.color]="item.categoria.corLetra">
+                        {{ item.categoria.nome }}
+                    </span>
+                </div>
+                <div class="item-details">
+                    <span>Estoque: {{ item.quantidadeEstoque }}</span> |
+                    <span>Máx. compra:: {{ item.limiteCompra }}</span> |
+                    <span>Uni./peso: {{ item.unidadeMedida }}</span> |
+                    <span>Duração: {{ item.duracaoDias }} dias</span> |
+                    <span>Comprado em: {{ item.dataUltimaCompra | date:'dd/MM/yyyy' }}</span>
+
+                </div>
+            </div>
+            <div class="item-options">
+                <button class="item-option__edit" (click)="onAbrirModalEdicao(item)">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-pencil-icon lucide-pencil">
+                        <path
+                            d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
+                        <path d="m15 5 4 4" />
+                    </svg>
+                </button>
+
+
+            </div>
+
+
+        </li>
+
+
+    </ul>
+
+</main>

@@ -2,4 +2,5 @@
 <div class="search-bar">
     <label for="main-search" class="sr-only">Pesquisar itens</label>
     <input class="search-bar__bar" id="main-search" name ="search" role="search" type="search" placeholder="Digite o termo de busca..." [(ngModel)]="termoBuscado" (input)="onSearch()">
+    <ng-content></ng-content>
 </div>

@@ -43,7 +43,7 @@ export class Categoria implements OnInit {
 
   corLetra: string = '#000000';
   corFundo: string = '#FFFFFF';
-  exemploTextoPreview: string = '';
+  exemploTextoPreview: string = 'Categoria';
   mensagemToast: string = '';
   emojiListaVazia: string = '🏷️';
   tituloListaVazia: string = 'Nenhuma categoria encontrada';
@@ -54,7 +54,7 @@ export class Categoria implements OnInit {
 
   constructor(
     private categoriaService: CategoriaService,
-    private sugestaoService: SugestaoService,
+    private sugestaoService: SugestaoService
   ) { }
 
 
@@ -134,8 +134,12 @@ export class Categoria implements OnInit {
             this.exibirToastSucesso = false;
           }, 5000);
 
+          this.exemploTextoPreview = '';
+          this.corLetra = '#000000';
+          this.corFundo = '#FFFFFF';
           this.onFecharModal();
           this.capturarCategorias();
+
 
 
         },
