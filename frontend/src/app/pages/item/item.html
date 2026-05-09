@@ -10,8 +10,8 @@
             Nome *
         </label>
         <div class="form-line__control">
-            <input class="form-line__input" type="text" id="nome-item" name="nome" placeholder="Ex.: Arroz"
-                [class.input-error]="!nomePreenchido" [ngModel]="itemCadastro.nome"
+            <input class="form-line__input" type="text" id="nome-item" name="nome" placeholder="Ex.: Arroz" required
+                aria-required="true" [class.input-error]="!nomePreenchido" [ngModel]="itemCadastro.nome"
                 (ngModelChange)="itemCadastro.nome = $event">
         </div>
     </div>
@@ -23,15 +23,15 @@
             <button class="form-line__input form-line__select" id="categoria"
                 (click)="exibirListaCategoria = !exibirListaCategoria">
                 <span class="select--text-selected"> {{ categoriaCadastroSelecionada.nome }}</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="lucide lucide-chevron-down-icon lucide-chevron-down">
                     <path d="m6 9 6 6 6-6" />
                 </svg>
             </button>
-            <ul class="select__list" *ngIf="exibirListaCategoria">
+            <ul class="select__list" *ngIf="exibirListaCategoria" role="listbox">
                 <li class="select__list__item text--small" *ngFor="let categoria of listaCategorias"
-                    (click)="toggleSelecionarCategoriaCadastro(categoria)">
+                    (click)="toggleSelecionarCategoriaCadastro(categoria)" role="option">
                     {{ categoria.nome }}
                 </li>
             </ul>
@@ -57,7 +57,8 @@
                 Qtd em estoque *
             </label>
             <input class="form-line__input" id="estoque" type="number" min="0" [class.input-error]="!estoquePreenchido"
-                [ngModel]="itemCadastro.quantidadeEstoque" (ngModelChange)="itemCadastro.quantidadeEstoque = $event">
+                required aria-required="true" [ngModel]="itemCadastro.quantidadeEstoque"
+                (ngModelChange)="itemCadastro.quantidadeEstoque = $event">
 
 
         </div>
@@ -65,7 +66,7 @@
             <label class="form-line__label" for="maximo-compra">
                 Qtd máx. compra *
             </label>
-            <input class="form-line__input" id="maximo-compra" type="number" min="1"
+            <input class="form-line__input" id="maximo-compra" type="number" min="1" required aria-required="true"
                 [class.input-error]="!maximoCompraPreenchido" [ngModel]="itemCadastro.limiteCompra"
                 (ngModelChange)="itemCadastro.limiteCompra = $event">
 
@@ -81,7 +82,8 @@
                 Duração (dias) *
             </label>
             <input class="form-line__input" id="duracao" type="number" min="1" [class.input-error]="!duracaoPreenchido"
-                [ngModel]="itemCadastro.duracaoDias" (ngModelChange)="itemCadastro.duracaoDias = $event">
+                required aria-required="true" [ngModel]="itemCadastro.duracaoDias"
+                (ngModelChange)="itemCadastro.duracaoDias = $event">
 
 
         </div>
@@ -90,7 +92,8 @@
                 Última compra *
             </label>
             <input class="form-line__input" id="data-compra" type="date" [class.input-error]="!ultimaCompraPreenchido"
-                [ngModel]="itemCadastro.dataUltimaCompra" (ngModelChange)="itemCadastro.dataUltimaCompra = $event">
+                required aria-required="true" [ngModel]="itemCadastro.dataUltimaCompra"
+                (ngModelChange)="itemCadastro.dataUltimaCompra = $event">
 
 
         </div>
@@ -114,7 +117,7 @@
         </label>
         <div class="form-line__control">
             <input class="form-line__input" type="text" id="nome-item-edicao" name="nome" placeholder="Ex.: Arroz"
-                [class.input-error]="!nomePreenchido" [(ngModel)]="itemEdicao.nome">
+                required aria-required="true" [class.input-error]="!nomePreenchido" [(ngModel)]="itemEdicao.nome">
         </div>
     </div>
     <div class="form-line--flex">
@@ -125,15 +128,15 @@
             <button class="form-line__input form-line__select" id="categoria-edicao"
                 (click)="exibirListaCategoria = !exibirListaCategoria">
                 <span class="select--text-selected"> {{ categoriaEdicaoSelecionada.nome }}</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="lucide lucide-chevron-down-icon lucide-chevron-down">
                     <path d="m6 9 6 6 6-6" />
                 </svg>
             </button>
-            <ul class="select__list" *ngIf="exibirListaCategoria">
+            <ul class="select__list" *ngIf="exibirListaCategoria" role="listbox">
                 <li class="select__list__item text--small" *ngFor="let categoria of listaCategorias"
-                    (click)="toggleSelecionarCategoriaEdicao(categoria)">
+                    (click)="toggleSelecionarCategoriaEdicao(categoria)" role="option">
                     {{ categoria.nome }}
                 </li>
             </ul>
@@ -158,7 +161,7 @@
             <label class="form-line__label" for="estoque-edicao">
                 Qtd em estoque *
             </label>
-            <input class="form-line__input" id="estoque-edicao" type="number" min="0"
+            <input class="form-line__input" id="estoque-edicao" type="number" min="0" required aria-required="true"
                 [class.input-error]="!estoquePreenchido" [(ngModel)]="itemEdicao.quantidadeEstoque">
 
 
@@ -167,8 +170,9 @@
             <label class="form-line__label" for="maximo-compra-edicao">
                 Qtd máx. compra *
             </label>
-            <input class="form-line__input" id="maximo-compra-edicao" type="number" min="1"
-                [class.input-error]="!maximoCompraPreenchido" [(ngModel)]="itemEdicao.limiteCompra">
+            <input class="form-line__input" id="maximo-compra-edicao" type="number" min="1" required
+                aria-required="true" [class.input-error]="!maximoCompraPreenchido"
+                [(ngModel)]="itemEdicao.limiteCompra">
 
 
         </div>
@@ -181,7 +185,7 @@
             <label class="form-line__label" for="duracao-edicao">
                 Duração (dias) *
             </label>
-            <input class="form-line__input" id="duracao-edicao" type="number" min="1"
+            <input class="form-line__input" id="duracao-edicao" type="number" min="1" required aria-required="true"
                 [class.input-error]="!duracaoPreenchido" [(ngModel)]="itemEdicao.duracaoDias">
 
 
@@ -190,7 +194,7 @@
             <label class="form-line__label" for="data-compra-edicao">
                 Última compra *
             </label>
-            <input class="form-line__input" id="data-compra-edicao" type="date"
+            <input class="form-line__input" id="data-compra-edicao" type="date" required aria-required="true"
                 [class.input-error]="!ultimaCompraPreenchido" [(ngModel)]="itemEdicao.dataUltimaCompra">
 
 
@@ -233,9 +237,9 @@
                     <path d="m6 9 6 6 6-6" />
                 </svg>
             </button>
-            <ul class="select__list" *ngIf="exibirFiltro">
+            <ul class="select__list" *ngIf="exibirFiltro" role="listbox">
                 <li class="select__list__item" *ngFor="let categoria of listaCategoriasFiltro"
-                    (click)="toggleSelecionarCategoriaFiltro(categoria)">
+                    (click)="toggleSelecionarCategoriaFiltro(categoria)" role="option">
                     {{ categoria.nome }}
                 </li>
             </ul>
@@ -250,9 +254,9 @@
         [quantidadeSelecionada]="quantidadeSelecionada" [todosItensSelecionados]="todosItensSelecionados"
         (excluir)="deletarItens()"></app-list-action>
 
-    <ul class="item-list" *ngIf="listaItens.length !== 0">
+    <ul class="item-list" *ngIf="listaItens.length !== 0" >
 
-        <li class="card-list" *ngFor="let item of listaItens">
+        <li class="card-list" *ngFor="let item of listaItens" >
             <button class="button-check"
                 (click)="item.selecionado = !item.selecionado; atualizarQuantidadeSelecionada()"
                 [class.selected]="item.selecionado">
