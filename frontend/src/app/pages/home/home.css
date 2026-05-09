@@ -21,7 +21,7 @@
 
 .card {
     border-radius: 0.938rem;
-    border: 1px solid var(--border);
+    border: 0.065rem solid var(--border);
     height: 6.25rem;
     flex: 1;
     display: flex;
@@ -86,6 +86,7 @@
 
 .card__info__quantity {
     font-size: 1.5rem;
+    color: hsl(var(--brown-strong-text))
 }
 
 .card__info__name {
@@ -109,4 +110,5 @@
 .card__info__title {
     font-size: 1.25rem;
     font-weight: 700;
+    color: hsl(var(--brown-strong-text));
 }

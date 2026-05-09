@@ -9,16 +9,16 @@
      align-items: center;
      justify-content: center;
      text-align: center;
-     border: 2px dashed var(--border);
+     border: 0.125rem dashed var(--border);
      padding: 0.5rem;
  }
 
  .empty-list__title {
-     font-size: 18px;
-     margin-bottom: 10px;
+     font-size: 1.125rem;
+     margin-bottom: 0.625rem;
  }
 
  .empty-list__description {
-     font-size: 14px;
+     font-size: 0.875rem;
      color: hsl(var(--browser-text));
  }

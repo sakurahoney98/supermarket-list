@@ -13,7 +13,7 @@
 
     .modal {
         min-width: 23.5rem;
-        max-width: 90%;
+        max-width: 30rem;
         background-color: hsl(var(--background-secondary));
         border-radius: 0.625rem;
         padding: 1.5rem;

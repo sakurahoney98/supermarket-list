@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-toast-message-sucess',
+  selector: 'app-toast-message-success',
   imports: [],
   templateUrl: './toast-message-sucess.html',
   styleUrl: './toast-message-sucess.css',

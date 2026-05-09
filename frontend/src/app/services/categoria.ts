@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { HttpParams } from '@angular/common/http';
+
 import { CategoriaModel } from '../models/categoria.model';
 import { CategoriaRequestModel } from '../models/categoria-request.model';
-import { HttpParams } from '@angular/common/http';
+
 
 @Injectable({
   providedIn: 'root',

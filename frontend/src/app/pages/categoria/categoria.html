@@ -1,7 +1,7 @@
-<app-toast-message-sucess 
+<app-toast-message-success 
 [mensagem]="mensagemToast" 
 [mostrarToast]="exibirToastSucesso">
-</app-toast-message-sucess>
+</app-toast-message-success>
 
 <app-toast-message-error 
 [mensagem]="mensagemToast" 
@@ -18,7 +18,8 @@ titulo="Nova categoria">
         <div class="form-line__control">
             <input class="form-line__input" type="text" id="nome-categoria" name="nome" placeholder="Ex.: Frios" 
             [class.input-error]="!nomePreenchido" 
-            [(ngModel)]="exemploTextoPreview">
+            [ngModel]=""
+            (ngModelChange)="exemploTextoPreview = $event">
         </div>
     </div>
 
