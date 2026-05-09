@@ -22,6 +22,8 @@ public interface ItemRepository  extends JpaRepository<Item, Long> {
 	
 	List<Item> findByIndAtivoTrueOrderByCategoriaIdeCategoriaAscNomeItemAsc();
 	
+	List<Item> findByIndAtivoTrueOrderByNomeItemAsc();
+	
 	List<Item> findByIndAtivoTrueOrderByDtcCriacaoDesc();
 	
 	List <Item> findByNomeItemContainingIgnoreCaseAndIndAtivoTrueOrderByNomeItemAsc(String termo);

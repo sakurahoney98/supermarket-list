@@ -46,6 +46,13 @@ public class ItemService {
 		return listaDeResposta(lista);
 
 	}
+	
+	public List<ItemResponseDTO> buscarTodosItensAtivosOrdenadosPorNome() {
+		List<Item> lista = repository.findByIndAtivoTrueOrderByNomeItemAsc();
+
+		return listaDeResposta(lista);
+
+	}
 
 	public List<ItemResponseDTO> buscarTodosItensAtivosOrdenadosPorDataCriacao() {
 		List<Item> lista = repository.findByIndAtivoTrueOrderByDtcCriacaoDesc();
