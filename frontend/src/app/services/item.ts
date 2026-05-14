@@ -4,6 +4,7 @@ import { HttpParams } from '@angular/common/http';
 
 import { ItemRequestModel } from '../models/item-request.model';
 import { ItemModel } from '../models/item.model';
+import { AtualizarEstoqueRequestModel } from '../models/atualizar-estoque-request.model';
 
 @Injectable({
   providedIn: 'root',
@@ -17,22 +18,8 @@ export class ItemService {
     return this.http.get<ItemModel[]>(this.apiItem);
   }
 
-  inserirItem(item: ItemRequestModel) {
-    return this.http.post(this.apiItem, item)
-  }
-
-  editarItem  (item: ItemRequestModel, ideItem: number) {
-    return this.http.put(this.apiItem + `/${ideItem}`, item)
-  }
-
-  deleteItem(ideItem: number) {
-    return this.http.delete(this.apiItem + `/${ideItem}`);
-  }
-
-  deleteItemEmMassa(ideItem: number[]) {
-    return this.http.delete(this.apiItem, {
-      body: ideItem
-    });
+  getItensEstoque(){
+    return this.http.get<ItemModel[]>(this.apiItem + '/lista-estoque');
   }
 
   buscarItensPorCategoria (ideCategoria: number){
@@ -54,6 +41,33 @@ export class ItemService {
     return this.http.get<ItemModel[]>(this.apiItem, {params});
 
   }
+
+  inserirItem(item: ItemRequestModel) {
+    return this.http.post(this.apiItem, item)
+  }
+
+  editarItem  (item: ItemRequestModel, ideItem: number) {
+    return this.http.put(this.apiItem + `/${ideItem}`, item)
+  }
+
+  atualizarEstoque(request: AtualizarEstoqueRequestModel[]){
+    return this.http.put(this.apiItem + '/estoque', request);
+
+  }
+
+  deleteItem(ideItem: number) {
+    return this.http.delete(this.apiItem + `/${ideItem}`);
+  }
+
+  deleteItemEmMassa(ideItem: number[]) {
+    return this.http.delete(this.apiItem, {
+      body: ideItem
+    });
+  }
+
+  
+
+
 
 
 

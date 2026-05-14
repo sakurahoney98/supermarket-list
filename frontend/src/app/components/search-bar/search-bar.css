@@ -10,10 +10,11 @@
 
   .search-bar__bar {
       width: 100%;
+      min-width: 240px;
       max-width: 31.25rem;
       padding: 0.625rem;
       font-size: 1rem;
-      border-radius: 0.625rem;
+      border-radius: 1.5rem;
       border: 0.065rem solid hsl(var(--pink-primary));
       font-style: italic;
 
