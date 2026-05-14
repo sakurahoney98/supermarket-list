@@ -99,6 +99,13 @@ public class ItemController {
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 	
+	@GetMapping("/lista-estoque")
+	public ResponseEntity<List<ItemResponseDTO>> exibirItensEstoque() {
+		List<ItemResponseDTO> response = service.buscarTodosItensAtivosOrdenadosPorCategoriaENome();
+		
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+	
 	@GetMapping("/{ideItem}")
 	public ResponseEntity<ItemResponseDTO> exibirDetalhesDoItem(@PathVariable Long ideItem) {
 		ItemResponseDTO response = service.buscarItemPorId(ideItem);

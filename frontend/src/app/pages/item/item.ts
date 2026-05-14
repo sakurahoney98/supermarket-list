@@ -43,9 +43,6 @@ export class Item implements OnInit {
   itemEdicao: ItemModel = {} as ItemModel;
   itemCadastro: ItemRequestModel = {} as ItemRequestModel;
 
-
-
-
   todosItensSelecionados: boolean = false;
   exibirModalCadastro: boolean = false;
   exibirModalEdicao: boolean = false;
@@ -65,7 +62,7 @@ export class Item implements OnInit {
   maximoCompra: number | null = null;
   duracao: number | null = null;
 
-  nomeItem: string = '';
+  
   unidadePeso: string = '';
   mensagemToast: string = '';
   emojiListaVazia: string = '📦';

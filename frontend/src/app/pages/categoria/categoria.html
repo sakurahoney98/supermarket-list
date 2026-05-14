@@ -16,7 +16,7 @@ titulo="Nova categoria">
             Nome *
         </label>
         <div class="form-line__control">
-            <input class="form-line__input" type="text" id="nome-categoria" name="nome" placeholder="Ex.: Frios" 
+            <input class="form-line__input" type="text" maxlength="255" id="nome-categoria" name="nome" placeholder="Ex.: Frios" 
             [class.input-error]="!nomePreenchido" 
             [ngModel]=""
             (ngModelChange)="exemploTextoPreview = $event">
@@ -68,7 +68,7 @@ titulo="Nova categoria">
                 [(ngModel)]="corFundo" 
                     >
 
-                <input class="form-line__input" type="text" placeholder="#000000"
+                <input class="form-line__input" type="text" maxlength="255" placeholder="#000000"
                 [class.input-error]="!corFundoPreenchido" 
                 [(ngModel)]="corFundo" >
 
@@ -85,7 +85,7 @@ titulo="Nova categoria">
                 <input class="form-line__input input-color" type="color" id="cor-letra" aria-label="Seletor da cor da letra de exibião da categoria"
                 [(ngModel)]="corLetra">
 
-                <input class="form-line__input" type="text" placeholder="#000000"
+                <input class="form-line__input" type="text" maxlength="255" placeholder="#000000"
                 [class.input-error]="!corLetraPreenchido" 
                 [(ngModel)]="corLetra" >
 

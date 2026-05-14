@@ -10,7 +10,7 @@
             Nome *
         </label>
         <div class="form-line__control">
-            <input class="form-line__input" type="text" id="nome-item" name="nome" placeholder="Ex.: Arroz" required
+            <input class="form-line__input" type="text" maxlength="255" id="nome-item" name="nome" placeholder="Ex.: Arroz" required
                 aria-required="true" [class.input-error]="!nomePreenchido" [ngModel]="itemCadastro.nome"
                 (ngModelChange)="itemCadastro.nome = $event">
         </div>
@@ -42,7 +42,7 @@
             <label class="form-line__label" for="unidade-medida">
                 Unidade peso
             </label>
-            <input class="form-line__input" id="unidade-medida" type="text" placeholder="Ex.: 1kg"
+            <input class="form-line__input" id="unidade-medida" type="text" maxlength="255" placeholder="Ex.: 1kg"
                 [ngModel]="itemCadastro.unidadeMedida" (ngModelChange)="itemCadastro.unidadeMedida = $event">
 
 
@@ -116,7 +116,7 @@
             Nome *
         </label>
         <div class="form-line__control">
-            <input class="form-line__input" type="text" id="nome-item-edicao" name="nome" placeholder="Ex.: Arroz"
+            <input class="form-line__input" type="text" maxlength="255" id="nome-item-edicao" name="nome" placeholder="Ex.: Arroz"
                 required aria-required="true" [class.input-error]="!nomePreenchido" [(ngModel)]="itemEdicao.nome">
         </div>
     </div>
@@ -147,7 +147,7 @@
             <label class="form-line__label" for="unidade-medida-edicao">
                 Unidade peso
             </label>
-            <input class="form-line__input" id="unidade-medida-edicao" type="text" placeholder="Ex.: 1kg"
+            <input class="form-line__input" id="unidade-medida-edicao" type="text" maxlength="255" placeholder="Ex.: 1kg"
                 [(ngModel)]="itemEdicao.unidadeMedida">
 
 
@@ -275,10 +275,10 @@
                     </span>
                 </div>
                 <div class="item-details">
+                    <span>{{ item.unidadeMedida }}</span> |
                     <span>Estoque: {{ item.quantidadeEstoque }}</span> |
-                    <span>Máx. compra:: {{ item.limiteCompra }}</span> |
-                    <span>Uni./peso: {{ item.unidadeMedida }}</span> |
-                    <span>Duração: {{ item.duracaoDias }} dias</span> |
+                    <span>Máx: {{ item.limiteCompra }}</span> |
+                    <span>Duração: {{ item.duracaoDias }}d</span> |
                     <span>Comprado em: {{ item.dataUltimaCompra | date:'dd/MM/yyyy' }}</span>
 
                 </div>

@@ -1,0 +1,121 @@
+<app-toast-message-success [mensagem]="mensagemToast" [mostrarToast]="exibirToastSucesso">
+</app-toast-message-success>
+
+<app-toast-message-error [mensagem]="mensagemToast" [mostrarToast]="exibirToastErro">
+</app-toast-message-error>
+
+<app-page-title titulo="Atualizar Estoque"
+    descricao="Atualize as quantidades em estoque dos seus itens"></app-page-title>
+
+<main class="page-update-inventory">
+    <div class="actions">
+        <div class="actions__buttons">
+            <button class="button-action button--draft" type="button" (click)="salvarRascunho()"
+                aria-label="Salvar rascunho das alterações">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-save-icon lucide-save">
+                    <path
+                        d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
+                    <path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7" />
+                    <path d="M7 3v4a1 1 0 0 0 1 1h7" />
+                </svg>
+                Salvar rascunho</button>
+            <button class="button-action button--save" [disabled]="!estoqueModificado" type="button"
+                (click)="salvarAlteracoes()" aria-label="Finalizar alterações de estoque">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-circle-check-big-icon lucide-circle-check-big">
+                    <path d="M21.801 10A10 10 0 1 1 17 3.335" />
+                    <path d="m9 11 3 3L22 4" />
+                </svg>
+                Finalizar</button>
+            <button class="button-action button--reset" [disabled]="!estoqueModificado" type="button"
+                (click)="resetarTudo()" aria-label="Remover todas as alterações">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-history-icon lucide-history">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                    <path d="M3 3v5h5" />
+                    <path d="M12 7v5l4 2" />
+                </svg>
+                Resetar</button>
+
+        </div>
+        <app-search-bar (busca)="onBusca($event)">
+            <div class="filter-category">
+                <button class="filter-category__select" (click)="exibirFiltro = !exibirFiltro"
+                    [attr.aria-expanded]="exibirFiltro" aria-haspopup="listbox">
+                    <span class="select--text-selected"> {{ categoriaSelecionada.nome }} </span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-chevron-down-icon lucide-chevron-down">
+                        <path d="m6 9 6 6 6-6" />
+                    </svg>
+                </button>
+                <ul class="select__list" *ngIf="exibirFiltro" role="listbox">
+                    <li class="select__list__item" *ngFor="let categoria of listaCategoriasFiltro"
+                        (click)="toggleSelecionarCategoriaFiltro(categoria)" role="option">
+                        {{ categoria.nome }}
+                    </li>
+                </ul>
+            </div>
+        </app-search-bar>
+
+    </div>
+
+    <app-empty-list *ngIf="listaItensCopy.length === 0" [emoji]="emojiListaVazia" [titulo]="tituloListaVazia"
+        [descricao]="descricaoListaVazia">
+    </app-empty-list>
+    <div class="stock-list">
+        <div class="stock-list__category-section" *ngFor="let categoria of listaCategoriasExibicao">
+            <div class="stock-list__category-section__title" [style.borderColor]="categoria.corFundo"
+                [style.color]="categoria.corLetra" [style.backgroundColor]="categoria.corFundo">
+                <span class="category-title-text">{{ categoria.nome }}</span>
+            </div>
+            <ul class="stock-category__items">
+                <li class="stock-item" *ngFor="let item of listaItensCopy.filter(i => i.categoria.id === categoria.id)">
+                    <div class="stock-item__info">
+                        <span class="stock-item__name">{{ item.nome }}</span>
+                        <span class="stock-item__stock">Atual: {{ item.quantidadeEstoque }}</span>
+                    </div>
+
+                    <div class="stock-item__stock-control">
+                        <button class="stock-item__control-btn" [disabled]="item.novoValor === 0"
+                            (click)="diminuirValor(item)" aria-label="Aumentar quantidade de {{ item.nome }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-minus-icon lucide-minus">
+                                <path d="M5 12h14" />
+                            </svg>
+                        </button>
+                        <input class="stock-item__control-input" type="text" inputmode="numeric"
+                            [(ngModel)]="item.novoValor" [attr.aria-label]="'Quantidade de ' + item.nome">
+                        <button class="stock-item__control-btn" (click)="aumentarValor(item)"
+                            aria-label="Diminuir quantidade de {{ item.nome }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus">
+                                <path d="M5 12h14" />
+                                <path d="M12 5v14" />
+                            </svg>
+                        </button>
+                        <button class="stock-item__control-btn" *ngIf="item.quantidadeEstoque !== item.novoValor"
+                            (click)="resetarValor(item)" aria-label="Resetar quantidade de {{ item.nome }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-rotate-ccw-icon lucide-rotate-ccw">
+                                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                                <path d="M3 3v5h5" />
+                            </svg>
+                        </button>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+</main>

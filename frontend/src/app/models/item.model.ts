@@ -10,5 +10,6 @@ export interface ItemModel {
 	categoria: CategoriaModel,
 	duracaoDias: number,
 	indAtivo: boolean,
-	selecionado: boolean
+	selecionado: boolean,
+	novoValor: number
 }
