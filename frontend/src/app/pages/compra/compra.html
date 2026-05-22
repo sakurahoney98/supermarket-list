@@ -1,0 +1,165 @@
+<app-toast-message-success [mensagem]="mensagemToast" [mostrarToast]="exibirToastSucesso">
+</app-toast-message-success>
+
+<app-modal *ngIf="exibirModal" (fecharModal)="onFecharModal()" titulo="Ação necessária">
+    <p>Já existe(m) compra(s) registrada(s) para a data. Insira uma nova compra ou una a alguma da(s) compra(s) já
+        cadastrada(s).</p>
+    <div class="filter-conflict">
+        <button class="filter-conflict__select" (click)="exibirListaResolverConflito = !exibirListaResolverConflito"
+            [attr.aria-expanded]="exibirFiltro" aria-haspopup="listbox">
+            <span class="select--text-selected"> {{ opcaoConflitoSelecionada.ideCompra === 0 ? "Inserir nova compra" :
+                `Compra ${opcaoConflitoSelecionada.ideCompra} - ${opcaoConflitoSelecionada.quantidadeItens} iten(s)` }}
+            </span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-chevron-down-icon lucide-chevron-down">
+                <path d="m6 9 6 6 6-6" />
+            </svg>
+        </button>
+        <ul class="select__list" *ngIf="exibirListaResolverConflito" role="listbox">
+            <li class="select__list__item" *ngFor="let compra of listaOpcoesConflito"
+                (click)="toggleAlterarOpcaoConflito(compra)" role="option">
+                {{ compra.ideCompra === 0 ? "Inserir nova compra" : `Compra ${compra.ideCompra} -
+                ${compra.quantidadeItens} iten(s)` }}
+            </li>
+        </ul>
+    </div>
+    <div class="form-line">
+
+        <button type="submit" class="save-btn" (click)="resolverConflito()">Salvar</button>
+
+    </div>
+
+</app-modal>
+<app-page-title titulo="Compra" descricao="Registre suas compras realizadas"></app-page-title>
+<main class="page-buy">
+    <div class="header">
+        <div class="info-date">
+            Data da compra: <input class="form-line__input" id="date-buy" type="date" required aria-required="true"
+                [(ngModel)]="dataCompra">
+
+        </div>
+
+        <div class="actions__buttons">
+            <button class="button-action button--draft" type="button" [disabled]="itensNaCompra.length === 0"
+                (click)="salvarRascunho()" aria-label="Salvar rascunho das alterações">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-save-icon lucide-save">
+                    <path
+                        d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" />
+                    <path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7" />
+                    <path d="M7 3v4a1 1 0 0 0 1 1h7" />
+                </svg>
+                Salvar rascunho</button>
+            <button class="button-action button--save" type="button" [disabled]="totalCompra === 0"
+                (click)="finalizar()" aria-label="Finalizar alterações de estoque">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-circle-check-big-icon lucide-circle-check-big">
+                    <path d="M21.801 10A10 10 0 1 1 17 3.335" />
+                    <path d="m9 11 3 3L22 4" />
+                </svg>
+                Finalizar</button>
+            <button class="button-action button--reset" type="button" [disabled]="itensNaCompra.length === 0"
+                (click)="resetarTudo()" aria-label="Remover todas as alterações">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-history-icon lucide-history">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                    <path d="M3 3v5h5" />
+                    <path d="M12 7v5l4 2" />
+                </svg>
+                Resetar</button>
+
+        </div>
+    </div>
+
+    <div class="buy-data">
+        <div class="table">
+            <div class="table__search-item">
+                <span class="table__search-item__title">Itens da compra</span>
+                <p class="table__search-item__subtitle">Adicione produtos buscando no catálogo abaixo.</p>
+                <div class="search-wrapper">
+                    <input class="table__search-item__bar" id="main-search" name="search" role="search" type="search"
+                        placeholder="Digite o nome do item..." [(ngModel)]="termoBuscado" (input)="onBusca()" />
+
+                    <ul class="select__list" *ngIf="exibirFiltro" role="listbox">
+                        <li class="select__list__item" *ngFor="let item of listaItens"
+                            (click)="inserirItemNaLista(item)" role="option">
+                            {{ item.nome }}
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+            <div class="table__item-list">
+                <table class="table__item-list__table">
+                    <thead>
+                        <th class="table__item-list__table--slim">
+                            ITEM
+                        </th>
+                        <th class="table__item-list__table--slim">
+                            QUANTIDADE
+                        </th>
+                        <th class="table__item-list__table--slim">
+                            MARCA
+                        </th>
+                        <th class="table__item-list__table--slim">
+                            PREÇO UNIT.
+                        </th>
+                        <th class="table__item-list__table--slim">
+                            SUBTOTAL
+                        </th>
+                        <th class="table__item-list__table--slim">
+                            AÇÃO
+                        </th>
+                    </thead>
+                    <tbody>
+                        <tr class="table__item-list__table--line" *ngFor="let item of itensNaCompra">
+                            <th>
+                                {{item.nomeItem}}
+                            </th>
+                            <th>
+                                <input class="table__input" id="quantidade" type="number" min="1"
+                                    [(ngModel)]="item.quantidadeComprada" (input)="calcularValorTotalItem(item)">
+                            </th>
+                            <th class="table__item-list__table--slim">
+                                <input class="table__input table__input--large" type="text" maxlength="255" id="marca"
+                                    name="nome" placeholder="Ex.: Omo" [(ngModel)]="item.marca">
+                            </th>
+                            <th class="table__item-list__table--slim">
+                                <input class="table__input" id="valor-unitario" type="number" min="0.1" value="0.1"
+                                    [(ngModel)]="item.valor" (input)="calcularValorTotalItem(item)">
+                            </th>
+                            <th>
+                                <input class="table__input" id="valor-total-item" type="number" min="0.1" readonly
+                                    [(ngModel)]="item.subtotal">
+                            </th>
+                            <th>
+                                <button class="table__btn" (click)="removerDaLista(item)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="lucide lucide-trash2-icon lucide-trash-2">
+                                        <path d="M10 11v6" />
+                                        <path d="M14 11v6" />
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+                                        <path d="M3 6h18" />
+                                        <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                    </svg>
+                                </button>
+                            </th>
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="table__footer">
+                <span><span class="text-strong">{{ itensNaCompra.length }}</span> itens</span> <span> TOTAL: <span
+                        class="text-strong text-bigger">{{ formatarDecimalParaReal(totalCompra) }}</span></span>
+
+            </div>
+
+        </div>
+
+    </div>
+</main>

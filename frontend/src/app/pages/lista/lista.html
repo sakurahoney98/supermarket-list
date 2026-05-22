@@ -1,0 +1,129 @@
+<app-page-title titulo="Lista de Compras"
+    descricao="Lista gerada automaticamente com base no estoque e consumo"></app-page-title>
+
+
+<main class="page-list">
+    <div class="actions">
+        <div class="actions__buttons">
+            <button class="button-action button--save" [disabled]="!itensNaLista" type="button" (click)="capturarPDF()"
+                aria-label="Finalizar alterações de estoque">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-download-icon lucide-download">
+                    <path d="M12 15V3" />
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <path d="m7 10 5 5 5-5" />
+                </svg>
+                Baixar PDF</button>
+            <button class="button-action button--reset" [disabled]="!estoqueModificado" type="button"
+                (click)="resetarTudo()" aria-label="Remover todas as alterações">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-history-icon lucide-history">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                    <path d="M3 3v5h5" />
+                    <path d="M12 7v5l4 2" />
+                </svg>
+                Resetar</button>
+
+        </div>
+
+        <app-search-bar (busca)="onBusca($event)">
+            <div class="filter-category">
+                <button class="filter-category__select" (click)="exibirFiltroCategoria = !exibirFiltroCategoria"
+                    [attr.aria-expanded]="exibirFiltroCategoria" aria-haspopup="listbox">
+                    <span class="select--text-selected"> {{ categoriaSelecionada.nome }} </span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-chevron-down-icon lucide-chevron-down">
+                        <path d="m6 9 6 6 6-6" />
+                    </svg>
+                </button>
+                <ul class="select__list" *ngIf="exibirFiltroCategoria" role="listbox">
+                    <li class="select__list__item" *ngFor="let categoria of listaCategoriasFiltro"
+                        (click)="toggleSelecionarCategoriaFiltro(categoria)" role="option">
+                        {{ categoria.nome }}
+                    </li>
+                </ul>
+            </div>
+            <div class="filter-category">
+                <button class="filter-category__select" (click)="exibirFiltroListaCompras = !exibirFiltroListaCompras"
+                    [attr.aria-expanded]="exibirFiltroListaCompras" aria-haspopup="listbox">
+                    <span class="select--text-selected"> {{ exibirTodosItens ? listaFiltroCompra[0] :
+                        listaFiltroCompra[1] }} </span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-chevron-down-icon lucide-chevron-down">
+                        <path d="m6 9 6 6 6-6" />
+                    </svg>
+                </button>
+                <ul class="select__list" *ngIf="exibirFiltroListaCompras" role="listbox">
+                    <li class="select__list__item" (click)="toggleSelecionarOpcaoFiltroCompra(true)" role="option">
+                        {{listaFiltroCompra[0]}}
+                    </li>
+                    <li class="select__list__item" (click)="toggleSelecionarOpcaoFiltroCompra(false)" role="option">
+                        {{listaFiltroCompra[1]}}
+                    </li>
+                </ul>
+            </div>
+        </app-search-bar>
+
+    </div>
+    <app-empty-list *ngIf="listaItensCompraCopy.length === 0" [emoji]="emojiListaVazia" [titulo]="tituloListaVazia"
+        [descricao]="descricaoListaVazia">
+    </app-empty-list>
+
+    <div class="stock-list">
+        <div class="stock-list__category-section" *ngFor="let categoria of listaCategoriasExibicao">
+            <div class="stock-list__category-section__title" [style.borderColor]="categoria.corFundo"
+                [style.color]="categoria.corLetra" [style.backgroundColor]="categoria.corFundo">
+                <span class="category-title-text">{{ categoria.nome }}</span>
+            </div>
+            <ul class="stock-category__items">
+                <li class="stock-item"
+                    *ngFor="let item of listaItensCompraCopy.filter(i => i.categoria.id === categoria.id)">
+                    <div class="stock-item__info">
+                        <span class="stock-item__name">{{ item.nomeItem }}</span>
+                        <span class="stock-item__stock">Atual: {{ item.quantidadeAtual }} | Máx.: {{ item.limiteCompra
+                            }}</span>
+                    </div>
+
+                    <div class="stock-item__stock-control">
+                        <button class="stock-item__control-btn" [disabled]="item.novoValor === 0"
+                            (click)="diminuirValor(item)" aria-label="Diminuir quantidade de {{ item.nomeItem }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-minus-icon lucide-minus">
+                                <path d="M5 12h14" />
+                            </svg>
+                        </button>
+                        <input class="stock-item__control-input" type="text" inputmode="numeric"
+                            [(ngModel)]="item.novoValor" [attr.aria-label]="'Quantidade de ' + item.nomeItem">
+                        <button class="stock-item__control-btn" (click)="aumentarValor(item)"
+                            aria-label="Aumentar quantidade de {{ item.nomeItem }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-plus-icon lucide-plus">
+                                <path d="M5 12h14" />
+                                <path d="M12 5v14" />
+                            </svg>
+                        </button>
+                        <button class="stock-item__control-btn" *ngIf="item.novoValor !== item.quantidadeSugerida"
+                            (click)="resetarValor(item)" aria-label="Resetar quantidade de {{ item.nomeItem }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-rotate-ccw-icon lucide-rotate-ccw">
+                                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                                <path d="M3 3v5h5" />
+                            </svg>
+                        </button>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+</main>

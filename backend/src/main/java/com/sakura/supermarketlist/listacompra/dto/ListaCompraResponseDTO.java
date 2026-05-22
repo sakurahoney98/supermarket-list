@@ -8,7 +8,8 @@ public record ListaCompraResponseDTO(
 	    String unidadeMedida,
 	    CategoriaResponseDTO categoria,
 	    Integer quantidadeAtual,
-	    Integer quantidadeSugerida
+	    Integer quantidadeSugerida,
+	    Integer limiteCompra
 		) {
 
 }

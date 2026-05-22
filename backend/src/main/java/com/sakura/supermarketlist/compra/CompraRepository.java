@@ -9,6 +9,6 @@ public interface CompraRepository extends JpaRepository<Compra, Long>{
 	
 	boolean existsByDataCompra(LocalDate data);
 	
-	List<Compra> findByDataCompra(LocalDate data);
+	List<Compra> findByDataCompraOrderByIdeCompra(LocalDate data);
 
 }

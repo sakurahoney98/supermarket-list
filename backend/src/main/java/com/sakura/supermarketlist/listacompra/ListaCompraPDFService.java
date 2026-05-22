@@ -44,6 +44,13 @@ public class ListaCompraPDFService {
 				int colunas = categorias.size() > 1 ? 4 : 2;
 
 				PdfPTable table = new PdfPTable(colunas);
+				table.setWidthPercentage(100f);
+				
+				if (colunas == 2) {
+				    table.setWidths(new float[]{75f, 25f});
+				} else {
+				    table.setWidths(new float[]{37.5f, 12.5f, 37.5f, 12.5f});
+				}
 
 				for (int index = 0; index < categorias.size(); index += 2) {
 
@@ -126,7 +133,9 @@ public class ListaCompraPDFService {
 
 	private void adicionarItemCompra(PdfPTable table, String nome, Integer quantidade, String unidadeMedida) {
 
-		table.addCell(nome + " (" + unidadeMedida + ")");
+		String unidadeMedidaFormatada = unidadeMedida == null ? "uni." : unidadeMedida; 
+		
+		table.addCell(nome + " (" + unidadeMedidaFormatada + ")");
 		PdfPCell celulaQuantidade = new PdfPCell(new Phrase("x" + quantidade));
 		celulaQuantidade.setHorizontalAlignment(Element.ALIGN_RIGHT);
 

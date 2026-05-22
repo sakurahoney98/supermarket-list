@@ -39,7 +39,7 @@ public class CompraService {
 
 		if (compraRepository.existsByDataCompra(data)) {
 
-			listaDatasIguais = montarListaResposta(compraRepository.findByDataCompra(data));
+			listaDatasIguais = montarListaResposta(compraRepository.findByDataCompraOrderByIdeCompra(data));
 		}
 
 		return listaDatasIguais;
@@ -116,14 +116,19 @@ public class CompraService {
 		for(ItemCompraRequestDTO objeto : listaItens) {
 			
 			Item item = mapaItens.get(objeto.ideItem());
-			ItemCompra itemCompra = itemCompraRepository.findByCompraIdeCompraAndPrecoAndMarca(compra.getIdeCompra(), objeto.valor(), objeto.marca());
+			ItemCompra itemCompra = itemCompraRepository.findByCompraIdeCompraAndItemIdeItemAndPrecoAndMarca(compra.getIdeCompra(), objeto.ideItem(), objeto.valor(), objeto.marca());
+			
+			
 			
 			if(itemCompra != null) {
+				System.out.println("Entrou no if");
+				System.out.println("itemCompra: " + itemCompra.toString());
 				
 				int quantidadeNovaItemCompra = itemCompra.getQuantidade() + objeto.quantidadeComprada();
 				itemCompra.setQuantidade(quantidadeNovaItemCompra);
 				
 			}else {
+				System.out.println("Entrou no else");
 				
 				itemCompra = new ItemCompra();
 				
@@ -144,6 +149,9 @@ public class CompraService {
 			
 		}
 		
+		System.out.println("itensDaCompra: " + itensDaCompra.toString());
+		System.out.println("itensParaAtualizar: " + itensParaAtualizar.toString());
+		
 		itemCompraRepository.saveAll(itensDaCompra);
 		itemRepository.saveAll(itensParaAtualizar);
 			
@@ -152,6 +160,7 @@ public class CompraService {
 	private void validarListaDeItens(List<Long> listaID, List<Item> itensParaInserir) {
 
 		if (itensParaInserir.size() != listaID.size()) {
+	
 			Set<Long> idsEncontrados = itensParaInserir.stream().map(Item::getIdeItem).collect(Collectors.toSet());
 
 			List<Long> idsNaoEncontrados = listaID.stream().filter(id -> !idsEncontrados.contains(id))
@@ -166,8 +175,12 @@ public class CompraService {
 		List<Long> listaID = new ArrayList<Long>();
 
 		for (ItemCompraRequestDTO item : listaItens) {
+			
+			if(!listaID.contains(item.ideItem())) {
+				listaID.add(item.ideItem());
+			}
 
-			listaID.add(item.ideItem());
+			
 
 		}
 

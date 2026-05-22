@@ -16,6 +16,7 @@ import { AtualizarEstoqueRequestModel } from '../../models/atualizar-estoque-req
 @Component({
   selector: 'app-atualizar-estoque',
   imports: [PageTitleComponent, SearchBarComponent, EmptyListComponent, ToastMessageErrorComponent, ToastMessageSucessComponent, CommonModule, FormsModule],
+  standalone: true,
   templateUrl: './atualizar-estoque.html',
   styleUrl: './atualizar-estoque.css',
 })
@@ -77,7 +78,8 @@ export class AtualizarEstoque implements OnInit {
 
 
   capturarItens() {
-    let rascunho: ItemModel[] | [] = JSON.parse(localStorage.getItem("listaAtualizarEstoque") || '[]');
+    let rascunho: ItemModel[] = JSON.parse(localStorage.getItem("listaAtualizarEstoque") || "[]");
+    
 
     this.itemService.getItensEstoque().subscribe({
       next: (data: ItemModel[]) => {
@@ -91,12 +93,15 @@ export class AtualizarEstoque implements OnInit {
 
         if(rascunho.length > 0){
         this.listaItens.forEach(item => {
-          const itemRascunho = rascunho.filter(i => i.id === item.id)[0];
-          if(itemRascunho !== null){
+          const itemRascunho = rascunho.find(i => i.id === item.id);
+
+          if(itemRascunho){
             item.novoValor = itemRascunho.novoValor;
           }
 
         })
+
+        
 
         }
         
@@ -107,6 +112,8 @@ export class AtualizarEstoque implements OnInit {
             this.listaCategoriasExibicao.push(categoriaItem);
           }
         })
+
+        console.log(this.listaItens)
 
 
         this.listaItensCopy = this.listaItens;
@@ -241,7 +248,7 @@ export class AtualizarEstoque implements OnInit {
   }
 
   isAlteracaoDetectada() {
-    return this.listaItensCopy.filter(i => i.quantidadeEstoque !== i.novoValor).length > 0;
+    return this.listaItens.filter(i => i.quantidadeEstoque !== i.novoValor).length > 0;
   }
 
   aumentarValor(item: ItemModel) {
@@ -279,6 +286,7 @@ export class AtualizarEstoque implements OnInit {
       novoValor: c.quantidadeEstoque
     }));
     this.estoqueModificado = this.isAlteracaoDetectada();
+    localStorage.removeItem("listaAtualizarEstoque");
 
 
   }

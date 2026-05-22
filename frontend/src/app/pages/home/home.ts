@@ -30,7 +30,7 @@ export class Home implements OnInit{
 
       },
       error: (err) => {
-        console.log(err)
+        console.error(err)
       }
     });
 
