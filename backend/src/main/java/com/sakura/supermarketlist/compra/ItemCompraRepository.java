@@ -46,6 +46,6 @@ public interface ItemCompraRepository extends JpaRepository<ItemCompra, Long> {
 		""")
 	List<RelatorioConsultaDTO> buscarGastoPorPeriodo(@Param("ideItem") Long ideItem, @Param("inicio") LocalDate inicio, @Param("fim") LocalDate fim);
 	
-	ItemCompra findByCompraIdeCompraAndPrecoAndMarca(Long ideCompra, BigDecimal preco, String marca);
+	ItemCompra findByCompraIdeCompraAndItemIdeItemAndPrecoAndMarca(Long ideCompra, Long ideItem, BigDecimal preco, String marca);
 
 }

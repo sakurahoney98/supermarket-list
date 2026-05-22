@@ -134,6 +134,8 @@ export class Item implements OnInit {
 
     if (this.isCamposObrigatoriosPreenchidos(this.itemCadastro)) {
 
+
+      
       this.itemService.inserirItem(this.itemCadastro).subscribe({
         next: () => {
           this.mensagemToast = "Item cadastrado com sucesso";
@@ -144,8 +146,10 @@ export class Item implements OnInit {
 
           this.onFecharModal();
           this.capturarItens();
-
           this.itemCadastro = {} as ItemRequestModel;
+          this.itemCadastro.categoria = this.listaCategorias[0].id;
+          
+          
 
 
         },
@@ -345,7 +349,6 @@ export class Item implements OnInit {
   }
 
   onAbrirModal() {
-    console.log(this.itemCadastro)
     if (this.listaCategorias.length === 0) {
       this.mensagemToast = "Necessário cadastrar uma categoria antes de cadastrar item.";
       this.exibirToastErro = true;

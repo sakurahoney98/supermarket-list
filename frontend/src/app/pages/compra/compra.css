@@ -1,0 +1,271 @@
+.header {
+  display: flex
+}
+
+.info-date {
+
+  padding: 1.5rem;
+  padding-top: 0;
+}
+
+.actions__buttons {
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-bottom: 1.5rem;
+
+}
+
+.button--draft,
+.button--save,
+.button--reset {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+}
+
+.button--draft:not(:disabled):hover,
+.button--reset:not(:disabled):hover {
+  background-color: hsl(var(--pink-hover));
+  border: 0.065rem solid hsl(var(--pink-primary));
+  color: white;
+}
+
+.button--draft {
+
+  border: 0.065rem solid hsl(var(--brown-text));
+  background-color: white;
+  color: hsl(var(--brown-text));
+  max-width: 200px;
+
+}
+
+.button--reset {
+  border: 0.065rem solid var(--border);
+  background-color: white;
+  color: hsl(var(--brown-text));
+
+}
+
+.button--save {
+  border: 0.065rem solid hsl(var(--pink-primary));
+  background-color: hsl(var(--pink-primary));
+  color: white;
+
+}
+
+.form-line__input {
+  max-width: 300px;
+  min-width: 150px;
+  width: 200px;
+  height: 2.25rem;
+  border: 0.065rem solid hsl(var(--border-input));
+  border-radius: 0.625rem;
+  padding: 0rem 0.5rem;
+  text-align: center;
+  font-weight: 600;
+  color: hsl(var(--pink-primary));
+  font-size: 16px;
+}
+
+.form-line__input:focus {
+  border: 0.063rem solid hsl(var(--pink-primary));
+}
+
+.buy-data {
+  padding: 1.5rem
+}
+
+.table {
+  background-color: white;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  padding: 16px
+}
+
+.table__search-item {
+  padding-bottom: 16px;
+
+}
+
+.table__search-item__title {
+  font-weight: 650;
+  font-size: 18px;
+
+}
+
+.table__search-item__subtitle {
+  margin: 8px 0px 16px 0px;
+  font-size: 14px;
+}
+
+.search-wrapper {
+  position: relative;
+
+}
+
+.table__search-item__bar {
+  width: 100%;
+  min-width: 240px;
+  padding: 0.625rem;
+  font-size: 1rem;
+  border-radius: 1.5rem;
+  border: 0.065rem solid hsl(var(--pink-primary));
+
+
+}
+
+.select__list {
+  position: absolute;
+  width: 100%;
+  background-color: white;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  border: 0.065rem solid #ddd;
+  box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.15);
+  z-index: 999;
+  margin: 0;
+  top: 100%;
+  max-height: 15rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  overflow-y: auto;
+
+
+
+}
+
+.select__list__item {
+  padding: 0.5rem;
+  border-radius: 0.625rem;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.select__list__item:hover {
+  background-color: hsl(var(--pink-hover));
+}
+
+.table__item-list {
+
+  max-height: 260px;
+  overflow-y: auto;
+
+}
+
+.table__item-list__table {
+  width: 100%;
+  font-size: 14px;
+
+}
+
+.table__item-list__table--slim {
+  font-weight: 500;
+}
+
+.table__item-list__table--line {
+  height: 40px;
+}
+
+.table__input {
+  max-width: 300px;
+  min-width: 150px;
+  height: 2.25rem;
+  border: 0.065rem solid hsl(var(--border-input));
+  border-radius: 0.625rem;
+  padding: 0rem 0.5rem;
+  text-align: center;
+  font-weight: 600;
+
+
+}
+
+.table__input--large {
+  width: 200px;
+}
+
+.table__btn {
+  background-color: white;
+  border: none;
+  cursor: pointer;
+  color: hsl(var(--red-background));
+
+}
+
+.table__footer {
+  display: flex;
+  font-size: 16px;
+  padding: 12px 16px 12px 0px;
+  justify-content: end;
+  gap: 12px;
+  align-items: center;
+}
+
+.text-strong {
+  font-weight: 700;
+}
+
+.text-bigger {
+  font-size: 20px;
+  color: hsl(var(--pink-primary))
+}
+
+.filter-conflict {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative;
+
+}
+
+.filter-conflict__select {
+  border-radius: 0.625rem;
+  border: 0.065rem solid hsl(var(--pink-primary));
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+  font-size: 1rem;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 6.25rem;
+  cursor: pointer;
+}
+
+.select--text-selected {
+  max-width: 80%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.form-line {
+  padding: 1rem 0rem 0.5rem 0rem;
+  flex: 1;
+}
+
+.save-btn {
+  height: 2.5rem;
+  width: 100%;
+  border-radius: 0.625rem;
+  border: 0.063rem solid hsl(var(--pink-primary));
+  font-size: 0.875rem;
+  background-color: hsl(var(--pink-primary));
+  color: white;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

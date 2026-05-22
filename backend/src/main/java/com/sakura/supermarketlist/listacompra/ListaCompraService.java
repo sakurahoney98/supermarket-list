@@ -81,7 +81,8 @@ public class ListaCompraService {
 				item.getUnidadeMedida(),
 				categoriaDTO,
 				item.getQuantidadeEstoque(),
-				quantidadeSugerida);
+				quantidadeSugerida,
+				item.getLimiteCompra());
 		
 	}
 	

@@ -78,7 +78,7 @@ export class Categoria implements OnInit {
 
       },
       error: (err) => {
-        console.log(err)
+        console.error(err)
       }
 
     });
@@ -94,7 +94,7 @@ export class Categoria implements OnInit {
       },
 
       error: (err) => {
-        console.log(err);
+        console.error(err);
       }
     })
   }

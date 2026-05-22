@@ -66,6 +66,7 @@ app-search-bar {
     flex-direction: column;
     flex: 1;
     position: relative;
+    max-width: 18rem;
 
 }
 
@@ -82,12 +83,12 @@ app-search-bar {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 18.75rem;
+    max-width: 100%;
     min-width: 6.25rem;
     cursor: pointer;
 }
 
-.select--text-selected{
+.select--text-selected {
     max-width: 80%;
     white-space: nowrap;
     overflow: hidden;
@@ -97,7 +98,7 @@ app-search-bar {
 .select__list {
     position: absolute;
     width: 100%;
-    max-width: 18.75rem;
+    max-width: 18rem;
     background-color: white;
     border-radius: 0.75rem;
     padding: 1rem;
@@ -129,9 +130,10 @@ app-search-bar {
     background-color: hsl(var(--pink-hover));
 }
 
-.page-update-inventory{
+.page-list {
     overflow-x: auto;
 }
+
 .stock-list {
     padding: 1.5rem;
     display: flex;
@@ -156,7 +158,7 @@ app-search-bar {
     border-top-left-radius: 16px;
     border-top-right-radius: 16px;
     max-width: 100%;
-  
+
 
 }
 
@@ -164,7 +166,7 @@ app-search-bar {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    min-width: 0; /* ESSENCIAL em flex! */
+    min-width: 0;
 }
 
 .stock-item {
@@ -217,6 +219,7 @@ app-search-bar {
     text-align: center;
 
 }
+
 
 ul {
     margin: 0;
