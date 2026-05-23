@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sakura.supermarketlist.relatorio.dto.IntervaloAnosCompraDTO;
 import com.sakura.supermarketlist.relatorio.dto.RelatorioGastoResponseDTO;
 import com.sakura.supermarketlist.relatorio.dto.RelatorioMensalResponseDTO;
 
@@ -22,6 +23,15 @@ public class RelatorioController {
 
 	public RelatorioController(RelatorioService service) {
 		this.service = service;
+	}
+	
+	@GetMapping("/anos")
+	public ResponseEntity<IntervaloAnosCompraDTO> intervaloAnosCompra(){
+		
+		IntervaloAnosCompraDTO response = service.intervaloAnosCompra();
+		
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+		
 	}
 	
 	@GetMapping("/mensal")

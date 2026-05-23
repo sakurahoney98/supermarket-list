@@ -74,12 +74,11 @@ export class Compra implements OnInit {
   }
 
   montarListaItensComprados() {
-    let rascunho: ItemCompraModel[] | [] = JSON.parse(localStorage.getItem("listaInserirCompra") || '[]');
-
+  
+    let rascunho: ItemCompraModel[] = JSON.parse(localStorage.getItem("listaInserirCompra") || '[]');
 
     if (rascunho.length > 0) {
       const idsItens = new Set(this.listaItens.map(item => item.id));
-
       rascunho = rascunho.filter(item => idsItens.has(item.ideItem));
 
 
@@ -94,6 +93,7 @@ export class Compra implements OnInit {
 
   inserirItemNaLista(item: ItemModel) {
     const itemCompra = {
+      id: this.itensNaCompra.length === 0 ? 1 : this.itensNaCompra[this.itensNaCompra.length - 1].id + 1,
       ideItem: item.id,
       nomeItem: item.nome,
       quantidadeComprada: 1,
@@ -125,8 +125,7 @@ export class Compra implements OnInit {
         if (data.length > 0) {
           this.exibirModal = true;
 
-          this.listaOpcoesConflito.push(this.opcaoConflito);
-          this.listaOpcoesConflito.push(...data);
+          this.listaOpcoesConflito = [this.opcaoConflito, ...data];
 
 
         } else {
@@ -218,7 +217,7 @@ export class Compra implements OnInit {
     this.totalCompra = 0;
     this.listaOpcoesConflito = [];
     this.opcaoConflitoSelecionada = this.opcaoConflito;
-    localStorage.setItem('listaInserirCompra', JSON.stringify('[]'));
+    localStorage.removeItem("listaInserirCompra");
   }
 
   onBusca() {

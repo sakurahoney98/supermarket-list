@@ -18,6 +18,8 @@
     --border-input: 30 25% 88%;
     --yellow-warning: 40 90% 55%;
     --pink-hover: 340 50% 85%;
+    --background-muted: 30 30% 94%;
+    --brown-text-muted: 19 9.8% 50%;
 
 
 
@@ -30,7 +32,7 @@
     
 }
 
-h1, h2{
+h1, h2, h3{
     font-family: "Nunito", sans-serif;
 }
 

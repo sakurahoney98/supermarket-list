@@ -10,7 +10,9 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sakura.supermarketlist.compra.CompraRepository;
 import com.sakura.supermarketlist.compra.ItemCompraRepository;
+import com.sakura.supermarketlist.relatorio.dto.IntervaloAnosCompraDTO;
 import com.sakura.supermarketlist.relatorio.dto.RelatorioConsultaDTO;
 import com.sakura.supermarketlist.relatorio.dto.RelatorioGastoItemResponseDTO;
 import com.sakura.supermarketlist.relatorio.dto.RelatorioGastoResponseDTO;
@@ -21,7 +23,15 @@ public class RelatorioService {
 
 	@Autowired
 	ItemCompraRepository itemCompraRepository;
+	
+	@Autowired
+	CompraRepository compraRepository;
 
+	public IntervaloAnosCompraDTO intervaloAnosCompra() {
+		
+		return compraRepository.buscarIntervaloAnos();
+	}
+	
 	public List<RelatorioMensalResponseDTO> relatorioItensCompradosNoMes(int ano, int mes) {
 
 		return itemCompraRepository.buscarItensPorMesEAno(ano, mes);

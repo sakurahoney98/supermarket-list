@@ -10,7 +10,7 @@
 
   .search-bar__bar {
       width: 100%;
-      min-width: 240px;
+      min-width: 15rem;
       max-width: 31.25rem;
       padding: 0.625rem;
       font-size: 1rem;
