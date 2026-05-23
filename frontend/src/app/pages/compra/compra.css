@@ -12,7 +12,7 @@
 
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 0.5rem;
   padding-bottom: 1.5rem;
 
 }
@@ -24,7 +24,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 0.5rem;
 
 }
 
@@ -40,7 +40,7 @@
   border: 0.065rem solid hsl(var(--brown-text));
   background-color: white;
   color: hsl(var(--brown-text));
-  max-width: 200px;
+  max-width: 12.5rem;
 
 }
 
@@ -59,17 +59,17 @@
 }
 
 .form-line__input {
-  max-width: 300px;
-  min-width: 150px;
-  width: 200px;
-  height: 2.25rem;
+  max-width: 18.75rem;
+  min-width: 9.375rem;
+  width: 12.5rem;
+  height: 1.40625rem;
   border: 0.065rem solid hsl(var(--border-input));
   border-radius: 0.625rem;
   padding: 0rem 0.5rem;
   text-align: center;
   font-weight: 600;
   color: hsl(var(--pink-primary));
-  font-size: 16px;
+  font-size: 1rem;
 }
 
 .form-line__input:focus {
@@ -82,25 +82,25 @@
 
 .table {
   background-color: white;
-  border: 1px solid var(--border);
-  border-radius: 15px;
-  padding: 16px
+  border: 0.065rem solid var(--border);
+  border-radius: 0.9375rem;
+  padding: 1rem
 }
 
 .table__search-item {
-  padding-bottom: 16px;
+  padding-bottom: 1rem;
 
 }
 
 .table__search-item__title {
   font-weight: 650;
-  font-size: 18px;
+  font-size: 1.125rem;
 
 }
 
 .table__search-item__subtitle {
-  margin: 8px 0px 16px 0px;
-  font-size: 14px;
+  margin: 0.5rem 0rem 1rem 0rem;
+  font-size: 0.875rem;
 }
 
 .search-wrapper {
@@ -110,7 +110,7 @@
 
 .table__search-item__bar {
   width: 100%;
-  min-width: 240px;
+  min-width: 15rem;
   padding: 0.625rem;
   font-size: 1rem;
   border-radius: 1.5rem;
@@ -155,28 +155,28 @@
 
 .table__item-list {
 
-  max-height: 260px;
+  max-height: 16.25rem;
   overflow-y: auto;
 
 }
 
 .table__item-list__table {
   width: 100%;
-  font-size: 14px;
+  font-size: 0.875rem;
 
 }
 
-.table__item-list__table--slim {
+.buy-table__cell--slim {
   font-weight: 500;
 }
 
 .table__item-list__table--line {
-  height: 40px;
+  height: 2.5rem;
 }
 
 .table__input {
-  max-width: 300px;
-  min-width: 150px;
+  max-width: 18.75rem;
+  min-width: 9.375rem;
   height: 2.25rem;
   border: 0.065rem solid hsl(var(--border-input));
   border-radius: 0.625rem;
@@ -188,7 +188,7 @@
 }
 
 .table__input--large {
-  width: 200px;
+  width: 12.5rem;
 }
 
 .table__btn {
@@ -201,10 +201,10 @@
 
 .table__footer {
   display: flex;
-  font-size: 16px;
-  padding: 12px 16px 12px 0px;
+  font-size: 1rem;
+  padding: 1rem;
   justify-content: end;
-  gap: 12px;
+  gap: 0.75rem;
   align-items: center;
 }
 
@@ -213,7 +213,7 @@
 }
 
 .text-bigger {
-  font-size: 20px;
+  font-size: 1.25rem;
   color: hsl(var(--pink-primary))
 }
 

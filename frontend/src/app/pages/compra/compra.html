@@ -1,12 +1,14 @@
 <app-toast-message-success [mensagem]="mensagemToast" [mostrarToast]="exibirToastSucesso">
 </app-toast-message-success>
 
-<app-modal *ngIf="exibirModal" (fecharModal)="onFecharModal()" titulo="Ação necessária">
-    <p>Já existe(m) compra(s) registrada(s) para a data. Insira uma nova compra ou una a alguma da(s) compra(s) já
+<app-modal *ngIf="exibirModal" (fecharModal)="onFecharModal()" titulo="Ação necessária"
+    ariaDescribedBy="modal-conflito-desc">
+    <p id="modal-conflito-desc">Já existe(m) compra(s) registrada(s) para a data. Insira uma nova compra ou una a alguma
+        da(s) compra(s) já
         cadastrada(s).</p>
     <div class="filter-conflict">
         <button class="filter-conflict__select" (click)="exibirListaResolverConflito = !exibirListaResolverConflito"
-            [attr.aria-expanded]="exibirFiltro" aria-haspopup="listbox">
+            [attr.aria-expanded]="exibirListaResolverConflito" aria-haspopup="listbox">
             <span class="select--text-selected"> {{ opcaoConflitoSelecionada.ideCompra === 0 ? "Inserir nova compra" :
                 `Compra ${opcaoConflitoSelecionada.ideCompra} - ${opcaoConflitoSelecionada.quantidadeItens} iten(s)` }}
             </span>
@@ -26,7 +28,7 @@
     </div>
     <div class="form-line">
 
-        <button type="submit" class="save-btn" (click)="resolverConflito()">Salvar</button>
+        <button type="button" class="save-btn" (click)="resolverConflito()">Salvar</button>
 
     </div>
 
@@ -35,8 +37,9 @@
 <main class="page-buy">
     <div class="header">
         <div class="info-date">
-            Data da compra: <input class="form-line__input" id="date-buy" type="date" required aria-required="true"
-                [(ngModel)]="dataCompra">
+
+            <label for="date-buy">Data da compra: </label> <input class="form-line__input" id="date-buy" type="date"
+                required aria-required="true" [(ngModel)]="dataCompra">
 
         </div>
 
@@ -53,7 +56,7 @@
                 </svg>
                 Salvar rascunho</button>
             <button class="button-action button--save" type="button" [disabled]="totalCompra === 0"
-                (click)="finalizar()" aria-label="Finalizar alterações de estoque">
+                (click)="finalizar()" aria-label="Finalizar alterações de compra">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="lucide lucide-circle-check-big-icon lucide-circle-check-big">
@@ -81,6 +84,7 @@
                 <span class="table__search-item__title">Itens da compra</span>
                 <p class="table__search-item__subtitle">Adicione produtos buscando no catálogo abaixo.</p>
                 <div class="search-wrapper">
+                    <label class="sr-only" for="main-search">Barra de pesquisa do item</label>
                     <input class="table__search-item__bar" id="main-search" name="search" role="search" type="search"
                         placeholder="Digite o nome do item..." [(ngModel)]="termoBuscado" (input)="onBusca()" />
 
@@ -95,46 +99,58 @@
             </div>
             <div class="table__item-list">
                 <table class="table__item-list__table">
+                    <caption class="sr-only">Itens adicionados na compra</caption>
                     <thead>
-                        <th class="table__item-list__table--slim">
-                            ITEM
-                        </th>
-                        <th class="table__item-list__table--slim">
-                            QUANTIDADE
-                        </th>
-                        <th class="table__item-list__table--slim">
-                            MARCA
-                        </th>
-                        <th class="table__item-list__table--slim">
-                            PREÇO UNIT.
-                        </th>
-                        <th class="table__item-list__table--slim">
-                            SUBTOTAL
-                        </th>
-                        <th class="table__item-list__table--slim">
-                            AÇÃO
-                        </th>
+                        <tr>
+                            <th class="buy-table__cell--slim" scope="col">
+                                ITEM
+                            </th>
+                            <th class="buy-table__cell--slim" scope="col">
+                                QUANTIDADE
+                            </th>
+                            <th class="buy-table__cell--slim" scope="col">
+                                MARCA
+                            </th>
+                            <th class="buy-table__cell--slim" scope="col">
+                                PREÇO UNIT.
+                            </th>
+                            <th class="buy-table__cell--slim" scope="col">
+                                SUBTOTAL
+                            </th>
+                            <th class="buy-table__cell--slim" scope="col">
+                                AÇÃO
+                            </th>
+                        </tr>
                     </thead>
                     <tbody>
                         <tr class="table__item-list__table--line" *ngFor="let item of itensNaCompra">
-                            <th>
+                            <th scope="row">
                                 {{item.nomeItem}}
                             </th>
                             <th>
-                                <input class="table__input" id="quantidade" type="number" min="1"
+                                <label class="sr-only" [for]="'quantidade-' + item.id">Quantidade de
+                                    {{item.nomeItem}}</label>
+                                <input class="table__input" [id]="'quantidade-' + item.id" type="number" min="1"
                                     [(ngModel)]="item.quantidadeComprada" (input)="calcularValorTotalItem(item)">
                             </th>
-                            <th class="table__item-list__table--slim">
-                                <input class="table__input table__input--large" type="text" maxlength="255" id="marca"
-                                    name="nome" placeholder="Ex.: Omo" [(ngModel)]="item.marca">
+                            <th class="buy-table__cell--slim">
+                                <label class="sr-only" [for]="'marca-' + item.id">Marca do item
+                                    {{item.nomeItem}}</label>
+                                <input class="table__input table__input--large" type="text" maxlength="255"
+                                    [id]="'marca-' + item.id" name="nome" placeholder="Ex.: Omo"
+                                    [(ngModel)]="item.marca">
                             </th>
-                            <th class="table__item-list__table--slim">
-                                <input class="table__input" id="valor-unitario" type="number" min="0.1" value="0.1"
-                                    [(ngModel)]="item.valor" (input)="calcularValorTotalItem(item)">
+                            <th class="buy-table__cell--slim">
+                                <label class="sr-only" [for]="'valor-unitario-' + item.id">Preço unitário de
+                                    {{item.nomeItem}}</label>
+                                <input class="table__input" [id]="'valor-unitario-' + item.id" type="number" min="0.1"
+                                    step="0.01" [(ngModel)]="item.valor" (input)="calcularValorTotalItem(item)">
                             </th>
                             <th>
-                                <input class="table__input" id="valor-total-item" type="number" min="0.1" readonly
-                                    [(ngModel)]="item.subtotal">
+                                <label class="sr-only" [for]="'valor-total-item-' + item.id">Valor total do item
+                                    {{item.nomeItem}}</label>
+                                <input class="table__input" [id]="'valor-total-item-' + item.id" type="number" min="0.1"
+                                    readonly [(ngModel)]="item.subtotal">
                             </th>
                             <th>
                                 <button class="table__btn" (click)="removerDaLista(item)">

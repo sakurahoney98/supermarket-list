@@ -1,4 +1,5 @@
 export interface ItemCompraModel {
+    id: number;
     ideItem: number;
     nomeItem: string,
     quantidadeComprada: number;

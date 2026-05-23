@@ -113,9 +113,6 @@ export class AtualizarEstoque implements OnInit {
           }
         })
 
-        console.log(this.listaItens)
-
-
         this.listaItensCopy = this.listaItens;
 
         this.estoqueModificado = this.isAlteracaoDetectada();

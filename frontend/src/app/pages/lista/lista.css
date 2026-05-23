@@ -15,7 +15,7 @@ app-search-bar {
 .actions__buttons {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 0.5rem;
     padding-bottom: 1.5rem;
 
 }
@@ -27,7 +27,7 @@ app-search-bar {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 0.5rem;
 
 }
 
@@ -43,7 +43,7 @@ app-search-bar {
     border: 0.065rem solid hsl(var(--brown-text));
     background-color: white;
     color: hsl(var(--brown-text));
-    max-width: 200px;
+    max-width: 12.5rem;
 
 }
 
@@ -142,21 +142,21 @@ app-search-bar {
 }
 
 .stock-list__category-section {
-    border-radius: 16px;
-    border: 1px solid var(--border);
+    border-radius: 1rem;
+    border: 0.0625rem solid var(--border);
     max-width: 100%;
     overflow-y: auto;
 }
 
 .stock-list__category-section__title {
-    padding: 8px;
-    min-height: 40px;
-    border-bottom: 1px solid black;
+    padding: 0.5rem;
+    min-height: 2.5rem;
+    border-bottom: 0.0625rem solid black;
     display: flex;
     align-items: center;
     font-weight: 600;
-    border-top-left-radius: 16px;
-    border-top-right-radius: 16px;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
     max-width: 100%;
 
 
@@ -170,9 +170,9 @@ app-search-bar {
 }
 
 .stock-item {
-    min-height: 40px;
-    padding: 8px;
-    border-top: 1px solid var(--border);
+    min-height: 2.5rem;
+    padding: 0.5rem;
+    border-top: 0.0625rem solid var(--border);
     background-color: white;
     display: flex;
 
@@ -181,12 +181,12 @@ app-search-bar {
 .stock-item__info {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 0.25rem;
     flex: 1;
 }
 
 .stock-item__stock {
-    font-size: 12px;
+    font-size: 0.75rem;
     color: hsl(var(--brown-text));
 
 }
@@ -194,28 +194,28 @@ app-search-bar {
 .stock-item__stock-control {
     display: flex;
     align-items: center;
-    gap: 8px
+    gap: 0.5rem
 }
 
 .stock-item__control-btn {
-    border-radius: 10px;
+    border-radius: 0.625rem;
     background-color: hsl(var(--background-secondary));
     color: hsl(var(--brown-strong-text));
-    border: 1px solid hsl(var(--border-input));
+    border: 0.0625rem solid hsl(var(--border-input));
     cursor: pointer;
     height: 80%;
-    min-width: 40px;
-    font-size: 16px;
+    min-width: 2.5rem;
+    font-size: 1rem;
 }
 
 .stock-item__control-input {
-    border-radius: 10px;
+    border-radius: 0.625rem;
     height: 80%;
-    border: 1px solid hsl(var(--border-input));
+    border: 0.0625rem solid hsl(var(--border-input));
     background-color: hsl(var(--background-secondary));
-    min-width: 40px;
-    max-width: 60px;
-    padding: 8px;
+    min-width: 2.5rem;
+    max-width: 3.75rem;
+    padding: 0.5rem;
     text-align: center;
 
 }
