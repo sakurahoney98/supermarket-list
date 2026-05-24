@@ -50,17 +50,6 @@ public class RelatorioService {
 
 	}
 	
-	public RelatorioGastoResponseDTO relatoriogastoItemPorPeriodo(Long ideItem, LocalDate inicio, LocalDate fim) {
-
-		List<RelatorioConsultaDTO> lista = itemCompraRepository.buscarGastoPorPeriodo(ideItem, inicio, fim);
-		lista = lista.stream().sorted(Comparator.comparing(RelatorioConsultaDTO::dataCompra).reversed())
-			    .collect(Collectors.toList());
-
-		List<RelatorioGastoItemResponseDTO> listaResposta = montarListaRelatorioGastoItem(lista);
-
-		return new RelatorioGastoResponseDTO(calcularValorTotal(listaResposta), listaResposta);
-
-	}
 
 	private BigDecimal calcularValorTotal(List<RelatorioGastoItemResponseDTO> lista) {
 		BigDecimal valorTotalCompra = BigDecimal.ZERO;
