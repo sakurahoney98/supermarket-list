@@ -20,6 +20,10 @@ jobs:
           java-version: "21"
           distribution: "temurin"
 
+      - name: Dar permissão ao mvnw
+        working-directory: ./backend
+        run: chmod +x mvnw
+
       - name: Executar testes
         working-directory: ./backend
         run: ./mvnw test -Dspring.profiles.active=test
