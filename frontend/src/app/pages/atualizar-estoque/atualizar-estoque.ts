@@ -79,32 +79,32 @@ export class AtualizarEstoque implements OnInit {
 
   capturarItens() {
     let rascunho: ItemModel[] = JSON.parse(localStorage.getItem("listaAtualizarEstoque") || "[]");
-    
+
 
     this.itemService.getItensEstoque().subscribe({
       next: (data: ItemModel[]) => {
 
-        this.listaItens = data; 
-        
+        this.listaItens = data;
+
         this.listaItens = data.map(c => ({
           ...c,
           novoValor: c.quantidadeEstoque
         }));
 
-        if(rascunho.length > 0){
-        this.listaItens.forEach(item => {
-          const itemRascunho = rascunho.find(i => i.id === item.id);
+        if (rascunho.length > 0) {
+          this.listaItens.forEach(item => {
+            const itemRascunho = rascunho.find(i => i.id === item.id);
 
-          if(itemRascunho){
-            item.novoValor = itemRascunho.novoValor;
-          }
+            if (itemRascunho) {
+              item.novoValor = itemRascunho.novoValor;
+            }
 
-        })
+          })
 
-        
+
 
         }
-        
+
         this.listaItens.forEach(item => {
           const categoriaItem = item.categoria
 
@@ -183,12 +183,7 @@ export class AtualizarEstoque implements OnInit {
   salvarRascunho() {
     localStorage.setItem('listaAtualizarEstoque', JSON.stringify(this.listaItens));
 
-    this.mensagemToast = "Rascunho salvo com sucesso!";
-
-    this.exibirToastSucesso = true;
-    setTimeout(() => {
-      this.exibirToastSucesso = false;
-    }, 5000);
+    this.exibirMensagemDeSucesso("Rascunho salvo com sucesso!")
 
 
   }
@@ -210,12 +205,9 @@ export class AtualizarEstoque implements OnInit {
 
     this.itemService.atualizarEstoque(listaAtualizarEstoque).subscribe({
       next: () => {
-        this.mensagemToast = "Itens atualizados com sucesso!";
 
-        this.exibirToastSucesso = true;
-        setTimeout(() => {
-          this.exibirToastSucesso = false;
-        }, 5000);
+        this.exibirMensagemDeSucesso("Itens atualizados com sucesso!")
+
 
         this.iniciarVariaveis();
         this.carregarDados();
@@ -223,11 +215,8 @@ export class AtualizarEstoque implements OnInit {
 
       },
       error: (err) => {
-        this.mensagemToast = err.error;
-        this.exibirToastErro = true;
-        setTimeout(() => {
-          this.exibirToastErro = false;
-        }, 5000);
+
+        this.exibirMensagemDeErro(err.error)
 
       }
     })
@@ -286,6 +275,24 @@ export class AtualizarEstoque implements OnInit {
     localStorage.removeItem("listaAtualizarEstoque");
 
 
+  }
+
+  exibirMensagemDeSucesso(mensagem: string) {
+    this.mensagemToast = mensagem;
+
+    this.exibirToastSucesso = true;
+    setTimeout(() => {
+      this.exibirToastSucesso = false;
+    }, 5000);
+  }
+
+  exibirMensagemDeErro(mensagem: string) {
+    this.mensagemToast = mensagem;
+
+    this.exibirToastErro = true;
+    setTimeout(() => {
+      this.exibirToastErro = false;
+    }, 5000);
   }
 
 

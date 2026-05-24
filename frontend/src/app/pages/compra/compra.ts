@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PageTitleComponent } from '../../components/page-title/page-title';
 import { ToastMessageSucessComponent } from '../../components/toast-message-sucess/toast-message-sucess';
+import { ToastMessageErrorComponent } from '../../components/toast-message-error/toast-message-error';
 import { ModalComponent } from '../../components/modal/modal';
 import { ItemService } from '../../services/item';
 import { CompraService } from '../../services/compra';
@@ -15,7 +16,7 @@ import { CompraResponseModel } from '../../models/compra-response.model';
 
 @Component({
   selector: 'app-compra',
-  imports: [CommonModule, FormsModule, PageTitleComponent, ToastMessageSucessComponent, ModalComponent],
+  imports: [CommonModule, FormsModule, PageTitleComponent, ToastMessageSucessComponent, ToastMessageErrorComponent, ModalComponent],
   templateUrl: './compra.html',
   styleUrl: './compra.css',
 })
@@ -33,6 +34,7 @@ export class Compra implements OnInit {
 
   exibirFiltro: boolean = false;
   exibirToastSucesso: boolean = false;
+  exibirToastErro: boolean = false;
   exibirModal: boolean = false;
   exibirListaResolverConflito: boolean = false;
 
@@ -66,7 +68,7 @@ export class Compra implements OnInit {
 
       },
       error: (err) => {
-        console.error(err);
+        this.exibirMensagemDeErro(err.error);
 
       }
     })
@@ -74,7 +76,7 @@ export class Compra implements OnInit {
   }
 
   montarListaItensComprados() {
-  
+
     let rascunho: ItemCompraModel[] = JSON.parse(localStorage.getItem("listaInserirCompra") || '[]');
 
     if (rascunho.length > 0) {
@@ -160,15 +162,14 @@ export class Compra implements OnInit {
         this.exibirListaResolverConflito = false;
         this.resetarTudo();
 
-        this.mensagemToast = "Compra inserida com sucesso!";
-
-        this.exibirToastSucesso = true;
-        setTimeout(() => {
-          this.exibirToastSucesso = false;
-        }, 5000);
+        this.exibirMensagemDeSucesso("Compra inserida com sucesso!");
 
 
 
+
+      },
+      error: (err) => {
+        this.exibirMensagemDeErro(err.error);
       }
     })
   }
@@ -183,16 +184,12 @@ export class Compra implements OnInit {
         this.exibirListaResolverConflito = false;
         this.resetarTudo();
 
-        this.mensagemToast = "Compra inserida com sucesso!";
+        this.exibirMensagemDeSucesso("Compra inserida com sucesso!");
 
-        this.exibirToastSucesso = true;
-        setTimeout(() => {
-          this.exibirToastSucesso = false;
-        }, 5000);
 
       },
       error: (err) => {
-        console.error(err);
+        this.exibirMensagemDeErro(err.error);
 
       },
     })
@@ -202,12 +199,8 @@ export class Compra implements OnInit {
   salvarRascunho() {
     localStorage.setItem('listaInserirCompra', JSON.stringify(this.itensNaCompra));
 
-    this.mensagemToast = "Rascunho salvo com sucesso!";
 
-    this.exibirToastSucesso = true;
-    setTimeout(() => {
-      this.exibirToastSucesso = false;
-    }, 5000);
+    this.exibirMensagemDeSucesso("Rascunho salvo com sucesso!");
 
 
   }
@@ -311,6 +304,24 @@ export class Compra implements OnInit {
   calcularValorTotalItem(item: ItemCompraModel) {
     item.subtotal = parseFloat((item.quantidadeComprada * item.valor).toFixed(2));
     this.calcularTotal();
+  }
+
+  exibirMensagemDeSucesso(mensagem: string) {
+    this.mensagemToast = mensagem;
+
+    this.exibirToastSucesso = true;
+    setTimeout(() => {
+      this.exibirToastSucesso = false;
+    }, 5000);
+  }
+
+  exibirMensagemDeErro(mensagem: string) {
+    this.mensagemToast = mensagem;
+
+    this.exibirToastErro = true;
+    setTimeout(() => {
+      this.exibirToastErro = false;
+    }, 5000);
   }
 
 

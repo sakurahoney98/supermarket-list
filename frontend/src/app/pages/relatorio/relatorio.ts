@@ -8,8 +8,10 @@ import { IntervaloAnosModel } from '../../models/intervalo-anos.model';
 import { ToastMessageErrorComponent } from '../../components/toast-message-error/toast-message-error';
 import { ItemModel } from '../../models/item.model';
 import { RelatorioMensalModel } from '../../models/relatorio-mensal.model';
-import * as XLSX from 'xlsx';
 import { RelatorioGastoModel } from '../../models/relatorio-gasto.model';
+import { RelatorioGastoItemModel } from '../../models/relatorio-gasto-item.model';
+import { MesModel } from '../../models/mes.model';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-relatorio',
@@ -17,9 +19,10 @@ import { RelatorioGastoModel } from '../../models/relatorio-gasto.model';
   templateUrl: './relatorio.html',
   styleUrl: './relatorio.css',
 })
+
 export class Relatorio implements OnInit {
 
-  listaMeses: { numero: number; nome: string }[] = [
+  MESES: MesModel[] = [
     { numero: 1, nome: "Janeiro" },
     { numero: 2, nome: "Fevereiro" },
     { numero: 3, nome: "Março" },
@@ -33,12 +36,13 @@ export class Relatorio implements OnInit {
     { numero: 11, nome: "Novembro" },
     { numero: 12, nome: "Dezembro" },
   ];
+
   listaAnos: number[] = [];
   listaItens: ItemModel[] = [];
 
   itemSelecionado: ItemModel = {} as ItemModel;
 
-  exibirListaMeses: boolean = false;
+  exibirMESES: boolean = false;
   exibirListaAnos: boolean = false;
   exibirListaItem: boolean = false;
   relatorioComprasAtivo: boolean = true;
@@ -48,15 +52,12 @@ export class Relatorio implements OnInit {
   tituloRelatorio: string = '';
   tituloRelatorioCompra: string = 'Itens comprados no mês';
   tituloRelatorioGasto: string = 'Gastos por item';
-  mesSelecionado: { numero: number; nome: string } = this.listaMeses[new Date().getMonth()];
+  mesSelecionado: MesModel = this.MESES[new Date().getMonth()];
   dataInicial: string = '';
   dataFinal: string = '';
   mensagemToast: string = '';
 
   anoSelecionado: number = new Date().getFullYear();
-
-
-
 
 
   constructor(
@@ -112,11 +113,8 @@ export class Relatorio implements OnInit {
     this.relatorioService.getRelatorioMensal(this.anoSelecionado, this.mesSelecionado.numero).subscribe({
       next: (data: RelatorioMensalModel[]) => {
         if (data.length === 0) {
-          this.mensagemToast = 'Não foram encontrados registros para os parâmetros selecionados.';
-          this.exibirToastErro = true;
-          setTimeout(() => {
-            this.exibirToastErro = false;
-          }, 5000);
+
+          this.exibirMensagemDeErro("Não foram encontrados registros para os parâmetros selecionados.");
 
         } else {
           this.exportarPlanilhaCompra(data);
@@ -124,11 +122,7 @@ export class Relatorio implements OnInit {
         }
       },
       error: (err) => {
-        this.mensagemToast = err.error;
-        this.exibirToastErro = true;
-        setTimeout(() => {
-          this.exibirToastErro = false;
-        }, 5000);
+        this.exibirMensagemDeErro(err.error);
 
       }
     })
@@ -141,11 +135,8 @@ export class Relatorio implements OnInit {
       next: (data: RelatorioGastoModel) => {
 
         if (data.gastoTotal === 0) {
-          this.mensagemToast = 'Não foram encontrados registros para os parâmetros selecionados.';
-          this.exibirToastErro = true;
-          setTimeout(() => {
-            this.exibirToastErro = false;
-          }, 5000);
+
+          this.exibirMensagemDeErro("Não foram encontrados registros para os parâmetros selecionados.");
 
         } else {
           this.exportarPlanilhaGasto(data);
@@ -154,11 +145,7 @@ export class Relatorio implements OnInit {
 
       },
       error: (err) => {
-        this.mensagemToast = err.error;
-        this.exibirToastErro = true;
-        setTimeout(() => {
-          this.exibirToastErro = false;
-        }, 5000);
+        this.exibirMensagemDeErro(err.error);
 
       }
     })
@@ -195,7 +182,7 @@ export class Relatorio implements OnInit {
     ];
 
 
-    item.historico.forEach((item: any) => {
+    item.historico.forEach((item: RelatorioGastoItemModel) => {
       dados.push([
         this.formatarDataBR(item.dataCompra),
         item.marca,
@@ -220,17 +207,17 @@ export class Relatorio implements OnInit {
     );
   }
 
-  toggleSelecionarMes(mes: { numero: number; nome: string }) {
+  selecionarMes(mes: MesModel) {
     this.mesSelecionado = mes;
-    this.exibirListaMeses = false;
+    this.exibirMESES = false;
   }
 
-  toggleSelecionarAno(ano: number) {
+  selecionarAno(ano: number) {
     this.anoSelecionado = ano;
     this.exibirListaAnos = false;
   }
 
-  toggleSelecionarItem(item: ItemModel) {
+  selecionarItem(item: ItemModel) {
     this.itemSelecionado = item;
     this.exibirListaItem = false;
 
@@ -247,6 +234,15 @@ export class Relatorio implements OnInit {
     const [ano, mes, dia] = data.split('-');
 
     return `${dia}/${mes}/${ano}`;
+  }
+
+  exibirMensagemDeErro(mensagem: string) {
+    this.mensagemToast = mensagem;
+
+    this.exibirToastErro = true;
+    setTimeout(() => {
+      this.exibirToastErro = false;
+    }, 5000);
   }
 
 

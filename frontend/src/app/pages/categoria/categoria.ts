@@ -127,12 +127,10 @@ export class Categoria implements OnInit {
 
       this.categoriaService.inserirCategoria(categoria).subscribe({
         next: () => {
-          this.mensagemToast = "Categoria cadastrada com sucesso!";
 
-          this.exibirToastSucesso = true;
-          setTimeout(() => {
-            this.exibirToastSucesso = false;
-          }, 5000);
+
+          this.exibirMensagemDeSucesso("Categoria cadastrada com sucesso!");
+
 
           this.exemploTextoPreview = '';
           this.corLetra = '#000000';
@@ -144,19 +142,15 @@ export class Categoria implements OnInit {
 
         },
         error: (err) => {
-          this.mensagemToast = err.error;
-          this.exibirToastErro = true;
-          setTimeout(() => {
-            this.exibirToastErro = false;
-          }, 5000);
+          this.exibirMensagemDeErro(err.error);
+
+
         }
       });
     } else {
-      this.mensagemToast = "Preencha os campos obrigatórios";
-      this.exibirToastErro = true;
-      setTimeout(() => {
-        this.exibirToastErro = false;
-      }, 5000);
+
+      this.exibirMensagemDeErro("Preencha os campos obrigatórios");
+
     }
 
   }
@@ -176,22 +170,14 @@ export class Categoria implements OnInit {
 
           this.atualizarQuantidadeSelecionada();
 
-          this.mensagemToast = "Categoria deletada com sucesso!";
 
-          this.exibirToastSucesso = true;
+          this.exibirMensagemDeSucesso("Categoria deletada com sucesso!")
 
-          setTimeout(() => {
-            this.exibirToastSucesso = false;
-          }, 5000);
 
 
         },
         error: (err) => {
-          this.mensagemToast = err.error;
-          this.exibirToastErro = true;
-          setTimeout(() => {
-            this.exibirToastErro = false;
-          }, 5000);
+          this.exibirMensagemDeErro(err.error);
         }
       })
 
@@ -204,23 +190,17 @@ export class Categoria implements OnInit {
 
           this.atualizarQuantidadeSelecionada();
 
-          this.mensagemToast = "Categorias deletadas com sucesso!";
 
-          this.exibirToastSucesso = true;
+          this.exibirMensagemDeSucesso("Categorias deletadas com sucesso!")
 
-          setTimeout(() => {
-            this.exibirToastSucesso = false;
-          }, 5000);
 
 
 
         },
         error: (err) => {
-          this.mensagemToast = this.formatarMensagem(err.error);
-          this.exibirToastErro = true;
-          setTimeout(() => {
-            this.exibirToastErro = false;
-          }, 5000);
+
+          this.exibirMensagemDeErro(this.formatarMensagem(err.error));
+
         }
       })
 
@@ -240,11 +220,7 @@ export class Categoria implements OnInit {
 
       },
       error: (err) => {
-        this.mensagemToast = err.error;
-        this.exibirToastErro = true;
-        setTimeout(() => {
-          this.exibirToastErro = false;
-        }, 5000);
+        this.exibirMensagemDeErro(err.error);
       }
     });
   }
@@ -301,6 +277,24 @@ export class Categoria implements OnInit {
     return mensagemFormatada;
 
 
+  }
+
+  exibirMensagemDeSucesso(mensagem: string) {
+    this.mensagemToast = mensagem;
+
+    this.exibirToastSucesso = true;
+    setTimeout(() => {
+      this.exibirToastSucesso = false;
+    }, 5000);
+  }
+
+  exibirMensagemDeErro(mensagem: string) {
+    this.mensagemToast = mensagem;
+
+    this.exibirToastErro = true;
+    setTimeout(() => {
+      this.exibirToastErro = false;
+    }, 5000);
   }
 
 

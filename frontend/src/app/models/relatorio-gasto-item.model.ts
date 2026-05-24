@@ -1,5 +1,5 @@
 export interface RelatorioGastoItemModel {
-    dataCompra: Date,
+    dataCompra: string,
     marca: string,
     valorTotalPago: number
 }

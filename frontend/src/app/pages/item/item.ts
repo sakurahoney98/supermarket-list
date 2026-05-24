@@ -62,7 +62,7 @@ export class Item implements OnInit {
   maximoCompra: number | null = null;
   duracao: number | null = null;
 
-  
+
   unidadePeso: string = '';
   mensagemToast: string = '';
   emojiListaVazia: string = '📦';
@@ -135,40 +135,31 @@ export class Item implements OnInit {
     if (this.isCamposObrigatoriosPreenchidos(this.itemCadastro)) {
 
 
-      
+
       this.itemService.inserirItem(this.itemCadastro).subscribe({
         next: () => {
-          this.mensagemToast = "Item cadastrado com sucesso";
-          this.exibirToastSucesso = true;
-          setTimeout(() => {
-            this.exibirToastSucesso = false;
-          }, 5000);
+
+          this.exibirMensagemDeSucesso("Item cadastrado com sucesso");
+
 
           this.onFecharModal();
           this.capturarItens();
           this.itemCadastro = {} as ItemRequestModel;
           this.itemCadastro.categoria = this.listaCategorias[0].id;
-          
-          
+
+
 
 
         },
         error: (err) => {
-          this.mensagemToast = err.error;
-          this.exibirToastErro = true;
-          setTimeout(() => {
-            this.exibirToastErro = false;
-          }, 5000);
+          this.exibirMensagemDeErro(err.error);
 
         }
 
       })
     } else {
-      this.mensagemToast = "Preencha todos os campos obrgatórios.";
-      this.exibirToastErro = true;
-      setTimeout(() => {
-        this.exibirToastErro = false;
-      }, 5000);
+
+      this.exibirMensagemDeErro("Preencha todos os campos obrgatórios.");
     }
 
 
@@ -192,22 +183,12 @@ export class Item implements OnInit {
 
           this.atualizarQuantidadeSelecionada();
 
-          this.mensagemToast = "Item deletado com sucesso!";
-
-          this.exibirToastSucesso = true;
-
-          setTimeout(() => {
-            this.exibirToastSucesso = false;
-          }, 5000);
+          this.exibirMensagemDeSucesso("Item deletado com sucesso!");
 
 
         },
         error: (err) => {
-          this.mensagemToast = err.error;
-          this.exibirToastErro = true;
-          setTimeout(() => {
-            this.exibirToastErro = false;
-          }, 5000);
+          this.exibirMensagemDeErro(err.error);
         }
       })
 
@@ -220,23 +201,14 @@ export class Item implements OnInit {
 
           this.atualizarQuantidadeSelecionada();
 
-          this.mensagemToast = "Itens deletados com sucesso!";
+          this.exibirMensagemDeSucesso("Itens deletados com sucesso!");
 
-          this.exibirToastSucesso = true;
-
-          setTimeout(() => {
-            this.exibirToastSucesso = false;
-          }, 5000);
 
 
 
         },
         error: (err) => {
-          this.mensagemToast = err.error;
-          this.exibirToastErro = true;
-          setTimeout(() => {
-            this.exibirToastErro = false;
-          }, 5000);
+          this.exibirMensagemDeErro(err.error);
         }
       })
 
@@ -263,21 +235,13 @@ export class Item implements OnInit {
         next: () => {
           this.capturarItens();
 
-          this.mensagemToast = `Item ${itemEditado.nome} salvo com sucesso.`
-          this.exibirToastSucesso = true;
+          this.exibirMensagemDeSucesso(`Item ${itemEditado.nome} salvo com sucesso.`);
 
-          setTimeout(() => {
-            this.exibirToastSucesso = false;
-          }, 5000);
 
 
         },
         error: (err) => {
-          this.mensagemToast = err.error;
-          this.exibirToastErro = true;
-          setTimeout(() => {
-            this.exibirToastErro = false;
-          }, 5000);
+          this.exibirMensagemDeErro(err.error);
         }
       })
 
@@ -350,11 +314,8 @@ export class Item implements OnInit {
 
   onAbrirModal() {
     if (this.listaCategorias.length === 0) {
-      this.mensagemToast = "Necessário cadastrar uma categoria antes de cadastrar item.";
-      this.exibirToastErro = true;
-      setTimeout(() => {
-        this.exibirToastErro = false;
-      }, 5000);
+
+      this.exibirMensagemDeErro("Necessário cadastrar uma categoria antes de cadastrar item.");
     } else {
       this.exibirModalCadastro = true;
       this.exibirFiltro = false;
@@ -463,5 +424,24 @@ export class Item implements OnInit {
 
     return validado;
 
+  }
+
+
+  exibirMensagemDeSucesso(mensagem: string) {
+    this.mensagemToast = mensagem;
+
+    this.exibirToastSucesso = true;
+    setTimeout(() => {
+      this.exibirToastSucesso = false;
+    }, 5000);
+  }
+
+  exibirMensagemDeErro(mensagem: string) {
+    this.mensagemToast = mensagem;
+
+    this.exibirToastErro = true;
+    setTimeout(() => {
+      this.exibirToastErro = false;
+    }, 5000);
   }
 }

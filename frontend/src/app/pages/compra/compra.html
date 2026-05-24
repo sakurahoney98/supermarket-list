@@ -1,6 +1,9 @@
 <app-toast-message-success [mensagem]="mensagemToast" [mostrarToast]="exibirToastSucesso">
 </app-toast-message-success>
 
+<app-toast-message-error [mensagem]="mensagemToast" [mostrarToast]="exibirToastErro">
+</app-toast-message-error>
+
 <app-modal *ngIf="exibirModal" (fecharModal)="onFecharModal()" titulo="Ação necessária"
     ariaDescribedBy="modal-conflito-desc">
     <p id="modal-conflito-desc">Já existe(m) compra(s) registrada(s) para a data. Insira uma nova compra ou una a alguma

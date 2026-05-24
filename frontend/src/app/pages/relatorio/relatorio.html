@@ -19,9 +19,9 @@
             <div class="content__parameters" *ngIf="relatorioComprasAtivo">
                 <div class="filter">
                     <p>Mês</p>
-                    <caption class="sr-only">Seleção do mês para gerar relatório de compras</caption>
-                    <button class="filter__select" (click)="exibirListaMeses = !exibirListaMeses"
-                        [attr.aria-expanded]="exibirListaMeses" aria-haspopup="listbox">
+                   <span class="sr-only" id="label-mes">Seleção do mês para gerar relatório de compras</span>
+                    <button class="filter__select" (click)="exibirMESES = !exibirMESES"
+                        [attr.aria-expanded]="exibirMESES" aria-haspopup="listbox" aria-labelledby="label-mes">
                         <span class="select--text-selected"> {{ mesSelecionado.nome }} </span>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -29,9 +29,9 @@
                             <path d="m6 9 6 6 6-6" />
                         </svg>
                     </button>
-                    <ul class="select__list" *ngIf="exibirListaMeses" role="listbox">
-                        <li class="select__list__item" *ngFor="let mes of listaMeses" role="option"
-                            (click)="toggleSelecionarMes(mes)">
+                    <ul class="select__list" *ngIf="exibirMESES" role="listbox">
+                        <li class="select__list__item" *ngFor="let mes of MESES" role="option"
+                            (click)="selecionarMes(mes)">
                             {{ mes.nome }}
                         </li>
                     </ul>
@@ -50,7 +50,7 @@
                     </button>
                     <ul class="select__list" *ngIf="exibirListaAnos" role="listbox">
                         <li class="select__list__item" role="option" *ngFor="let ano of listaAnos"
-                            (click)="toggleSelecionarAno(ano)">
+                            (click)="selecionarAno(ano)">
                             {{ ano }}
                         </li>
                     </ul>
@@ -76,14 +76,14 @@
                     </button>
                     <ul class="select__list" *ngIf="exibirListaItem" role="listbox">
                         <li class="select__list__item" *ngFor="let item of listaItens" role="option"
-                            (click)="toggleSelecionarItem(item)">
+                            (click)="selecionarItem(item)">
                             {{ item.nome }}
                         </li>
                     </ul>
                 </div>
                 <div class="filter">
                     <p>
-                        <label for="date-buy">Data inicial: </label>
+                        <label for="date-start">Data inicial: </label>
                     </p>
                     <input class="filter__input" id="date-start" type="date" [(ngModel)]="dataInicial" required aria-required="true">
                 </div>
