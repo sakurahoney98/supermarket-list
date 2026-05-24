@@ -79,7 +79,7 @@ class RelatorioServiceTest {
 
         assertNotNull(response);
         assertEquals(2, response.size());
-        assertEquals("Macarrão", response.get(0).nomeItem());
+        assertEquals("Arroz", response.get(0).nomeItem());
         assertEquals("Feijão", response.get(1).nomeItem());
         verify(itemCompraRepository, times(1)).buscarItensPorMesEAno(2024, 3);
     }
