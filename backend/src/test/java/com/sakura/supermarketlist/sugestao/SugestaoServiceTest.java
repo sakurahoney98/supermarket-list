@@ -46,6 +46,9 @@ class SugestaoServiceTest {
         sugestoesMock = List.of(s1, s2);
     }
 
+	// =========================================================
+	// BUSCA
+	// =========================================================
     @Test
     void buscarSugestoesComResultado() {
         when(repository.findByIndAtivoTrue()).thenReturn(sugestoesMock);
