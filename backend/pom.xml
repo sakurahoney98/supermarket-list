@@ -70,6 +70,12 @@
 			<version>5.5.13.3</version>
 			<scope>compile</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -94,8 +100,7 @@
 						<path>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
-							<version>1.18.36</version>  <!-- versão compatível com
-							Java 21 -->
+							<version>1.18.36</version> 
 						</path>
 					</annotationProcessorPaths>
 				</configuration>

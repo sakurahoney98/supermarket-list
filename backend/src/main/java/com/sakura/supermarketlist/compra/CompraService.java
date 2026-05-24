@@ -121,14 +121,13 @@ public class CompraService {
 			
 			
 			if(itemCompra != null) {
-				System.out.println("Entrou no if");
-				System.out.println("itemCompra: " + itemCompra.toString());
+				
 				
 				int quantidadeNovaItemCompra = itemCompra.getQuantidade() + objeto.quantidadeComprada();
 				itemCompra.setQuantidade(quantidadeNovaItemCompra);
 				
 			}else {
-				System.out.println("Entrou no else");
+				
 				
 				itemCompra = new ItemCompra();
 				
@@ -149,8 +148,6 @@ public class CompraService {
 			
 		}
 		
-		System.out.println("itensDaCompra: " + itensDaCompra.toString());
-		System.out.println("itensParaAtualizar: " + itensParaAtualizar.toString());
 		
 		itemCompraRepository.saveAll(itensDaCompra);
 		itemRepository.saveAll(itensParaAtualizar);

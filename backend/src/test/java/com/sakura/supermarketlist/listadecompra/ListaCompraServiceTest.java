@@ -1,10 +1,10 @@
 package com.sakura.supermarketlist.listadecompra;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -22,93 +22,181 @@ import com.sakura.supermarketlist.listacompra.dto.ListaCompraResponseDTO;
 
 @ExtendWith(MockitoExtension.class)
 public class ListaCompraServiceTest {
-	@Mock
-	private ItemRepository repository;
-	
-	@InjectMocks
-	private ListaCompraService service;
-	
-	private List<Item> listaItem;
-	private Categoria categoriaTest;
-	
-	@BeforeEach
-	void setUp() {
-		
-		categoriaTest = new Categoria(2L);
-		
-		Item item1 = new Item();
-		item1.setIdeItem(1L);
-		item1.setNomeItem("Item 1");
-		item1.setUnidadeMedida("1kg");
-		item1.setQuantidadeEstoque(1);
-		item1.setLimiteCompra(1);
-		item1.setDataUltimaCompra(LocalDate.of(2026, 3, 14));
-		item1.setCategoria(categoriaTest);
-		item1.setDuracaoDias(30);
-		
-		Item item2 = new Item();
-		item2.setIdeItem(2L);
-		item2.setNomeItem("Item 2");
-		item2.setUnidadeMedida("1kg");
-		item2.setQuantidadeEstoque(0);
-		item2.setLimiteCompra(2);
-		item2.setDataUltimaCompra(LocalDate.of(2026, 3, 14));
-		item2.setCategoria(categoriaTest);
-		item2.setDuracaoDias(30);
-		
-		Item item3 = new Item();
-		item3.setIdeItem(3L);
-		item3.setNomeItem("Item 3");
-		item3.setUnidadeMedida("1kg");
-		item3.setQuantidadeEstoque(1);
-		item3.setLimiteCompra(2);
-		item3.setDataUltimaCompra(LocalDate.of(2026, 3, 14));
-		item3.setCategoria(categoriaTest);
-		item3.setDuracaoDias(10);
-		
-		Item item4 = new Item();
-		item4.setIdeItem(1L);
-		item4.setNomeItem("Item 1");
-		item4.setUnidadeMedida("1kg");
-		item4.setQuantidadeEstoque(1);
-		item4.setLimiteCompra(4);
-		item4.setDataUltimaCompra(LocalDate.of(2026, 3, 14));
-		item4.setCategoria(categoriaTest);
-		item4.setDuracaoDias(12);
-		
-		Item item5 = new Item();
-		item5.setIdeItem(1L);
-		item5.setNomeItem("Item 5");
-		item5.setUnidadeMedida("1kg");
-		item5.setQuantidadeEstoque(3);
-		item5.setLimiteCompra(6);
-		item5.setDataUltimaCompra(LocalDate.of(2026, 3, 14));
-		item5.setCategoria(categoriaTest);
-		item5.setDuracaoDias(20);
-		
-		listaItem = new ArrayList<Item>();
-		
-		listaItem.add(item1);
-		listaItem.add(item2);
-		listaItem.add(item3);
-		listaItem.add(item4);
-		listaItem.add(item5);
-		
-		
-		
-	}
-	
-	@Test
-	void gerarListaDeCompras() {
-		when(repository.findByIndAtivoTrueOrderByCategoriaIdeCategoriaAscNomeItemAsc()).thenReturn(listaItem);
-		
-		List<ListaCompraResponseDTO> response = service.gerarListaDeCompras();
-		
-		assertEquals(0, response.get(0).quantidadeSugerida());
-		assertEquals(2, response.get(1).quantidadeSugerida());
-		assertEquals(1, response.get(2).quantidadeSugerida());
-		assertEquals(2, response.get(3).quantidadeSugerida());
-		assertEquals(3, response.get(4).quantidadeSugerida());
-	}
 
+    @Mock
+    private ItemRepository repository;
+
+    @InjectMocks
+    private ListaCompraService service;
+
+    private Categoria categoriaTest;
+
+    @BeforeEach
+    void setUp() {
+        categoriaTest = new Categoria();
+        categoriaTest.setIdeCategoria(2L);
+        categoriaTest.setDscCategoria("Categoria Teste");
+        categoriaTest.setCorLetra("#FFFFFF");
+        categoriaTest.setCorFundo("#000000");
+        categoriaTest.setIndAtivo(true);
+    }
+
+ 
+    private Item criarItem(Long id, String nome, int estoque, int limite, int duracao) {
+        Item item = new Item();
+        item.setIdeItem(id);
+        item.setNomeItem(nome);
+        item.setUnidadeMedida("1kg");
+        item.setQuantidadeEstoque(estoque);
+        item.setLimiteCompra(limite);
+        item.setDuracaoDias(duracao);
+        item.setDataUltimaCompra(LocalDate.of(2026, 3, 14));
+        item.setCategoria(categoriaTest);
+        return item;
+    }
+
+    // =========================================================
+    // estoque >= limiteCompra → sugerido = 0
+    // =========================================================
+    @Test
+    void itemComEstoqueNoLimite() {
+        // estoque(1) >= limite(1) → sugerido = 0
+        Item item = criarItem(1L, "Item 1", 1, 1, 30);
+        when(repository.findByIndAtivoTrueOrderByCategoriaIdeCategoriaAscNomeItemAsc())
+                .thenReturn(List.of(item));
+
+        List<ListaCompraResponseDTO> response = service.gerarListaDeCompras();
+
+        assertNotNull(response);
+        assertEquals(1, response.size());
+        assertEquals(0, response.get(0).quantidadeSugerida());
+    }
+
+    // =========================================================
+    // duração > 29, estoque == 0 → sugerido = limiteCompra
+    // =========================================================
+    @Test
+    void itemComEstoqueZeroEDuracaoLonga() {
+        // duração(30) > 29, estoque(0) == 0 → sugerido = limiteCompra(2)
+        Item item = criarItem(2L, "Item 2", 0, 2, 30);
+        when(repository.findByIndAtivoTrueOrderByCategoriaIdeCategoriaAscNomeItemAsc())
+                .thenReturn(List.of(item));
+
+        List<ListaCompraResponseDTO> response = service.gerarListaDeCompras();
+
+        assertNotNull(response);
+        assertEquals(1, response.size());
+        assertEquals(2, response.get(0).quantidadeSugerida());
+    }
+
+    // =========================================================
+    // duração > 29, estoque > 0 → sugerido = 0
+    // =========================================================
+    @Test
+    void itemComEstoquePositivoEDuracaoLonga() {
+        // duração(35) > 29, estoque(1) > 0 → sugerido = 0
+        Item item = criarItem(3L, "Item 3", 1, 4, 35);
+        when(repository.findByIndAtivoTrueOrderByCategoriaIdeCategoriaAscNomeItemAsc())
+                .thenReturn(List.of(item));
+
+        List<ListaCompraResponseDTO> response = service.gerarListaDeCompras();
+
+        assertNotNull(response);
+        assertEquals(1, response.size());
+        assertEquals(0, response.get(0).quantidadeSugerida());
+    }
+
+    // =========================================================
+    // duração <= 29, estoque == 0 → sugerido = limiteCompra
+    // =========================================================
+    @Test
+    void itemComEstoqueZeroEDuracaoCurta() {
+        // duração(10) <= 29, estoque(0) == 0 → sugerido = limiteCompra(2)
+        Item item = criarItem(4L, "Item 4", 0, 2, 10);
+        when(repository.findByIndAtivoTrueOrderByCategoriaIdeCategoriaAscNomeItemAsc())
+                .thenReturn(List.of(item));
+
+        List<ListaCompraResponseDTO> response = service.gerarListaDeCompras();
+
+        assertNotNull(response);
+        assertEquals(1, response.size());
+        assertEquals(2, response.get(0).quantidadeSugerida());
+    }
+
+    // =========================================================
+    // duração <= 29, estoque > 0
+    // quantidadeBase(1) <= quantidadePorDuracao(2) → usa quantidadeBase
+    // =========================================================
+    @Test
+    void itemComQuantidadeBaseMenorOuIgualDuracao() {
+        // duração(10), estoque(1), limite(2)
+        // base = 2-1 = 1
+        // fator = ceil(30/10) = 3 → porDuracao = 3-1 = 2
+        // base(1) > porDuracao(2)? NÃO → sugerido = base = 1
+        Item item = criarItem(5L, "Item 5", 1, 2, 10);
+        when(repository.findByIndAtivoTrueOrderByCategoriaIdeCategoriaAscNomeItemAsc())
+                .thenReturn(List.of(item));
+
+        List<ListaCompraResponseDTO> response = service.gerarListaDeCompras();
+
+        assertNotNull(response);
+        assertEquals(1, response.size());
+        assertEquals(1, response.get(0).quantidadeSugerida());
+    }
+
+    // =========================================================
+    // duração <= 29, estoque > 0
+    // quantidadeBase(3) > quantidadePorDuracao(2) → usa quantidadePorDuracao
+    // =========================================================
+    @Test
+    void itemComQuantidadeBaseMaiorQuePorDuracao() {
+        // duração(12), estoque(1), limite(4)
+        // base = 4-1 = 3
+        // fator = ceil(30/12) = 3 → porDuracao = 3-1 = 2
+        // base(3) > porDuracao(2)? SIM → sugerido = porDuracao = 2
+        Item item = criarItem(6L, "Item 6", 1, 4, 12);
+        when(repository.findByIndAtivoTrueOrderByCategoriaIdeCategoriaAscNomeItemAsc())
+                .thenReturn(List.of(item));
+
+        List<ListaCompraResponseDTO> response = service.gerarListaDeCompras();
+
+        assertNotNull(response);
+        assertEquals(1, response.size());
+        assertEquals(2, response.get(0).quantidadeSugerida());
+    }
+
+    // =========================================================
+    // duração <= 29, estoque > 0
+    // quantidadePorDuracao negativa → usa quantidadeBase
+    // =========================================================
+    @Test
+    void itemComQuantidadePorDuracaoNegativa() {
+        // duração(20), estoque(3), limite(6)
+        // base = 6-3 = 3
+        // fator = ceil(30/20) = 2 → porDuracao = 2-3 = -1
+        // porDuracao(-1) > 0? NÃO → sugerido = base = 3
+        Item item = criarItem(7L, "Item 7", 3, 6, 20);
+        when(repository.findByIndAtivoTrueOrderByCategoriaIdeCategoriaAscNomeItemAsc())
+                .thenReturn(List.of(item));
+
+        List<ListaCompraResponseDTO> response = service.gerarListaDeCompras();
+
+        assertNotNull(response);
+        assertEquals(1, response.size());
+        assertEquals(3, response.get(0).quantidadeSugerida());
+    }
+
+    // =========================================================
+    // VALIDAÇÃO
+    // =========================================================
+    @Test
+    void retornaListaVazia() {
+        when(repository.findByIndAtivoTrueOrderByCategoriaIdeCategoriaAscNomeItemAsc())
+                .thenReturn(List.of());
+
+        List<ListaCompraResponseDTO> response = service.gerarListaDeCompras();
+
+        assertNotNull(response);
+        assertEquals(0, response.size());
+    }
 }

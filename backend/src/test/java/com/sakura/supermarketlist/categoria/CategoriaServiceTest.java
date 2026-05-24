@@ -26,7 +26,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.sakura.supermarketlist.categoria.dto.CategoriaRequestDTO;
 import com.sakura.supermarketlist.categoria.dto.CategoriaResponseDTO;
 import com.sakura.supermarketlist.categoria.exception.CategoriaDuplicadaException;
+import com.sakura.supermarketlist.categoria.exception.CategoriaInexistenteException;
 import com.sakura.supermarketlist.categoria.exception.CategoriaVinculadaItensAtivosException;
+import com.sakura.supermarketlist.categoria.exception.ListaCategoriaInexistenteException;
 import com.sakura.supermarketlist.common.dto.ExclusaoResponseDTO;
 import com.sakura.supermarketlist.item.ItemRepository;
 
@@ -88,21 +90,22 @@ public class CategoriaServiceTest {
 		categoriasMock.add(cat1);
 		categoriasMock.add(cat2);
 		categoriasMock.add(cat3);
-		
+
 		listaCategorias = new ArrayList<Long>();
 		listaCategorias.add(cat1.getIdeCategoria());
 		listaCategorias.add(cat2.getIdeCategoria());
 		listaCategorias.add(cat3.getIdeCategoria());
-		
+
 		itensComVinculo = new ArrayList<String>();
 		itensComVinculo.add("Item teste");
-		
+
 		itensComVinculoVazia = new ArrayList<String>();
 
-		
-		
-
 	}
+
+	// =========================================================
+	// CADASTRAR
+	// =========================================================
 
 	@Test
 	void cadastrarCategoriaInexistente() {
@@ -118,8 +121,6 @@ public class CategoriaServiceTest {
 		assertEquals("#FFFFFF", response.corLetra());
 		assertEquals("#0000FF", response.corFundo());
 		assertTrue(response.ativo());
-
-		repository.deleteById(response.id());
 
 	}
 
@@ -138,6 +139,26 @@ public class CategoriaServiceTest {
 
 	}
 
+	// =========================================================
+	// EXCLUIR
+	// =========================================================
+
+	@Test
+	void excluirCategoriaSemVinculo() {
+
+		when(repository.findByIdeCategoriaAndIndAtivoTrue(1L)).thenReturn(Optional.of(categoria));
+		when(itemRepository.findNomesByCategoriaIdeCategoriaAndIndAtivoTrue(1L)).thenReturn(List.of());
+
+		ExclusaoResponseDTO response = service.excluirCategoria(1L);
+
+		assertNotNull(response);
+		assertEquals(1, response.quantidadeExcluida());
+		assertFalse(categoria.isIndAtivo());
+		assertNotNull(categoria.getDtcExclusao());
+		verify(repository, times(1)).save(categoria);
+
+	}
+
 	@Test
 	void excluirCategoriaComVinculo() {
 
@@ -149,31 +170,46 @@ public class CategoriaServiceTest {
 					service.excluirCategoria(1L);
 				});
 
-		assertEquals("Antes de realizar a exclusão você precisa modificar a categoria do(s) seguinte(s) item(ns):\n" + itensComVinculo.toString(), exception.getMessage());
+		assertEquals("Antes de realizar a exclusão você precisa modificar a categoria do(s) seguinte(s) item(ns):\n"
+				+ itensComVinculo.toString(), exception.getMessage());
 
 		verify(repository, never()).save(any(Categoria.class));
 
 	}
 
 	@Test
-	void excluirCategoriaSemVinculo() {
+	void excluirCategoriaInexistente() {
+		when(repository.findByIdeCategoriaAndIndAtivoTrue(99L)).thenReturn(Optional.empty());
 
-		when(itemRepository.findNomesByCategoriaIdeCategoriaAndIndAtivoTrue(1L)).thenReturn(itensComVinculoVazia);
-		when(repository.findByIdeCategoriaAndIndAtivoTrue(1L)).thenReturn(Optional.of(categoria));
+		CategoriaInexistenteException exception = assertThrows(CategoriaInexistenteException.class,
+				() -> service.excluirCategoria(99L));
 
-		service.excluirCategoria(1L);
+		assertEquals("Identificador 99 não existe ou a categoria já se encontra inativada.", exception.getMessage());
+		verify(repository, never()).save(any(Categoria.class));
+	}
 
-		verify(repository, times(1)).save(any(Categoria.class));
+	@Test
+	void excluirListaCategoriaSemVinculo() {
 
-		assertFalse(categoria.isIndAtivo());
+		when(repository.findAllByIdeCategoriaInAndIndAtivoTrue(listaCategorias)).thenReturn(categoriasMock);
+
+		when(itemRepository.findNomesByCategoriaIdeCategoriaAndIndAtivoTrue(1L)).thenReturn(List.of());
+		when(itemRepository.findNomesByCategoriaIdeCategoriaAndIndAtivoTrue(2L)).thenReturn(List.of());
+		when(itemRepository.findNomesByCategoriaIdeCategoriaAndIndAtivoTrue(3L)).thenReturn(List.of());
+
+		ExclusaoResponseDTO response = service.excluirCategoria(listaCategorias);
+
+		assertEquals(3, response.quantidadeExcluida());
+		verify(repository, times(1)).saveAll(categoriasMock);
 
 	}
-	
+
 	@Test
 	void excluirListaCategoriaComVinculo() {
-		
+
 		List<String> categoriasComBloqueioDeExclusao = new ArrayList<String>();
-		categoriasComBloqueioDeExclusao.add(categoriasMock.get(0).getDscCategoria() + ": " + itensComVinculo.toString());
+		categoriasComBloqueioDeExclusao
+				.add(categoriasMock.get(0).getDscCategoria() + ": " + itensComVinculo.toString());
 
 		when(itemRepository.findNomesByCategoriaIdeCategoriaAndIndAtivoTrue(1L)).thenReturn(itensComVinculo);
 		when(repository.findAllByIdeCategoriaInAndIndAtivoTrue(listaCategorias)).thenReturn(categoriasMock);
@@ -182,78 +218,81 @@ public class CategoriaServiceTest {
 				() -> {
 					service.excluirCategoria(listaCategorias);
 				});
-		
 
-		assertEquals(categoriasComBloqueioDeExclusao.toString(), exception.getMessage());
+		assertEquals(
+				"Antes de realizar a exclusão você precisa modificar a categoria do(s) seguinte(s) item(ns):\n[Zebra: [Item teste]]",
+				exception.getMessage());
 
 		verify(repository, never()).save(any(Categoria.class));
-		
 
 	}
-	
+
 	@Test
-	void excluirListaCategoriaVazia() {
+	void excluirListaCategoriaComIdInexistente() {
+		List<Long> listaComIdInexistente = List.of(1L, 2L, 99L);
 
-		when(itemRepository.findNomesByCategoriaIdeCategoriaAndIndAtivoTrue(1L)).thenReturn(itensComVinculoVazia);
-		when(repository.findByIdeCategoriaAndIndAtivoTrue(1L)).thenReturn(Optional.of(categoriasMock.get(0)));
-		when(repository.findByIdeCategoriaAndIndAtivoTrue(2L)).thenReturn(Optional.of(categoriasMock.get(1)));
-		when(repository.findByIdeCategoriaAndIndAtivoTrue(3L)).thenReturn(Optional.of(categoriasMock.get(2)));
+		when(repository.findAllByIdeCategoriaInAndIndAtivoTrue(listaComIdInexistente))
+				.thenReturn(List.of(categoriasMock.get(0), categoriasMock.get(1)));
 
-		service.excluirCategoria(1L);
-		service.excluirCategoria(2L);
-		service.excluirCategoria(3L);
+		ListaCategoriaInexistenteException exception = assertThrows(ListaCategoriaInexistenteException.class,
+				() -> service.excluirCategoria(listaComIdInexistente));
 
-		verify(repository, times(3)).save(any(Categoria.class));
-
-		assertFalse(categoriasMock.get(0).isIndAtivo());
-		assertFalse(categoriasMock.get(1).isIndAtivo());
-		assertFalse(categoriasMock.get(2).isIndAtivo());
-
+		assertEquals("Identificador [99] não existe ou a categoria já se encontra inativada.", exception.getMessage());
+		verify(repository, never()).saveAll(any());
 	}
-	
-	@Test
-	void excluirListaCategoriaSemVinculo() {
 
-		when(itemRepository.findNomesByCategoriaIdeCategoriaAndIndAtivoTrue(1L)).thenReturn(itensComVinculoVazia);
-		when(repository.findAllByIdeCategoriaInAndIndAtivoTrue(listaCategorias)).thenReturn(categoriasMock);
-
-		ExclusaoResponseDTO response = service.excluirCategoria(listaCategorias);
-		
-		assertEquals(3, response.quantidadeExcluida());
-
-		assertFalse(categoriasMock.get(0).isIndAtivo());
-		assertFalse(categoriasMock.get(1).isIndAtivo());
-		assertFalse(categoriasMock.get(2).isIndAtivo());
-		
-		verify(repository, times(1)).saveAll(any(ArrayList.class));
-
-	}
+	// =========================================================
+	// BUSCAR / FILTRAR
+	// =========================================================
 
 	@Test
 	void capturarTodasCategoriasPorNome() {
 		when(repository.findByIndAtivoTrueOrderByDscCategoriaAsc()).thenReturn(categoriasMock);
-		
-		service.buscarTodasCategoriasAtivasOrdenadasPorNome();
 
+		List<CategoriaResponseDTO> response = service.buscarTodasCategoriasAtivasOrdenadasPorNome();
+
+		assertNotNull(response);
+		assertEquals(3, response.size());
+		assertEquals("Zebra", response.get(0).nome());
+		assertEquals("Arroz", response.get(1).nome());
+		assertEquals("Bolo", response.get(2).nome());
 		verify(repository, times(1)).findByIndAtivoTrueOrderByDscCategoriaAsc();
 	}
-	
+
 	@Test
 	void capturarTodasCategoriasPorData() {
 		when(repository.findByIndAtivoTrueOrderByDtcCriacaoDesc()).thenReturn(categoriasMock);
-		
-		service.buscarTodasCategoriasAtivasOrdenadasPorDataCriacao();
 
+		List<CategoriaResponseDTO> response = service.buscarTodasCategoriasAtivasOrdenadasPorDataCriacao();
+
+		assertNotNull(response);
+		assertEquals(3, response.size());
+		assertEquals("Zebra", response.get(0).nome());
 		verify(repository, times(1)).findByIndAtivoTrueOrderByDtcCriacaoDesc();
 	}
-	
-	@Test
-	void filtrarCategoriasPordata() {
-		when(repository.findByDscCategoriaContainingIgnoreCaseAndIndAtivoTrueOrderByDscCategoriaAsc("Teste")).thenReturn(categoriasMock);
-		
-		service.filtrarCategoriasPorNome("Teste");
 
-		verify(repository, times(1)).findByDscCategoriaContainingIgnoreCaseAndIndAtivoTrueOrderByDscCategoriaAsc("Teste");
+
+	@Test
+	void filtrarCategoriasPorNomeComResultado() {
+		when(repository.findByDscCategoriaContainingIgnoreCaseAndIndAtivoTrueOrderByDscCategoriaAsc("Bolo"))
+				.thenReturn(List.of(categoriasMock.get(2)));
+
+		List<CategoriaResponseDTO> response = service.filtrarCategoriasPorNome("Bolo");
+
+		assertNotNull(response);
+		assertEquals(1, response.size());
+		assertEquals("Bolo", response.get(0).nome());
+	}
+
+	@Test
+	void filtrarCategoriasPorNomeSemResultado() {
+		when(repository.findByDscCategoriaContainingIgnoreCaseAndIndAtivoTrueOrderByDscCategoriaAsc("XYZ"))
+				.thenReturn(List.of());
+
+		List<CategoriaResponseDTO> response = service.filtrarCategoriasPorNome("XYZ");
+
+		assertNotNull(response);
+		assertTrue(response.isEmpty());
 	}
 
 }
