@@ -1,17 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { vi } from 'vitest';
 
-import { SearchBar } from './search-bar';
+import { SearchBarComponent } from './search-bar';
 
-describe('SearchBar', () => {
-  let component: SearchBar;
-  let fixture: ComponentFixture<SearchBar>;
+describe('SearchBarComponent', () => {
+  let component: SearchBarComponent;
+  let fixture: ComponentFixture<SearchBarComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SearchBar],
+      imports: [SearchBarComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SearchBar);
+    fixture = TestBed.createComponent(SearchBarComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
@@ -19,4 +20,12 @@ describe('SearchBar', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('emitir evento busca ao chamar onSearch()', () => {
+    const emitSpy = vi.spyOn(component.busca, 'emit');
+
+    component.onSearch();
+
+    expect(emitSpy).toHaveBeenCalledOnce();
+  })
 });
