@@ -4,9 +4,7 @@ import { FormsModule } from '@angular/forms';
 
 import { CategoriaService } from '../../services/categoria';
 import { SugestaoService } from '../../services/sugestao';
-import { CategoriaModel } from '../../models/categoria.model';
-import { SugestaoModel } from '../../models/sugestao.model';
-import { CategoriaRequestModel } from '../../models/categoria-request.model';
+
 import { PageTitleComponent } from '../../components/page-title/page-title';
 import { ModalComponent } from '../../components/modal/modal';
 import { ListActionComponent } from '../../components/list-action/list-action';
@@ -14,6 +12,12 @@ import { ToastMessageSucessComponent } from '../../components/toast-message-suce
 import { ToastMessageErrorComponent } from '../../components/toast-message-error/toast-message-error';
 import { EmptyListComponent } from '../../components/empty-list/empty-list';
 import { SearchBarComponent } from '../../components/search-bar/search-bar';
+
+import { CategoriaModel } from '../../models/categoria.model';
+import { SugestaoModel } from '../../models/sugestao.model';
+import { CategoriaRequestModel } from '../../models/categoria-request.model';
+
+
 
 
 
