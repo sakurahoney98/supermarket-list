@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
+import { ItemService } from '../../services/item';
+import { CompraService } from '../../services/compra';
+
 import { PageTitleComponent } from '../../components/page-title/page-title';
 import { ToastMessageSucessComponent } from '../../components/toast-message-sucess/toast-message-sucess';
 import { ToastMessageErrorComponent } from '../../components/toast-message-error/toast-message-error';
 import { ModalComponent } from '../../components/modal/modal';
-import { ItemService } from '../../services/item';
-import { CompraService } from '../../services/compra';
+
 import { ItemCompraModel } from '../../models/item-compra.model';
 import { ItemModel } from '../../models/item.model';
 import { ItemCompraResponseModel } from '../../models/item-compra-response.model';
@@ -83,13 +85,10 @@ export class Compra implements OnInit {
       const idsItens = new Set(this.listaItens.map(item => item.id));
       rascunho = rascunho.filter(item => idsItens.has(item.ideItem));
 
-
     }
 
     this.itensNaCompra = rascunho;
     this.calcularTotal();
-
-
 
   }
 
@@ -252,7 +251,7 @@ export class Compra implements OnInit {
     this.exibirListaResolverConflito = false;
   }
 
-  private montarCompra() {
+  montarCompra() {
     let listaItensDaCompra = [] as ItemCompraResponseModel[];
 
     this.itensNaCompra.forEach(item => {
@@ -274,7 +273,7 @@ export class Compra implements OnInit {
     return compra;
   }
 
-  private converterDataParaString(data: Date): string {
+  converterDataParaString(data: Date): string {
     const yyyy = data.getFullYear();
     const mm = String(data.getMonth() + 1).padStart(2, '0');
     const dd = String(data.getDate()).padStart(2, '0');
@@ -282,7 +281,7 @@ export class Compra implements OnInit {
 
   }
 
-  private converterStringParaData(dataStr: string): Date {
+  converterStringParaData(dataStr: string): Date {
     const [yyyy, mm, dd] = dataStr.split('-').map(Number);
     return new Date(yyyy, mm - 1, dd);
   }
