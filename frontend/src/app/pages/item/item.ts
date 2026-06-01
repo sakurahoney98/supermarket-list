@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 
 import { ItemService } from '../../services/item';
 import { CategoriaService } from '../../services/categoria';
+
 import { PageTitleComponent } from '../../components/page-title/page-title';
 import { ModalComponent } from '../../components/modal/modal';
 import { SearchBarComponent } from '../../components/search-bar/search-bar';
@@ -11,6 +12,7 @@ import { EmptyListComponent } from '../../components/empty-list/empty-list';
 import { ListActionComponent } from '../../components/list-action/list-action';
 import { ToastMessageErrorComponent } from '../../components/toast-message-error/toast-message-error';
 import { ToastMessageSucessComponent } from '../../components/toast-message-sucess/toast-message-sucess';
+
 import { ItemModel } from '../../models/item.model';
 import { CategoriaModel } from '../../models/categoria.model';
 import { ItemRequestModel } from '../../models/item-request.model';
@@ -124,30 +126,21 @@ export class Item implements OnInit {
 
   }
 
-
-
-
-
   cadastrarItem() {
 
     this.resetarEstadoInput();
 
     if (this.isCamposObrigatoriosPreenchidos(this.itemCadastro)) {
 
-
-
       this.itemService.inserirItem(this.itemCadastro).subscribe({
         next: () => {
 
           this.exibirMensagemDeSucesso("Item cadastrado com sucesso");
 
-
           this.onFecharModal();
           this.capturarItens();
           this.itemCadastro = {} as ItemRequestModel;
-          this.itemCadastro.categoria = this.listaCategorias[0].id;
-
-
+          this.itemCadastro.categoria = this.listaCategorias[0].id ?? this.categoriaFiltro.id;
 
 
         },
@@ -161,10 +154,6 @@ export class Item implements OnInit {
 
       this.exibirMensagemDeErro("Preencha todos os campos obrgatórios.");
     }
-
-
-
-
 
   }
 
@@ -237,18 +226,13 @@ export class Item implements OnInit {
 
           this.exibirMensagemDeSucesso(`Item ${itemEditado.nome} salvo com sucesso.`);
 
-
-
         },
         error: (err) => {
           this.exibirMensagemDeErro(err.error);
         }
       })
 
-
-
     }
-
 
   }
 
