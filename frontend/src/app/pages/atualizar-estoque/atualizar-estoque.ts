@@ -2,16 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
+import { CategoriaService } from '../../services/categoria';
+import { ItemService } from '../../services/item';
+
 import { PageTitleComponent } from '../../components/page-title/page-title';
 import { SearchBarComponent } from '../../components/search-bar/search-bar';
 import { EmptyListComponent } from '../../components/empty-list/empty-list';
 import { ToastMessageErrorComponent } from '../../components/toast-message-error/toast-message-error';
 import { ToastMessageSucessComponent } from '../../components/toast-message-sucess/toast-message-sucess';
+
 import { ItemModel } from '../../models/item.model';
 import { CategoriaModel } from '../../models/categoria.model';
-import { CategoriaService } from '../../services/categoria';
-import { ItemService } from '../../services/item';
 import { AtualizarEstoqueRequestModel } from '../../models/atualizar-estoque-request.model';
+
+
 
 @Component({
   selector: 'app-atualizar-estoque',
