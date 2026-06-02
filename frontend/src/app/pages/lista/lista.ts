@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
+import { ListaService } from '../../services/lista';
+import { CategoriaService } from '../../services/categoria';
+
 import { PageTitleComponent } from '../../components/page-title/page-title';
 import { SearchBarComponent } from '../../components/search-bar/search-bar';
 import { EmptyListComponent } from '../../components/empty-list/empty-list';
-import { ListaService } from '../../services/lista';
-import { CategoriaService } from '../../services/categoria';
+
 import { CategoriaModel } from '../../models/categoria.model';
 import { ItemListaCompraRequest } from '../../models/item-lista-compra-request.model';
 import { ItemListaCompraResponse } from '../../models/item-lista-compra-response.model';
@@ -215,7 +217,7 @@ export class Lista implements OnInit {
   }
 
   isAlteracaoDetectada() {
-    ; return this.listaItensCompraCopy.filter(i => i.quantidadeSugerida !== i.novoValor).length > 0;
+    return this.listaItensCompraCopy.filter(i => i.quantidadeSugerida !== i.novoValor).length > 0;
   }
 
   isItensNaLista() {
