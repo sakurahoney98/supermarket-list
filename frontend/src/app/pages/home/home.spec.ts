@@ -14,7 +14,7 @@ describe('Home', () => {
     getDashboard: vi.fn(),
   };
 
-const dashboard = {categorias: 10, itens: 20, itensZerados: 5};
+  const dashboard = { categorias: 10, itens: 20, itensZerados: 5 };
 
   beforeEach(async () => {
 
@@ -24,8 +24,8 @@ const dashboard = {categorias: 10, itens: 20, itensZerados: 5};
       imports: [Home],
       providers: [
         provideRouter([]),
-        {provide: DashboardService, useValue: dashboardServiceMock},
-    ]
+        { provide: DashboardService, useValue: dashboardServiceMock },
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(Home);

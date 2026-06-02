@@ -4,8 +4,10 @@ import { vi } from 'vitest';
 import { of } from 'rxjs';
 
 import { AtualizarEstoque } from './atualizar-estoque';
+
 import { ItemService } from '../../services/item';
 import { CategoriaService } from '../../services/categoria';
+
 import { ItemModel } from '../../models/item.model';
 import { CategoriaModel } from '../../models/categoria.model';
 

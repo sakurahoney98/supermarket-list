@@ -10,7 +10,7 @@ import { CompraService } from '../../services/compra';
 
 import { CategoriaModel } from '../../models/categoria.model';
 import { ItemModel } from '../../models/item.model';
-import { ItemCompraResponseModel } from '../../models/item-compra-response.model';
+
 
 describe('Compra', () => {
   let component: Compra;
