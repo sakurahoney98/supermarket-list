@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.sakura</groupId>
 	<artifactId>supermarketlist</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>supermarketlist</name>
 	<description>API para lista de supermercado</description>
 
@@ -79,6 +79,7 @@
 	</dependencies>
 
 	<build>
+	<finalName>app</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
