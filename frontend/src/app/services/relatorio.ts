@@ -1,15 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { HttpParams } from '@angular/common/http';
+
 import { IntervaloAnosModel } from '../models/intervalo-anos.model';
 import { RelatorioMensalModel } from '../models/relatorio-mensal.model';
 import { RelatorioGastoModel } from '../models/relatorio-gasto.model';
+
+import { environment } from '../../environment/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RelatorioService {
-  private apiRelatorio = '/api/relatorio';
+  private apiRelatorio = `${environment.apiUrl}/relatorio`;
 
   constructor(private http: HttpClient) { }
 

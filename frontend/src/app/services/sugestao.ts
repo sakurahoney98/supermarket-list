@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+
 import { SugestaoModel } from '../models/sugestao.model';
+
+import { environment } from '../../environment/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SugestaoService {
-  private apiSugestao = "/api/sugestao"
+  private apiSugestao = `${environment.apiUrl}/sugestao`
 
   constructor(private http: HttpClient){}
 

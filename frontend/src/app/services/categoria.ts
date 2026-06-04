@@ -5,12 +5,14 @@ import { HttpParams } from '@angular/common/http';
 import { CategoriaModel } from '../models/categoria.model';
 import { CategoriaRequestModel } from '../models/categoria-request.model';
 
+import { environment } from '../../environment/environment';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class CategoriaService {
-  private apiCategoria = '/api/categorias'
+  private apiCategoria = `${environment.apiUrl}/categorias`
 
 
   constructor(private http: HttpClient) { }

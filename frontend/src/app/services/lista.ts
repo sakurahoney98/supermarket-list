@@ -3,12 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { ItemListaCompraRequest } from '../models/item-lista-compra-request.model';
 import { ItemListaCompraResponse } from '../models/item-lista-compra-response.model';
 
+import { environment } from '../../environment/environment';
+
 @Injectable({
   providedIn: 'root',
 })
 export class ListaService {
 
-  private apiLista = '/api/lista-compras'
+  private apiLista = `${environment.apiUrl}/lista-compras`
 
   constructor(
     private http: HttpClient

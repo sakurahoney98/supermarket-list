@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+
 import { CompraRequestModel } from '../models/compra-request.model';
 import { CompraResponseModel } from '../models/compra-response.model';
+
+import { environment } from '../../environment/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CompraService {
 
-  private apiCompra = '/api/compra'
+  private apiCompra = `${environment.apiUrl}/compra`
 
   constructor( private http: HttpClient) {}
 

@@ -6,11 +6,13 @@ import { ItemRequestModel } from '../models/item-request.model';
 import { ItemModel } from '../models/item.model';
 import { AtualizarEstoqueRequestModel } from '../models/atualizar-estoque-request.model';
 
+import { environment } from '../../environment/environment';
+
 @Injectable({
   providedIn: 'root',
 })
 export class ItemService {
-  private apiItem = '/api/itens'
+  private apiItem = `${environment.apiUrl}/itens`
 
   constructor(private http: HttpClient) { }
 
