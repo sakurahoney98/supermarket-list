@@ -44,7 +44,7 @@ git clone https://github.com/sakurahoney98/supermarket-list.git
 ## Execução
 
 ### Em ambiente local
-1. Backend:
+1. Acesse a pasta do backend e execute a API:
 
 ```shell
 cd backend
@@ -53,10 +53,11 @@ mvn spring-boot:run
 
 A API ficará disponível em: http://localhost:8080
 
-2. Frontend:
+2. Acesse a pasta do frontend, instale as dependências e execute a aplicação:
 
 ```shell
 cd frontend
+npm install
 ng serve
 ```
 
