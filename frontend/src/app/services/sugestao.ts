@@ -6,7 +6,7 @@ import { SugestaoModel } from '../models/sugestao.model';
   providedIn: 'root',
 })
 export class SugestaoService {
-  private apiSugestao = "http://localhost:8080/sugestao"
+  private apiSugestao = "/api/sugestao"
 
   constructor(private http: HttpClient){}
 

@@ -10,7 +10,7 @@ import { CategoriaRequestModel } from '../models/categoria-request.model';
   providedIn: 'root',
 })
 export class CategoriaService {
-  private apiCategoria = 'http://localhost:8080/categorias'
+  private apiCategoria = '/api/categorias'
 
 
   constructor(private http: HttpClient) { }

@@ -8,7 +8,7 @@ import { CompraResponseModel } from '../models/compra-response.model';
 })
 export class CompraService {
 
-  private apiCompra = 'http://localhost:8080/compra'
+  private apiCompra = '/api/compra'
 
   constructor( private http: HttpClient) {}
 

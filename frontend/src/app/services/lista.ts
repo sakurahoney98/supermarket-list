@@ -8,7 +8,7 @@ import { ItemListaCompraResponse } from '../models/item-lista-compra-response.mo
 })
 export class ListaService {
 
-  private apiLista = 'http://localhost:8080/lista-compras'
+  private apiLista = '/api/lista-compras'
 
   constructor(
     private http: HttpClient

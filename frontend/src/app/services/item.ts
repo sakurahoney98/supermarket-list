@@ -10,7 +10,7 @@ import { AtualizarEstoqueRequestModel } from '../models/atualizar-estoque-reques
   providedIn: 'root',
 })
 export class ItemService {
-  private apiItem = 'http://localhost:8080/itens'
+  private apiItem = '/api/itens'
 
   constructor(private http: HttpClient) { }
 

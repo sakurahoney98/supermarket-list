@@ -9,7 +9,7 @@ import { RelatorioGastoModel } from '../models/relatorio-gasto.model';
   providedIn: 'root',
 })
 export class RelatorioService {
-  private apiRelatorio = 'http://localhost:8080/relatorio';
+  private apiRelatorio = '/api/relatorio';
 
   constructor(private http: HttpClient) { }
 
