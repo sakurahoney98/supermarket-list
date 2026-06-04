@@ -1,0 +1,48 @@
+services:
+
+  postgres:
+    image: postgres:17
+
+    container_name: supermarket-postgres
+
+    environment:
+      POSTGRES_DB: supermarketlist
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    image: supermarket-backend:latest
+
+    container_name: supermarket-backend
+
+    depends_on:
+      - postgres
+
+    ports:
+      - "8080:8080"
+
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      DB_URL: jdbc:postgresql://postgres:5432/supermarketlist
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      CORS_ORIGINS: http://192.168.1.27
+
+  frontend:
+    image: supermarket-frontend:latest
+    container_name: supermarket-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+
+volumes:
+  postgres_data:
