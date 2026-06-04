@@ -10,7 +10,7 @@ RUN npm install
 
 COPY . .
 
-RUN npm run build -- --configuration production
+-- --configuration production
 
 
 # Etapa 2: Servidor Web
