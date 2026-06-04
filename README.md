@@ -1,3 +1,5 @@
+![banner-supermarket](https://github.com/sakurahoney98/supermarket-list/blob/main/docs/banner.png)
+
 # 🛒 Sistema de Gestão de Estoque e Lista de Compras
 
 Um sistema para gerenciamento de estoque e geração automática de listas de compras domésticas.
