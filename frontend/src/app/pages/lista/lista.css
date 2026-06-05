@@ -3,19 +3,27 @@
     gap: 1.5rem;
     align-items: center;
     width: 100%;
-    padding: 0rem 1.5rem;
+    flex-direction: column;
+    align-items: flex-start;
 
+}
+
+.page-list{
+    overflow-x: auto;
+    min-width: 350px;
 }
 
 app-search-bar {
     flex: 1;
     min-width: 0;
+    width: 100%;
 }
 
 .actions__buttons {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
+    padding: 0rem 1.5rem;
     padding-bottom: 1.5rem;
 
 }
@@ -93,6 +101,14 @@ app-search-bar {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.stock-list {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+   
 }
 
 .select__list {
@@ -233,4 +249,11 @@ li {
 button:disabled {
     opacity: 0.4;
     cursor: not-allowed;
+}
+
+@media screen and (max-width: 650px){
+    .filter-category{
+        min-width: 100%;
+    }
+
 }

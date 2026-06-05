@@ -1,7 +1,8 @@
  .page-title {
      display: flex;
      justify-content: space-between;
-     padding: 1.5rem
+     padding: 1.5rem;
+     min-width: 350px;
  }
 
  .page-title__title {

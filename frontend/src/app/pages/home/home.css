@@ -112,3 +112,15 @@
     font-weight: 700;
     color: hsl(var(--brown-strong-text));
 }
+
+ @media screen and (max-width: 650px) {
+    .home-content, .home-quick-options{
+        flex-direction: column;
+        padding: 0.75rem 1rem
+    }
+
+    .card{
+        width: 100%;
+    }
+
+ }

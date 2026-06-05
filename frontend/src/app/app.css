@@ -2,6 +2,8 @@
 .flex {
         display: flex;
         flex: 1;
+        min-width: 300px;
+        overflow: auto;
 
     }
 
@@ -9,9 +11,7 @@
         flex: 1;
         background-color: hsl(var(--background-secondary));
         padding: 0.5rem;
-        max-width: 100%;
-       overflow: auto;
-       
+        overflow: scroll;
 
     }
 
@@ -20,6 +20,28 @@
     display: flex;
     flex-direction: column;
      max-width: 100%;
-     overflow: auto;
+    
       
+}
+
+
+
+@media screen and (max-width: 940px) {
+    .flex {
+        flex-direction: column; 
+    }
+
+    .content {
+        order: 1; 
+        
+    
+        
+    }
+
+    app-sidebar {
+        order: 2; 
+        width: 100%;
+        
+    }
+    
 }

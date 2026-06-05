@@ -113,8 +113,7 @@
 
 .card-list {
     height: 5rem;
-    max-width: 100%;
-    min-width: 42.5rem;
+    min-width: 100%;
     border: 0.125rem solid var(--border);
     border-radius: 1.25rem;
     padding: 0.75rem;
@@ -220,5 +219,24 @@
 
 li{
     list-style: none;
+}
+
+@media screen and (max-width: 650px){
+    .filter-category__select{
+        max-width: 100%;
+        
+    }
+
+    .card-list{
+        gap: 0;
+    }
+}
+
+@media screen and (max-width: 480px){
+    .item-details{
+        display: none
+    }
+
+   
 }
 

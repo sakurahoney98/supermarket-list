@@ -1,3 +1,6 @@
+.page-reports{
+    min-width: 350px;
+}
 .choice-report{
     padding: 1.5rem;
     padding-top: 0rem;
@@ -21,6 +24,7 @@
     padding: 0rem 24px;
     color: hsl(var(--brown-text-muted));
     cursor: pointer;
+    width: 100%;
 }
 
 .report-active{
@@ -39,7 +43,7 @@
     border-radius: 10px;
     background-color: white;
     padding: 20px 32px;
-    min-width: 710px;
+    min-width: 720px;
 
 }
 
@@ -154,4 +158,22 @@
 button:disabled {
     opacity: 0.4;
     cursor: not-allowed;
+}
+
+@media screen and (max-width: 760px){
+    .content{
+        overflow-x: auto;
+        width: 100%;
+        min-width: 300px;
+        
+    }
+
+    .choice-report__buttons{
+        width: 100%;
+        min-width: 300px;
+    }
+
+    .content__parameters{
+        flex-direction: column;
+    }
 }

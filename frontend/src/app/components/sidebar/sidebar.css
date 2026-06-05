@@ -32,3 +32,64 @@
         border-radius: 0.938rem;
         color: white;
     }
+
+    @media screen and (max-width: 940px) {
+        .sidebar{
+            width: 100%;
+            display: flex;
+            gap: 0rem;
+            padding: 0.5rem;
+            max-height: 100px;
+            justify-content: space-between;
+            min-width: 0;
+        }
+
+        .sidebar__option{
+            flex-direction: column;
+            min-width: 80px;
+            text-align: center;
+            padding: 0.5rem;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem
+        }
+
+       
+
+        .sidebar__option-name{
+            margin: 0
+        }
+
+        .sidebar__option-name{
+        font-size: 0.75rem;
+        }
+
+        svg {
+         width: 20px;
+        height: 20px;
+        }
+
+        .selected-option {
+        background-color: hsl(var(--background-primary));
+        border-radius: 0.938rem;
+        color: hsl(var(--pink-primary));
+        font-weight: 650;
+    }
+        
+    }
+
+     @media screen and (max-width: 560px) {
+
+        .sidebar{
+            justify-content: space-between;
+        }
+        .sidebar__option-name{
+        display: none; 
+        }
+
+        .sidebar__option{
+            min-width: 0;
+            
+        }
+
+     }

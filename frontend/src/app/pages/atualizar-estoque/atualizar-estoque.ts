@@ -185,9 +185,34 @@ export class AtualizarEstoque implements OnInit {
   }
 
   salvarRascunho() {
-    localStorage.setItem('listaAtualizarEstoque', JSON.stringify(this.listaItens));
+    let rascunhoRecuperado: ItemModel[] = JSON.parse(localStorage.getItem("listaAtualizarEstoque") || "[]");
 
-    this.exibirMensagemDeSucesso("Rascunho salvo com sucesso!")
+    if (rascunhoRecuperado.length === 0) {
+      localStorage.setItem('listaAtualizarEstoque', JSON.stringify(this.listaItens));
+
+    } else {
+
+      let mapaRascunho = new Map(rascunhoRecuperado.map(item => [item.id, item]));
+
+
+      this.listaItens.forEach(itemAtual => {
+        if (itemAtual.quantidadeEstoque !== itemAtual.novoValor) {
+
+          mapaRascunho.set(itemAtual.id, { ...itemAtual });
+        }
+      });
+
+      const rascunhoAtualizado = Array.from(mapaRascunho.values());
+
+      localStorage.setItem('listaAtualizarEstoque', JSON.stringify(rascunhoAtualizado));
+
+    }
+
+
+    this.capturarItens();
+    this.exibirMensagemDeSucesso("Rascunho salvo com sucesso!");
+
+    
 
 
   }

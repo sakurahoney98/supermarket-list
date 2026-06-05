@@ -19,3 +19,16 @@
       font-style: italic;
 
   }
+
+  @media screen and (max-width: 650px){
+    .search-bar{
+        flex-direction: column;
+    }
+
+    #main-search{
+        max-width: 100%;
+    }
+
+    
+}
+
