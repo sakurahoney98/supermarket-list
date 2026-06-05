@@ -99,7 +99,7 @@ export class AtualizarEstoque implements OnInit {
           this.listaItens.forEach(item => {
             const itemRascunho = rascunho.find(i => i.id === item.id);
 
-            if (itemRascunho) {
+            if (itemRascunho && (itemRascunho.quantidadeEstoque === item.quantidadeEstoque || itemRascunho.quantidadeEstoque != itemRascunho.novoValor)) {
               item.novoValor = itemRascunho.novoValor;
             }
 

@@ -134,6 +134,46 @@ describe('AtualizarEstoque', () => {
 
   });
 
+  it('capturarItens deve manter quantidadeEstoque da lista quando esta divergir da quantidadeEstoque do rascunho', () => {
+    localStorageMock.getItem.mockReturnValue(
+      JSON.stringify([{ id: 10, quantidadeEstoque: 2, novoValor: 2 }])
+    );
+
+    component.capturarItens();
+
+    expect(localStorage.getItem).toHaveBeenCalledWith('listaAtualizarEstoque');
+    expect(itemServiceMock.getItensEstoque).toHaveBeenCalledOnce();
+
+    const itemModificado = component.listaItens.find(i => i.id === 10)!;
+    const itemNaoModificado = component.listaItens.find(i => i.id === 20)!;
+
+    expect(itemModificado.novoValor).toBe(3);
+    expect(itemModificado.novoValor).toBe(itemModificado.quantidadeEstoque);
+    expect(itemNaoModificado.novoValor).toBe(itemNaoModificado.quantidadeEstoque)
+
+
+  });
+
+  it('capturarItens deve aplicar rascunho do localStorage sobrescrevendo novoValor quando rascunho tiver a quantidade modificada', () => {
+    localStorageMock.getItem.mockReturnValue(
+      JSON.stringify([{ id: 10, quantidadeEstoque: 2, novoValor: 99 }])
+    );
+
+    component.capturarItens();
+
+    expect(localStorage.getItem).toHaveBeenCalledWith('listaAtualizarEstoque');
+    expect(itemServiceMock.getItensEstoque).toHaveBeenCalledOnce();
+
+    const itemModificado = component.listaItens.find(i => i.id === 10)!;
+    const itemNaoModificado = component.listaItens.find(i => i.id === 20)!;
+
+    expect(itemModificado.novoValor).toBe(99);
+    expect(itemModificado.novoValor).not.toBe(itemModificado.quantidadeEstoque);
+    expect(itemNaoModificado.novoValor).toBe(itemNaoModificado.quantidadeEstoque)
+
+
+  });
+
   it('onBusca deve filtrar itens por nome', () => {
     component.listaItens = [
     item1({ novoValor: 3 }),
