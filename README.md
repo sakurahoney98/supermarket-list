@@ -2,6 +2,13 @@
 
 # 🛒 Sistema de Gestão de Estoque e Lista de Compras
 
+![Status](https://img.shields.io/badge/status-finalizado-brightgreen)
+![Tests](https://img.shields.io/badge/tests-passed-brightgreen)
+![Versão](https://img.shields.io/badge/versão-1.2.0-blue)
+![Licença](https://img.shields.io/badge/licença-Apache_2.0-orange)
+![Java](https://img.shields.io/badge/Java-21-ED8B00?logo=openjdk&logoColor=white)
+![Angular](https://img.shields.io/badge/Angular-20-DD0031?logo=angular&logoColor=white)
+
 Um sistema para gerenciamento de estoque e geração automática de listas de compras domésticas.
 
 
