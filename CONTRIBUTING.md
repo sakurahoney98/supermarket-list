@@ -50,13 +50,13 @@ Você pode contribuir de várias formas:
 
 ## Tenho uma Dúvida
 
-> Antes de perguntar, assumimos que você já leu a [Documentação](https://github.com/sakurahoney98/supermarket-list/tree/53d047b8b8c4db8ceb4a89c2e8290422464e2e6c/docs) disponível.
+> Antes de perguntar, assumimos que você já leu a [Documentação](https://github.com/sakurahoney98/supermarket-list/tree/main/docs) disponível.
 
 Antes de abrir uma dúvida, recomendamos procurar nas [issues existentes](https://github.com/sakurahoney98/supermarket-list.git/issues), pois talvez alguém já tenha enfrentado o mesmo problema. Se encontrar uma issue relacionada e ainda tiver dúvidas, você pode comentar nela. Também é válido pesquisar na internet antes de perguntar.
 
 Se ainda assim precisar de ajuda, siga estas orientações:
 
-- Abra uma [nova issue](https://github.com/sakurahoney98/supermarket-list/issues/new).
+- Abra uma [nova issue](https://github.com/sakurahoney98/supermarket-list/issues/new/choose).
 - Descreva o máximo de contexto possível sobre o que está acontecendo.
 - Informe as versões utilizadas (Java, Docker, sistema operacional etc.), conforme for relevante.
 
@@ -75,8 +75,8 @@ Responderemos o mais rápido possível. 💬
 Um bom relatório de bug deve ser claro e detalhado, para que possamos reproduzir e corrigir o problema. Siga estas etapas antes de enviar:
 
 - Verifique se está usando a versão mais recente do projeto.
-- Certifique-se de que o problema não está relacionado ao seu ambiente (versões incompatíveis, configurações, etc.). Leia a [documentação](https://github.com/sakurahoney98/supermarket-list/tree/53d047b8b8c4db8ceb4a89c2e8290422464e2e6c/docs) e, se necessário, veja a seção [Tenho uma dúvida](#tenho-uma-dúvida).
-- Veja se já existe uma issue para o problema no [rastreador de bug](https://github.com/sakurahoney98/supermarket-list.git/issues?q=label%3Abug).
+- Certifique-se de que o problema não está relacionado ao seu ambiente (versões incompatíveis, configurações, etc.). Leia a [documentação](https://github.com/sakurahoney98/supermarket-list/tree/main/docs) e, se necessário, veja a seção [Tenho uma dúvida](#tenho-uma-dúvida).
+- Veja se já existe uma issue para o problema no [rastreador de bug](https://github.com/sakurahoney98/supermarket-list/issues/new/choose?template=relatar-bug.md).
 - Reúna informações como:
   - Stack trace (erro completo)
   - Sistema operacional, plataforma e arquitetura
@@ -90,7 +90,7 @@ Um bom relatório de bug deve ser claro e detalhado, para que possamos reproduzi
 
 Para relatar um bug:
 
-- Abra uma [nova issue](https://github.com/sakurahoney98/supermarket-list/issues/new).
+- Abra uma [nova issue](https://github.com/sakurahoney98/supermarket-list/issues/new/choose).
 - Descreva o comportamento esperado e o que ocorreu de fato.
 - Inclua um passo a passo para que outras pessoas consigam reproduzir o erro.
 - Envie todas as informações que reuniu na etapa anterior.
@@ -102,7 +102,7 @@ Para relatar um bug:
 #### Antes de sugerir uma melhoria
 
 - Verifique se está usando a última versão.
-- Confira a [documentação](https://github.com/sakurahoney98/supermarket-list/tree/53d047b8b8c4db8ceb4a89c2e8290422464e2e6c/docs)  para garantir que sua sugestão ainda não foi contemplada.
+- Confira a [documentação](https://github.com/sakurahoney98/supermarket-list/tree/main/docs)  para garantir que sua sugestão ainda não foi contemplada.
 - Pesquise nas [issues](https://github.com/sakurahoney98/supermarket-list/issues) se a sugestão já foi feita. Se sim, comente nela em vez de criar uma nova.
 - Avalie se a ideia está alinhada com o propósito do projeto. Foque em soluções úteis para a maioria dos usuários, não apenas para um caso muito específico.
 
@@ -119,13 +119,13 @@ Para relatar um bug:
 #### Antes de contribuir
 
 - Verifique se está usando a última versão.
-- Confira a [documentação](https://github.com/sakurahoney98/supermarket-list/tree/53d047b8b8c4db8ceb4a89c2e8290422464e2e6c/docs)  para garantir que sua sugestão ainda não foi contemplada.
+- Confira a [documentação](https://github.com/sakurahoney98/supermarket-list/tree/main/docs)  para garantir que sua sugestão ainda não foi contemplada.
 - Pesquise nas [issues](https://github.com/sakurahoney98/supermarket-list/issues) se a sugestão já foi feita. Se sim, comente nela em vez de criar uma nova.
 
 #### Como inicio uma alteração?
 
 1. Crie uma issue
-- Abra uma [nova issue](https://github.com/sakurahoney98/supermarket-list/issues/new) descrevendo:
+- Abra uma [nova issue](https://github.com/sakurahoney98/supermarket-list/issues/new/choose) descrevendo:
   - O que pretende resolver ou implementar
   - O comportamento atual e o comportamento desejado
 - Justifique por que a mudança é relevante
