@@ -65,7 +65,11 @@ A aplicação ficará disponível em: http://localhost:4200
 
 
 ### Em ambiente de produção
-1. No arquivo `compose.server.yaml` modifique as informações contidas na sessão `environment` de acordo com o seu ambiente.
+1. Copie o arquivo `env.dist` como `.env` e modifique o valor das váriaveis de acordo com seu ambiente.
+```shell
+cp env.dist .env
+nano .env
+```
 
 2. Conceda permissão de execução ao script:
 

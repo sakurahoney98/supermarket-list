@@ -31,11 +31,11 @@ services:
 
     environment:
       SPRING_PROFILES_ACTIVE: prod
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
-      DB_URL: jdbc:postgresql://postgres:5432/supermarketlist
-      DB_USERNAME: postgres
-      DB_PASSWORD: postgres
-      CORS_ORIGINS: http://192.168.1.27
+      SPRING_JPA_HIBERNATE_DDL_AUTO: ${DLL_TYPE}
+      DB_URL: ${URL_DB}
+      DB_USERNAME: ${USER_DB}
+      DB_PASSWORD: ${PASS_DB}
+      CORS_ORIGINS: ${URL_APP}
 
   frontend:
     build:
