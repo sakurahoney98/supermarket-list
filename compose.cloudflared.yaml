@@ -1,0 +1,6 @@
+services:
+    cloudflared:
+        image: cloudflare/cloudflared:latest
+        container_name: cloudflared
+        command: tunnel --url http://192.168.1.27
+

@@ -3,10 +3,12 @@
 set -e
 
 COMPOSE_FILE="compose.server.yaml"
+COMPOSE_CLOUDFLARED="compose.cloudflared.yaml"
 
 show_help() {
     echo "Uso:"
     echo "  ./docker-run.sh --server"
+    echo "  ./docker-run.sh --server-cloudflared"
     echo "  ./docker-run.sh --clean"
     echo "  ./docker-run.sh --reset-db"
     exit 1
@@ -18,6 +20,25 @@ fi
 
 case "$1" in
 
+    --server-cloudflared)
+        echo "Parando containers..."
+        docker compose -f ${COMPOSE_FILE} down
+        docker compose -f ${COMPOSE_CLOUDFLARED} down
+
+        echo "Subindo ambiente..."
+        docker compose -f ${COMPOSE_FILE} up -d --build
+        docker compose -f ${COMPOSE_CLOUDFLARED} up -d
+        
+        echo "Aguardando Cloudflare Tunnel..."
+        sleep 5
+
+        URL=$(docker logs cloudflared 2>&1 | grep -o 'https://.*trycloudflare.com' | head -n 1)
+
+        echo "Ambiente iniciado."
+        echo "URL pública:"
+        echo "$URL"
+        ;;
+        
     --server)
         echo "Parando containers..."
         docker compose -f ${COMPOSE_FILE} down
