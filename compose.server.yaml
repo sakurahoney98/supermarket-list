@@ -35,7 +35,7 @@ services:
       DB_URL: ${URL_DB}
       DB_USERNAME: ${USER_DB}
       DB_PASSWORD: ${PASS_DB}
-      CORS_ORIGINS: ${URL_APP}
+      CORS_ORIGINS: ${APP_CORS}
 
   frontend:
     build:

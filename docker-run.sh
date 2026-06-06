@@ -30,7 +30,7 @@ case "$1" in
         docker compose -f ${COMPOSE_CLOUDFLARED} up -d
         
         echo "Aguardando Cloudflare Tunnel..."
-        sleep 5
+        sleep 10
 
         URL=$(docker logs cloudflared 2>&1 | grep -o 'https://.*trycloudflare.com' | head -n 1)
 
