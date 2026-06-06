@@ -95,10 +95,16 @@ A aplicação ficará disponível em: http://<IP_DO_SERVIDOR>
 
 ## Comandos úteis
 
-Recriar containers e reconstruir imagens:
+Recriar containers e subir em modo produção:
 
 ```shell
 ./docker-run.sh --server
+```
+
+Recriar containers e reconstruir imagens em modo produção com ip público:
+
+```shell
+./docker-run.sh --server-cloudflared
 ```
 
 Forçar rebuild completo das imagens
