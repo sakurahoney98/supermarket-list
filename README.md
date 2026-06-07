@@ -4,7 +4,7 @@
 
 ![Status](https://img.shields.io/badge/status-finalizado-brightgreen)
 ![Tests](https://img.shields.io/badge/tests-passed-brightgreen)
-![Versão](https://img.shields.io/badge/versão-1.2.0-blue)
+![Versão](https://img.shields.io/badge/versão-1.2.2-blue)
 ![Licença](https://img.shields.io/badge/licença-Apache_2.0-orange)
 ![Java](https://img.shields.io/badge/Java-21-ED8B00?logo=openjdk&logoColor=white)
 ![Angular](https://img.shields.io/badge/Angular-20-DD0031?logo=angular&logoColor=white)

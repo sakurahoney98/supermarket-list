@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.sakura</groupId>
 	<artifactId>supermarketlist</artifactId>
-	<version>1.0.0</version>
+	<version>1.2.2</version>
 	<name>supermarketlist</name>
 	<description>API para lista de supermercado</description>
 

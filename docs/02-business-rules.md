@@ -17,7 +17,7 @@ Definir:
 - `fator_duracao = ceil(30 / duracao)`  (arredondar para cima)
 - `quantidade_por_duracao = fator_duracao - quantidade_estoque`
 
-A **quantidade sugerida** é o **menor valor** entre `quantidade_base` e `quantidade_por_duracao`, com **mínimo 0** (não pode ser negativo).
+A **quantidade sugerida** é o **menor valor** entre `quantidade_base` e `quantidade_por_duracao`, contanto que a `quantidade_por_duracao` seja maior que 1.
 
 > Exemplo: duração = 7, estoque = 2, máximo = 10  
 > quantidade_base = 8  
