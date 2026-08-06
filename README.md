@@ -65,10 +65,24 @@ A API ficará disponível em: http://localhost:8080
 ```shell
 cd frontend
 npm install
-ng serve
+npm start
 ```
 
-A aplicação ficará disponível em: http://localhost:4200
+A aplicação ficará disponível no computador em: http://localhost:4200
+
+Para testar pelo celular na mesma rede Wi-Fi ou LAN, descubra o IP do computador
+com `ipconfig` e acesse `http://IP_DO_PC:4200`. O frontend usa `/api` e o proxy
+de desenvolvimento encaminha as chamadas para `http://127.0.0.1:8080` no PC.
+
+Checklist para acesso pela rede:
+- computador e celular devem estar na mesma sub-rede;
+- desative ou configure VPN que isole a rede local;
+- permita entrada TCP nas portas `4200` (frontend) e `8080` (backend) na rede privada do Windows;
+- confirme que o backend está ouvindo no IP da LAN, e não apenas em `127.0.0.1`.
+
+Se o navegador bloquear o host informado pelo celular, habilite o fallback somente
+nesse caso, executando `ng serve --host 0.0.0.0 --proxy-config proxy.conf.json --allowed-hosts IP_DO_PC`.
+Não habilite `--allowed-hosts` por padrão.
 
 
 ### Em ambiente de produção
