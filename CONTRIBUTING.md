@@ -104,7 +104,6 @@ Para relatar um bug:
 - Verifique se está usando a última versão.
 - Confira a [documentação](https://github.com/sakurahoney98/supermarket-list/tree/main/docs)  para garantir que sua sugestão ainda não foi contemplada.
 - Pesquise nas [issues](https://github.com/sakurahoney98/supermarket-list/issues) se a sugestão já foi feita. Se sim, comente nela em vez de criar uma nova.
-- Não use `localhost` ou `127.0.0.1` fixos nas URLs de API do frontend; use o ambiente e o proxy `/api` para preservar o acesso pela rede local.
 - Avalie se a ideia está alinhada com o propósito do projeto. Foque em soluções úteis para a maioria dos usuários, não apenas para um caso muito específico.
 
 #### Como eu envio uma sugestão?
