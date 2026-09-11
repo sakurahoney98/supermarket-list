@@ -65,10 +65,18 @@ A API ficará disponível em: http://localhost:8080
 ```shell
 cd frontend
 npm install
-ng serve
+npm start
 ```
 
 A aplicação ficará disponível em: http://localhost:4200
+
+Para acessar pelo celular ou por outro dispositivo na mesma rede local, descubra o IP da máquina e inicie o Angular aceitando conexões externas:
+
+```shell
+npm start -- --host 0.0.0.0
+```
+
+No celular, acesse `http://<IP_DA_MAQUINA>:4200`. A API será chamada automaticamente pelo mesmo hostname da página, na porta 8080. O backend e o firewall da máquina precisam aceitar conexões da rede local.
 
 
 ### Em ambiente de produção
